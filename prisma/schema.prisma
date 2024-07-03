@@ -20,7 +20,7 @@ model Race {
     updatedAt DateTime @updatedAt
 
     name String
-    datum DateTime
+    date DateTime
     organizer String
     event Event[]
 }
@@ -62,7 +62,6 @@ model Racer {
     birthDate DateTime
     sex String
     club String
-    coach String
 
     performace Performance[]
 }
@@ -78,6 +77,8 @@ model AgeCoeficient {
     event         Event     @relation(fields: [eventId], references: [id])
     eventId Int
 }
+
+
 
 // Necessary for Next auth
 model Account {
