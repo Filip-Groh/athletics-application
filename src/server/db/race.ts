@@ -32,7 +32,7 @@ export async function updateRace(id: number, name: string, date: Date, organizer
     })
 }
 
-export async function destroyRace(id: number) {
+export async function destroyRace(id: number): Promise<Race> {
     return await db.race.delete({
         where: {
             id: id
