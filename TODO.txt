@@ -1,0 +1,2 @@
+ui.shadcn.com - UI library
+full stack type safety (frontend calling backend) - https://www.youtube.com/watch?v=OgVeQVXt7xU / server actions

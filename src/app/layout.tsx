@@ -1,7 +1,8 @@
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import MainMenu, { type MenuItemType } from "./components/menu/mainMenu";
+import MainMenu, { type MenuItemType } from "~/components/menu/mainMenu";
+import { ThemeProvider } from "~/components/theme/theme-provider"
 
 export const metadata = {
     title: "Create T3 App",
@@ -34,14 +35,16 @@ const menuItems: Array<MenuItemType> = [
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
     return (
-        <html lang="cs" className={`${GeistSans.variable}`}>
+        <html lang="cs" className={`${GeistSans.variable}`} suppressHydrationWarning>
             <body>
-                <header>
-                    <MainMenu menuItems={menuItems} isAdmin={true}/>
-                </header>
-                <main>
-                    {children}
-                </main>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                    <header>
+                        <MainMenu menuItems={menuItems} isAdmin={true}/>
+                    </header>
+                    <main>
+                        {children}
+                    </main>
+                </ThemeProvider>
             </body>
         </html>
     );
