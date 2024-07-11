@@ -20,6 +20,7 @@ model Race {
   date      DateTime
   organizer String
   event     Event[]
+  racer     Racer[]
 }
 
 model Event {
@@ -61,6 +62,8 @@ model Racer {
   club      String
 
   performace Performance[]
+  race       Race          @relation(fields: [raceId], references: [id])
+  raceId     Int
 }
 
 model AgeCoeficient {

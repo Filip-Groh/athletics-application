@@ -1,6 +1,11 @@
 import type { Performance as PrismaPerformance } from "@prisma/client";
+import type { RacerPreview } from "./racer";
 
-export type Performance = PrismaPerformance
+export type PerformancePreview = PrismaPerformance
+
+export type Performance = PerformancePreview & {
+    racer: RacerPreview
+}
 
 export type PerformancePost = {
     measurement: number,

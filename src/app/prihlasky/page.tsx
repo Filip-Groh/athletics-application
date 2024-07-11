@@ -1,8 +1,12 @@
 import React from 'react'
+import NewRacerForm from '~/components/forms/newRacerForm'
+import { getRaces } from '~/server/db/race'
 
-function PrihlaskyPage() {
+async function PrihlaskyPage() {
+    const races = await getRaces()
+
     return (
-        <div>PrihlaskyPage</div>
+        <NewRacerForm races={races} />
     )
 }
 

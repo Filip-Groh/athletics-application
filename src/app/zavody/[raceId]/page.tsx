@@ -28,10 +28,10 @@ async function PrehledPage({ params }: { params: { raceId: string } }) {
                 <OverviewTab race={race} />
             </TabsContent>
             <TabsContent value="registred">
-                <RegistredTab />
+                <RegistredTab race={race} />
             </TabsContent>
             <TabsContent value="performance">
-                <PerformanceTab />
+                <PerformanceTab race={race} />
             </TabsContent>
             <TabsContent value="points">
                 <PointsTab />

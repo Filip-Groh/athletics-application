@@ -1,7 +1,7 @@
 import { db } from "../db";
-import type { Performance } from "../types/performance";
+import type { PerformancePreview } from "../types/performance";
 
-export async function createPerformance(measurement: number, racerId: number, eventId: number): Promise<Performance> {
+export async function createPerformance(measurement: number, racerId: number, eventId: number): Promise<PerformancePreview> {
     return await db.performance.create({
         data: {
             measurement: measurement,
@@ -19,7 +19,7 @@ export async function createPerformance(measurement: number, racerId: number, ev
     })
 }
 
-export async function readPerformance(id: number): Promise<Performance | null> {
+export async function readPerformance(id: number): Promise<PerformancePreview | null> {
     return await db.performance.findFirst({
         where: {
             id: id
@@ -27,7 +27,7 @@ export async function readPerformance(id: number): Promise<Performance | null> {
     })
 }
 
-export async function updatePerformance(id: number, measurement: number, racerId: number, eventId: number): Promise<Performance> {
+export async function updatePerformance(id: number, measurement: number, racerId: number, eventId: number): Promise<PerformancePreview> {
     return await db.performance.update({
         where: {
             id: id
@@ -48,7 +48,7 @@ export async function updatePerformance(id: number, measurement: number, racerId
     })
 }
 
-export async function destroyPerformance(id: number): Promise<Performance> {
+export async function destroyPerformance(id: number): Promise<PerformancePreview> {
     return await db.performance.delete({
         where: {
             id: id

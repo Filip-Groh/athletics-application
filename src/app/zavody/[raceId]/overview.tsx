@@ -1,7 +1,7 @@
 import React from 'react'
-import { type Race } from '~/server/types/race'
+import { type RacePreview } from '~/server/types/race'
 
-function OverviewTab({race}: {race: Race}) {
+function OverviewTab({race}: {race: RacePreview}) {
     return (
         <div>
             <p>Jméno závodu: {race.name}</p>

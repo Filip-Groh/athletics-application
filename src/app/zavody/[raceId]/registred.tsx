@@ -1,8 +1,10 @@
 import React from 'react'
+import RegistredTable from '~/components/tables/registredTable'
+import type { Race } from '~/server/types/race'
 
-function RegistredTab() {
+function RegistredTab({race}: {race: Race}) {
     return (
-        <div>RegistredTab</div>
+        <RegistredTable data={race.racer}/>
     )
 }
 
