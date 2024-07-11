@@ -19,6 +19,10 @@ export async function readRace(id: number): Promise<Race | null> {
     })
 }
 
+export async function getRaces(): Promise<Race[]> {
+    return await db.race.findMany()
+}
+
 export async function updateRace(id: number, name: string, date: Date, organizer: string): Promise<Race> {
     return await db.race.update({
         where: {

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import Link from "next/link"
 import { ModeToggle } from "~/components/theme/theme-toggle";

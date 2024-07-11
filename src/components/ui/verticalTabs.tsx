@@ -5,8 +5,6 @@ import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "~/lib/utils"
 
-// const VerticalTabs = TabsPrimitive.Root
-
 const VerticalTabs = React.forwardRef<
 React.ElementRef<typeof TabsPrimitive.Root>,
 React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>

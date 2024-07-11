@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import MainMenu, { type MenuItemType } from "~/components/menu/mainMenu";
 import { ThemeProvider } from "~/components/theme/theme-provider"
+import { Toaster } from "~/components/ui/sonner"
 
 export const metadata = {
     title: "Create T3 App",
@@ -44,6 +45,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
                     <main>
                         {children}
                     </main>
+                    <Toaster />
                 </ThemeProvider>
             </body>
         </html>

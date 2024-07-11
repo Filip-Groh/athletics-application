@@ -5,8 +5,16 @@ import RegistredTab from './registred'
 import PerformanceTab from './performance'
 import PointsTab from './points'
 import BackupTab from './backup'
+import { readRace } from '~/server/db/race'
+import { notFound } from 'next/navigation';
 
-function PrehledPage() {
+async function PrehledPage({ params }: { params: { raceId: string } }) {
+    const race = await readRace(Number(params.raceId))
+
+    if (!race) {
+        notFound()
+    }
+
     return (
         <Tabs defaultValue="overview">
             <TabsList>
@@ -17,7 +25,7 @@ function PrehledPage() {
                 <TabsTrigger value="backup">Záloha</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                <OverviewTab />
+                <OverviewTab race={race} />
             </TabsContent>
             <TabsContent value="registred">
                 <RegistredTab />
