@@ -3,8 +3,17 @@
 import React from 'react'
 import NewEventForm from '~/components/forms/newEventForm'
 import { useArrayWithIdState } from '~/components/hooks/useArrayWithIdState'
+import PerformanceTable from '~/components/tables/performanceTable'
 import { VerticalTabs, VerticalTabsContent, VerticalTabsList, VerticalTabsTrigger } from '~/components/ui/verticalTabs'
 import type { Race } from '~/server/types/race'
+
+export type PerformanceType = {
+    name: string,
+    surname: string,
+    sex: string,
+    birthDate: string,
+    measurement: number[]
+}
 
 function PerformanceTab({race}: {race: Race}) {
     const {state: events, push: pushEvents} = useArrayWithIdState(race.event, true)
@@ -21,13 +30,21 @@ function PerformanceTab({race}: {race: Race}) {
                     <VerticalTabsTrigger key="eventTrigger_new" value="event_new">Přidat disciplínu</VerticalTabsTrigger>
                 </VerticalTabsList>
                 {events.map((event) => {
+                    let tableData: PerformanceType[] = event.performance.map<PerformanceType>((value) => {
+                        return {
+                            name: value.racer.name,
+                            surname: value.racer.surname,
+                            sex: value.racer.sex,
+                            birthDate: value.racer.birthDate.toLocaleDateString(),
+                            measurement: value.measurement.map((measurement) => {
+                                return measurement.value
+                            })
+                        }
+                    })
+
                     return (
                         <VerticalTabsContent key={`eventContent_${event.id}`} value={event.id.toString()}>
-                            {event.performance.map((performance) => {
-                                return (
-                                    <p key={performance.id}>{performance.racer.name}</p>
-                                )
-                            })}
+                            <PerformanceTable data={tableData} />
                         </VerticalTabsContent>
                     )
                 })}

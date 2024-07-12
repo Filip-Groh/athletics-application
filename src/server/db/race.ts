@@ -23,7 +23,8 @@ export async function readRace(id: number): Promise<Race | null> {
                 include: {
                     performance: {
                         include: {
-                            racer: true
+                            racer: true,
+                            measurement: true
                         }
                     },
                     ageCoeficient: true
