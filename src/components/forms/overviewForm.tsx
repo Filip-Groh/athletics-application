@@ -29,8 +29,10 @@ import {
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
 import { Event } from '~/server/types/event'
+import { RacePreview } from '~/server/types/race'
+import { Checkbox } from "~/components/ui/checkbox"
 
-function NewRaceForm() {
+function OverviewForm({race}: {race: RacePreview}) {
     const router = useRouter()
     const formSchema = z.object({
         name: z.string().min(1, {
@@ -45,25 +47,28 @@ function NewRaceForm() {
         organizer: z.string().min(1, {
             message: "Jméno organizátora musí mít alespoň 1 znak.",
         }),
+        visible: z.boolean().default(false).optional()
     })
     
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            organizer: "",
-            place: ""
+            name: race.name,
+            date: race.date,
+            place: race.place,
+            organizer: race.organizer,
+            visible: race.visible
         },
     })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const response = await fetch('/api/race', {
-            method: 'POST',
-            body: JSON.stringify(values)
+            method: 'PATCH',
+            body: JSON.stringify({id: race.id,...values})
         })
         switch (response.status) {
-            case 201: {
-                toast(`Nový závod "${values.name}" byl naplánován na ${values.date.toLocaleDateString()} organizátorem "${values.organizer}".`)
+            case 200: {
+                toast(`Závod "${values.name}" byl upraven.`)
                 form.reset()
                 const data = (await response.json() as {data: Event}).data
                 router.push(`/zavody/${data.id}`)
@@ -169,10 +174,32 @@ function NewRaceForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Vytvořit závod</Button>
+                <FormField
+                    control={form.control}
+                    name="visible"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                            <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                            <FormLabel>
+                            Viditelný závod
+                            </FormLabel>
+                            <FormDescription>
+                            Pokud zaškrtnuto závodníci se můžou na závod přihlásit.
+                            </FormDescription>
+                        </div>
+                        </FormItem>
+                    )}
+                />
+                <Button type="submit">Updatovat</Button>
             </form>
         </Form>
     )
 }
 
-export default NewRaceForm
+export default OverviewForm

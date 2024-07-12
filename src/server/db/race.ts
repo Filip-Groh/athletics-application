@@ -1,12 +1,14 @@
 import { db } from "../db";
 import type { Race, RacePreview } from "../types/race";
 
-export async function createRace(name: string, date: Date, organizer: string): Promise<RacePreview> {
+export async function createRace(name: string, date: Date, organizer: string, place: string, visible: boolean): Promise<RacePreview> {
     return await db.race.create({
         data: {
             name: name,
             date: date,
             organizer: organizer,
+            place: place,
+            visible: visible
         }
     })
 }
@@ -32,11 +34,18 @@ export async function readRace(id: number): Promise<Race | null> {
     })
 }
 
-export async function getRaces(): Promise<RacePreview[]> {
-    return await db.race.findMany()
+export async function getRaces(includeHidden: boolean = false): Promise<RacePreview[]> {
+    if (includeHidden) {
+        return await db.race.findMany()
+    }
+    return await db.race.findMany({
+        where: {
+            visible: true
+        }
+    })
 }
 
-export async function updateRace(id: number, name: string, date: Date, organizer: string): Promise<RacePreview> {
+export async function updateRace(id: number, name: string, date: Date, organizer: string, place: string, visible: boolean): Promise<RacePreview> {
     return await db.race.update({
         where: {
             id: id
@@ -44,7 +53,9 @@ export async function updateRace(id: number, name: string, date: Date, organizer
         data: {
             name: name,
             date: date,
-            organizer: organizer
+            organizer: organizer,
+            place: place,
+            visible: visible
         }
     })
 }

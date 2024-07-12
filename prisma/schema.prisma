@@ -18,7 +18,9 @@ model Race {
 
   name      String
   date      DateTime
+  place     String
   organizer String
+  visible   Boolean
   event     Event[]
   racer     Racer[]
 }
@@ -37,12 +39,22 @@ model Event {
   raceId        Int
 }
 
+model Measurement {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  value         Float
+  performance   Performance @relation(fields: [performanceId], references: [id])
+  performanceId Int
+}
+
 model Performance {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  measurement Float?
+  measurement Measurement[]
 
   racer   Racer @relation(fields: [racerId], references: [id])
   racerId Int

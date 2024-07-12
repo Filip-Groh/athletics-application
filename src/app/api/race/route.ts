@@ -4,7 +4,7 @@ import { createRace, readRace, updateRace, destroyRace } from '~/server/db/race'
 
 export async function POST(request: Request) {
     const data = await request.json() as RacePost
-    const createdRace: RacePreview = await createRace(data.name, data.date, data.organizer)
+    const createdRace: RacePreview = await createRace(data.name, data.date, data.organizer, data.place, false)
     return NextResponse.json({data: createdRace}, { status: 201 })
 }
 
@@ -19,7 +19,7 @@ export async function PUT(request: Request) {
 
 export async function PATCH(request: Request) {
     const data = await request.json() as RacePatch
-    const race: RacePreview = await updateRace(data.id, data.name, data.date, data.organizer)
+    const race: RacePreview = await updateRace(data.id, data.name, data.date, data.place, data.organizer, data.visible)
     return NextResponse.json({data: race}, { status: 200 })
 }
 

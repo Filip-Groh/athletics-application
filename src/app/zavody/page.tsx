@@ -12,7 +12,7 @@ import { getRaces } from '~/server/db/race'
   
 
 async function ZavodyPage() {
-    const races = await getRaces()
+    const races = await getRaces(true)
 
     return (
         <div>
@@ -22,13 +22,13 @@ async function ZavodyPage() {
                         <Card>
                             <CardHeader>
                                 <CardTitle>{race.name}</CardTitle>
-                                <CardDescription>{race.date.toLocaleDateString()}</CardDescription>
+                                <CardDescription>Koná se {race.date.toLocaleDateString()}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <p>{race.organizer}</p>
+                                <p>Závod se pořádá zde: {race.place}</p>
                             </CardContent>
                             <CardFooter>
-                                <p>{race.createdAt.toLocaleString()}</p>
+                                <p>Pořádá {race.organizer}</p>
                             </CardFooter>
                         </Card>
                     </Link>

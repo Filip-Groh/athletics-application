@@ -12,7 +12,9 @@ export type Race = RacePreview & {
 export type RacePost = {
     name: string,
     date: Date,
-    organizer: string
+    place: string,
+    organizer: string,
+    visible: boolean
 }
 
 export type RaceGet = {

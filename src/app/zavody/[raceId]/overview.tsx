@@ -1,13 +1,10 @@
 import React from 'react'
+import OverviewForm from '~/components/forms/overviewForm'
 import { type RacePreview } from '~/server/types/race'
 
 function OverviewTab({race}: {race: RacePreview}) {
     return (
-        <div>
-            <p>Jméno závodu: {race.name}</p>
-            <p>Datum konání: {race.date.toLocaleDateString()}</p>
-            <p>Organizátor: {race.organizer}</p>
-        </div>
+        <OverviewForm race={race} />
     )
 }
 
