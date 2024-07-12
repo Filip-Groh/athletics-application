@@ -23,7 +23,11 @@ function PerformanceTab({race}: {race: Race}) {
                 {events.map((event) => {
                     return (
                         <VerticalTabsContent key={`eventContent_${event.id}`} value={event.id.toString()}>
-                            {event.name}
+                            {event.performance.map((performance) => {
+                                return (
+                                    <p key={performance.id}>{performance.racer.id}</p>
+                                )
+                            })}
                         </VerticalTabsContent>
                     )
                 })}

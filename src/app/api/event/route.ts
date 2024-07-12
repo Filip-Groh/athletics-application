@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import type { EventPreview, EventPost, EventGet, EventPatch, EventDelete } from '~/server/types/event'
+import type { EventPreview, EventPost, EventGet, EventPatch, EventDelete, Event } from '~/server/types/event'
 import { createEvent, readEvent, updateEvent, destroyEvent } from '~/server/db/event'
 
 export async function POST(request: Request) {
     const data = await request.json() as EventPost
-    const createdEvent: EventPreview = await createEvent(data.name, data.category, data.raceId)
+    const createdEvent: Event = await createEvent(data.name, data.category, data.raceId)
     return NextResponse.json({data: createdEvent}, { status: 201 })
 }
 

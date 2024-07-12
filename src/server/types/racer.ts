@@ -8,7 +8,8 @@ export type RacerPost = {
     birthDate: Date,
     sex: string,
     club: string,
-    raceId: string
+    raceId: string,
+    event: Array<string>
 }
 
 export type RacerGet = {

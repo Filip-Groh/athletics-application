@@ -1,11 +1,11 @@
 import type { Event as PrismaEvent } from "@prisma/client";
-import type { PerformancePreview } from "./performance";
+import type { Performance } from "./performance";
 import type { AgeCoeficient } from "./ageCoeficient";
 
 export type EventPreview = PrismaEvent
 
 export type Event = EventPreview & {
-    performance: Array<PerformancePreview>,
+    performance: Array<Performance>,
     ageCoeficient: Array<AgeCoeficient>
 }
 

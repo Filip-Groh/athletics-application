@@ -1,11 +1,11 @@
 import type { Race as PrismaRace } from "@prisma/client";
-import type { EventPreview } from "./event";
+import type { Event } from "./event";
 import type { RacerPreview } from "./racer";
 
 export type RacePreview = PrismaRace
 
 export type Race = RacePreview & {
-    event: Array<EventPreview>,
+    event: Array<Event>,
     racer: Array<RacerPreview>
 }
 

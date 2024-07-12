@@ -28,7 +28,7 @@ import {
 } from "~/components/ui/popover"
 import { toast } from "sonner"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
-import type { RacePreview } from '~/server/types/race'
+import type { Race, RaceGet, RacePreview } from '~/server/types/race'
 import {
   Select,
   SelectContent,
@@ -36,6 +36,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import { Checkbox } from "~/components/ui/checkbox"
+import type { EventPreview } from '~/server/types/event'
 
 function NewRacerForm({races}: {races: Array<RacePreview>}) {
     const formSchema = z.object({
@@ -54,8 +56,11 @@ function NewRacerForm({races}: {races: Array<RacePreview>}) {
         club: z.string().min(1, {
             message: "Jméno oddílu musí mít alespoň 1 znak.",
         }),
-        raceId: z.string({
-            required_error: "Zvolte si závod.",
+        raceId: z.string().min(1, {
+            message: "Zvolte si závod.",
+        }),
+        event: z.array(z.string()).refine((value) => value.some((item) => item), {
+            message: "Vyberte si alespoň 1 disciplínu.",
         })
     })
     
@@ -69,6 +74,37 @@ function NewRacerForm({races}: {races: Array<RacePreview>}) {
             raceId: ""
         },
     })
+
+    const [formRaceId, setFormRaceId] = React.useState<string>()
+    const [events, setEvents] = React.useState<Array<EventPreview>>([])
+    React.useEffect(() => {
+        async function getEvents() {
+            if (!formRaceId) {
+                return
+            }
+            const response = await fetch('/api/race', {
+                method: 'PUT',
+                body: JSON.stringify({id: Number(formRaceId)} as RaceGet)
+            })
+            switch (response.status) {
+                case 200: {
+                    const data = (await response.json() as {data: Race}).data
+                    setEvents(data.event)
+                    break
+                }
+                case 204: {
+                    setEvents([])
+                    break
+                }
+                default: {
+                    toast("Někde se stala chyba, více informací v console.log().")
+                    console.log(response)
+                    break
+                }
+            }
+        }
+        void getEvents()
+    }, [formRaceId])
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const response = await fetch('/api/racer', {
@@ -225,7 +261,7 @@ function NewRacerForm({races}: {races: Array<RacePreview>}) {
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel>Závod</FormLabel>
-                        <Select onValueChange={field.onChange}>
+                        <Select onValueChange={(event) => {field.onChange(event);setFormRaceId(event)}}>
                             <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Zvolte si závod" />
@@ -246,6 +282,56 @@ function NewRacerForm({races}: {races: Array<RacePreview>}) {
                         </FormItem>
                     )}
                 />
+                {events.length > 0 ? (
+                    <FormField
+                        control={form.control}
+                        name="event"
+                        render={() => (
+                            <FormItem>
+                            <div className="mb-4">
+                                <FormLabel className="text-base">Disciplíny</FormLabel>
+                                <FormDescription>
+                                Vyberte si disciplíny, ve kterých chcete soutěžit.
+                                </FormDescription>
+                            </div>
+                            {events.map((event) => (
+                                <FormField
+                                key={event.id.toString()}
+                                control={form.control}
+                                name="event"
+                                render={({ field }) => {
+                                    return (
+                                    <FormItem
+                                        key={event.id.toString()}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                        <FormControl>
+                                        <Checkbox
+                                            checked={field.value?.includes(event.id.toString())}
+                                            onCheckedChange={(checked) => {
+                                            return checked
+                                                ? field.onChange([...(field.value ? field.value : []), event.id.toString()])
+                                                : field.onChange(
+                                                    field.value?.filter(
+                                                    (value) => value !== event.id.toString()
+                                                    )
+                                                )
+                                            }}
+                                        />
+                                        </FormControl>
+                                        <FormLabel className="font-normal">
+                                        {event.name}
+                                        </FormLabel>
+                                    </FormItem>
+                                    )
+                                }}
+                                />
+                            ))}
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                ) : null}
                 <Button type="submit">Přihlásit se na závod</Button>
             </form>
         </Form>

@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     return NextResponse.json({data: createdRace}, { status: 201 })
 }
 
-export async function GET(request: Request) {
+export async function PUT(request: Request) {
     const data = await request.json() as RaceGet
     const race: Race | null = await readRace(data.id)
     if (race) {

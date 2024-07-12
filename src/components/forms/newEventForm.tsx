@@ -17,10 +17,10 @@ import {
 import { Input } from "~/components/ui/input"
 import { toast } from "sonner"
 import type { Race } from '~/server/types/race'
-import type { EventPreview } from '~/server/types/event'
+import type { Event } from '~/server/types/event'
 import { type PushDirection } from '../hooks/useArrayWithIdState'
 
-function NewEventForm({race, pushEvents}: {race: Race, pushEvents: (element: EventPreview, direction?: PushDirection) => void}) {
+function NewEventForm({race, pushEvents}: {race: Race, pushEvents: (element: Event, direction?: PushDirection) => void}) {
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno disciplíny musí mít alespoň 1 znak.",
@@ -49,7 +49,7 @@ function NewEventForm({race, pushEvents}: {race: Race, pushEvents: (element: Eve
         switch (response.status) {
             case 201: {
                 toast(`Nová disciplína "${values.name}" pro kategorii "${values.category}" byla přidána .`)
-                const data = (await response.json() as {data: EventPreview}).data
+                const data = (await response.json() as {data: Event}).data
                 pushEvents(data)
                 form.reset()
                 break

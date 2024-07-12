@@ -42,7 +42,7 @@ model Performance {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  measurement Float
+  measurement Float?
 
   racer   Racer @relation(fields: [racerId], references: [id])
   racerId Int

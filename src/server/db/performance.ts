@@ -1,10 +1,9 @@
 import { db } from "../db";
 import type { PerformancePreview } from "../types/performance";
 
-export async function createPerformance(measurement: number, racerId: number, eventId: number): Promise<PerformancePreview> {
+export async function createPerformance(racerId: number, eventId: number): Promise<PerformancePreview> {
     return await db.performance.create({
         data: {
-            measurement: measurement,
             racer: {
                 connect: {
                     id: racerId

@@ -1,7 +1,7 @@
 import { db } from "../db";
 import type { EventPreview, Event } from "../types/event";
 
-export async function createEvent(name: string, category: string, raceId: number): Promise<EventPreview> {
+export async function createEvent(name: string, category: string, raceId: number): Promise<Event> {
     return await db.event.create({
         data: {
             name: name,
@@ -11,6 +11,14 @@ export async function createEvent(name: string, category: string, raceId: number
                     id: raceId
                 }
             }
+        },
+        include: {
+            performance: {
+                include: {
+                    racer: true
+                }
+            },
+            ageCoeficient: true
         }
     })
 }
