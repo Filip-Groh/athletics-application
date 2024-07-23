@@ -1,8 +1,14 @@
-import {type ReactNode } from 'react'
+import { redirect } from 'next/navigation'
+import React from 'react'
+import { getServerAuthSession } from "~/server/auth"
 
-// Auth check!!!
+const AuthLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
+    const session = await getServerAuthSession()
 
-function ZavodyLayout({children}: {children: ReactNode}) {
+    if (!session) {
+        redirect("/")
+    }
+
     return (
         <>
             {children}
@@ -10,4 +16,4 @@ function ZavodyLayout({children}: {children: ReactNode}) {
     )
 }
 
-export default ZavodyLayout
+export default AuthLayout

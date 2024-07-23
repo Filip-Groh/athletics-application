@@ -1,9 +1,11 @@
 import React from 'react'
 import NewRacerForm from '~/components/forms/newRacerForm'
-import { getRaces } from '~/server/db/race'
+import { api } from "~/trpc/server";
 
 async function PrihlaskyPage() {
-    const races = await getRaces()
+    const races = await api.race.getRaces({
+        includeHidden: false
+    })
 
     return (
         <NewRacerForm races={races} />

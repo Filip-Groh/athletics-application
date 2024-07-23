@@ -28,53 +28,51 @@ import {
 } from "~/components/ui/popover"
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
-import { Event } from '~/server/types/event'
+import { api } from "~/trpc/react"
 
 function NewRaceForm() {
     const router = useRouter()
-    const formSchema = z.object({
+
+    const createRaceSchema = z.object({
         name: z.string().min(1, {
-            message: "Jméno musí mít alespoň 1 znak.",
+            message: "Jméno musí mít alespoň 1 znak."
         }),
         date: z.date({
             required_error: "Musíte vybrat datum.",
         }),
-        place: z.string().min(1, {
-            message: "Místo konání musí mít alespoň 1 znak.",
-        }),
         organizer: z.string().min(1, {
-            message: "Jméno organizátora musí mít alespoň 1 znak.",
+            message: "Jméno organizátora musí mít alespoň 1 znak."
         }),
+        place: z.string().min(1, {
+            message: "Místo konání musí mít alespoň 1 znak."
+        }),
+        visible: z.boolean()
     })
     
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof createRaceSchema>>({
+        resolver: zodResolver(createRaceSchema),
         defaultValues: {
             name: "",
             organizer: "",
-            place: ""
+            place: "",
+            visible: false
+        },
+    })
+
+    const createRace = api.race.createRace.useMutation({
+        async onSuccess(data) {
+            toast(`Nový závod "${data.name}" byl naplánován na ${data.date.toLocaleDateString()} organizátorem "${data.organizer}".`)
+            form.reset()
+            router.push(`/zavody/${data.id}`)
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
         },
     })
     
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await fetch('/api/race', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
-        switch (response.status) {
-            case 201: {
-                toast(`Nový závod "${values.name}" byl naplánován na ${values.date.toLocaleDateString()} organizátorem "${values.organizer}".`)
-                form.reset()
-                const data = (await response.json() as {data: Event}).data
-                router.push(`/zavody/${data.id}`)
-                break
-            }
-            default: {
-                toast("Někde se stala chyba, více informací v console.log().")
-                console.log(response)
-                break
-            }
-        }
+    async function onSubmit(values: z.infer<typeof createRaceSchema>) {
+        createRace.mutate(values)
     }
 
     return (

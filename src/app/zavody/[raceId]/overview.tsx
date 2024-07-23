@@ -1,8 +1,8 @@
 import React from 'react'
 import OverviewForm from '~/components/forms/overviewForm'
-import { type RacePreview } from '~/server/types/race'
+import type { RouterOutputs } from '~/trpc/react'
 
-function OverviewTab({race}: {race: RacePreview}) {
+function OverviewTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     return (
         <OverviewForm race={race} />
     )

@@ -16,11 +16,10 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { toast } from "sonner"
-import type { Race } from '~/server/types/race'
-import type { Event } from '~/server/types/event'
 import { type PushDirection } from '../hooks/useArrayWithIdState'
+import { api, type RouterOutputs } from '~/trpc/react'
 
-function NewEventForm({race, pushEvents}: {race: Race, pushEvents: (element: Event, direction?: PushDirection) => void}) {
+function NewEventForm({race, pushEvents}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>, pushEvents: (element: NonNullable<RouterOutputs["event"]["createEvent"]>, direction?: PushDirection) => void}) {
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno disciplíny musí mít alespoň 1 znak.",
@@ -37,29 +36,21 @@ function NewEventForm({race, pushEvents}: {race: Race, pushEvents: (element: Eve
             category: ""
         },
     })
+
+    const createEvent = api.event.createEvent.useMutation({
+        async onSuccess(data) {
+            toast(`Nová disciplína "${data.name}" pro kategorii "${data.category}" byla přidána .`)
+            pushEvents(data)
+            form.reset()
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await fetch('/api/event', {
-            method: 'POST',
-            body: JSON.stringify({
-                ...values,
-                raceId: race.id
-            })
-        })
-        switch (response.status) {
-            case 201: {
-                toast(`Nová disciplína "${values.name}" pro kategorii "${values.category}" byla přidána .`)
-                const data = (await response.json() as {data: Event}).data
-                pushEvents(data)
-                form.reset()
-                break
-            }
-            default: {
-                toast("Někde se stala chyba, více informací v console.log().")
-                console.log(response)
-                break
-            }
-        }
+        createEvent.mutate({...values, raceId: race.id})
     }
 
     return (

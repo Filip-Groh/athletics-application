@@ -8,11 +8,13 @@ import {
     CardHeader,
     CardTitle,
   } from "~/components/ui/card"
-import { getRaces } from '~/server/db/race'
+import { api } from "~/trpc/server";
   
 
 async function ZavodyPage() {
-    const races = await getRaces(true)
+    const races = await api.race.getRaces({
+        includeHidden: true
+    })
 
     return (
         <div>

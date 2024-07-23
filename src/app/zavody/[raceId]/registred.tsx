@@ -1,8 +1,8 @@
 import React from 'react'
 import RegistredTable from '~/components/tables/registredTable'
-import type { Race } from '~/server/types/race'
+import type { RouterOutputs } from '~/trpc/react'
 
-function RegistredTab({race}: {race: Race}) {
+function RegistredTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     return (
         <RegistredTable data={race.racer}/>
     )

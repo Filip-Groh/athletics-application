@@ -5,17 +5,23 @@ import NewEventForm from '~/components/forms/newEventForm'
 import { useArrayWithIdState } from '~/components/hooks/useArrayWithIdState'
 import PerformanceTable from '~/components/tables/performanceTable'
 import { VerticalTabs, VerticalTabsContent, VerticalTabsList, VerticalTabsTrigger } from '~/components/ui/verticalTabs'
-import type { Race } from '~/server/types/race'
+import type { RouterOutputs } from '~/trpc/react'
+
+export type MeasurementType = {
+    id: number | undefined
+    value: number
+}
 
 export type PerformanceType = {
+    id: number,
     name: string,
     surname: string,
     sex: string,
     birthDate: string,
-    measurement: number[]
+    measurement: MeasurementType[]
 }
 
-function PerformanceTab({race}: {race: Race}) {
+function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     const {state: events, push: pushEvents} = useArrayWithIdState(race.event, true)
 
     return (
@@ -30,14 +36,18 @@ function PerformanceTab({race}: {race: Race}) {
                     <VerticalTabsTrigger key="eventTrigger_new" value="event_new">Přidat disciplínu</VerticalTabsTrigger>
                 </VerticalTabsList>
                 {events.map((event) => {
-                    let tableData: PerformanceType[] = event.performance.map<PerformanceType>((value) => {
+                    const tableData: PerformanceType[] = event.performance.map<PerformanceType>((value) => {
                         return {
+                            id: value.id,
                             name: value.racer.name,
                             surname: value.racer.surname,
                             sex: value.racer.sex,
                             birthDate: value.racer.birthDate.toLocaleDateString(),
                             measurement: value.measurement.map((measurement) => {
-                                return measurement.value
+                                return {
+                                    id: measurement.id,
+                                    value: measurement.value ? measurement.value : NaN
+                                }
                             })
                         }
                     })

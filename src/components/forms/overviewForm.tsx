@@ -28,12 +28,13 @@ import {
 } from "~/components/ui/popover"
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
-import { Event } from '~/server/types/event'
-import { RacePreview } from '~/server/types/race'
 import { Checkbox } from "~/components/ui/checkbox"
+import type { RouterOutputs } from '~/trpc/react'
+import { api } from '~/trpc/react'
 
-function OverviewForm({race}: {race: RacePreview}) {
+function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     const router = useRouter()
+    
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
@@ -60,26 +61,21 @@ function OverviewForm({race}: {race: RacePreview}) {
             visible: race.visible
         },
     })
+
+    const updateRace = api.race.updateRace.useMutation({
+        async onSuccess(data) {
+            toast(`Závod "${data.name}" byl upraven.`)
+            form.reset()
+            router.push(`/zavody/${data.id}`)
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await fetch('/api/race', {
-            method: 'PATCH',
-            body: JSON.stringify({id: race.id,...values})
-        })
-        switch (response.status) {
-            case 200: {
-                toast(`Závod "${values.name}" byl upraven.`)
-                form.reset()
-                const data = (await response.json() as {data: Event}).data
-                router.push(`/zavody/${data.id}`)
-                break
-            }
-            default: {
-                toast("Někde se stala chyba, více informací v console.log().")
-                console.log(response)
-                break
-            }
-        }
+        updateRace.mutate({ id: race.id, ...values })
     }
 
     return (

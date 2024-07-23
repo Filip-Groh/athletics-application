@@ -5,11 +5,13 @@ import RegistredTab from './registred'
 import PerformanceTab from './performance'
 import PointsTab from './points'
 import BackupTab from './backup'
-import { readRace } from '~/server/db/race'
 import { notFound } from 'next/navigation';
+import { api } from '~/trpc/server'
 
 async function PrehledPage({ params }: { params: { raceId: string } }) {
-    const race = await readRace(Number(params.raceId))
+    const race = await api.race.readRaceById({
+        id: Number(params.raceId)
+    })
 
     if (!race) {
         notFound()

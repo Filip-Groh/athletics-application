@@ -16,7 +16,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         if (logChanges) {
             console.log({
                 paramArray: array,
-                internalArray: arrayState
+                internalArrayBefore: arrayState
             })
         }
     }
@@ -35,7 +35,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         if (logChanges) {
             console.log({
                 paramElement: element,
-                internalArray: arrayState
+                internalArrayBefore: arrayState
             })
         }
     }
@@ -46,7 +46,21 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         if (logChanges) {
             console.log({
                 paramIndex: index,
-                internalArray: arrayState
+                internalArrayBefore: arrayState
+            })
+        }
+    }
+
+    function change(index: number, element: T) {
+        const newArray = structuredClone(arrayState)
+        newArray[index] = element
+        setArrayState(newArray)
+
+        if (logChanges) {
+            console.log({
+                paramIndex: index,
+                paramElement: element,
+                internalArrayBefore: arrayState
             })
         }
     }
@@ -55,6 +69,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         state: arrayState,
         set: set,
         push: push,
-        pop: pop
+        pop: pop,
+        change: change
     }
 }

@@ -15,10 +15,10 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import React from 'react'
-import type { RacerPreview } from "~/server/types/racer"
+import type { RouterOutputs } from "~/trpc/react"
 
-function RegistredTable({data}: {data: RacerPreview[]}) {
-    const columns: ColumnDef<RacerPreview>[] = [
+function RegistredTable({data}: {data: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
+    const columns: ColumnDef<NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"][0]>[] = [
         {
             accessorKey: "name",
             header: "Jméno",
@@ -30,6 +30,9 @@ function RegistredTable({data}: {data: RacerPreview[]}) {
         {
             accessorKey: "birthDate",
             header: "Datum narození",
+            accessorFn: (row) => {
+                return row.birthDate.toLocaleDateString()
+            }
         },
         {
             accessorKey: "sex",

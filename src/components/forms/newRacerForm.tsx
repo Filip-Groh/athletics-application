@@ -28,7 +28,6 @@ import {
 } from "~/components/ui/popover"
 import { toast } from "sonner"
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group"
-import type { Race, RaceGet, RacePreview } from '~/server/types/race'
 import {
   Select,
   SelectContent,
@@ -37,9 +36,9 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { Checkbox } from "~/components/ui/checkbox"
-import type { EventPreview } from '~/server/types/event'
+import { api, type RouterOutputs } from '~/trpc/react'
 
-function NewRacerForm({races}: {races: Array<RacePreview>}) {
+function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRaces"]>}) {
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
@@ -76,57 +75,51 @@ function NewRacerForm({races}: {races: Array<RacePreview>}) {
     })
 
     const [formRaceId, setFormRaceId] = React.useState<string>()
-    const [events, setEvents] = React.useState<Array<EventPreview>>([])
-    React.useEffect(() => {
-        async function getEvents() {
-            if (!formRaceId) {
-                return
-            }
-            const response = await fetch('/api/race', {
-                method: 'PUT',
-                body: JSON.stringify({id: Number(formRaceId)} as RaceGet)
-            })
-            switch (response.status) {
-                case 200: {
-                    const data = (await response.json() as {data: Race}).data
-                    setEvents(data.event)
-                    break
-                }
-                case 204: {
-                    setEvents([])
-                    break
-                }
-                default: {
-                    toast("Někde se stala chyba, více informací v console.log().")
-                    console.log(response)
-                    break
-                }
-            }
+    const [events, setEvents] = React.useState<NonNullable<RouterOutputs["race"]["getRaceEvents"]>["event"]>([])
+
+    const getRaceEvents = api.race.getRaceEvents.useMutation({
+        async onSuccess(data) {
+            setEvents(data ? data.event : [])
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
         }
-        void getEvents()
+    })
+
+    React.useEffect(() => {
+        if (formRaceId) {
+            getRaceEvents.mutate({
+                id: Number(formRaceId)
+            })
+        }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formRaceId])
+
+    const createRacer = api.racer.createRacer.useMutation({
+        async onSuccess(data) {
+            toast(`Úspěšně jste se přihlásili na závod "${data.race.name}"`)
+            form.reset()
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        }
+    })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const response = await fetch('/api/racer', {
-            method: 'POST',
-            body: JSON.stringify(values)
+        createRacer.mutate({
+            name: values.name,
+            surname: values.surname,
+            birthDate: values.birthDate,
+            sex: values.sex,
+            club: values.club,
+            raceId: Number(values.raceId),
+            event: values.event.map((event) => {
+                return Number(event)
+            })
         })
-        switch (response.status) {
-            case 201: {
-                let raceName = ""
-                races.forEach((race) => {
-                    raceName = race.id.toString() == values.raceId ? race.name : raceName
-                })
-                toast(`Úspěšně jste se přihlásili na závod "${raceName}"`)
-                form.reset()
-                break
-            }
-            default: {
-                toast("Někde se stala chyba, více informací v console.log().")
-                console.log(response)
-                break
-            }
-        }
     }
 
     return (
