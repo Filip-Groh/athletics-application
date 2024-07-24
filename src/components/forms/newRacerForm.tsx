@@ -74,7 +74,7 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
         },
     })
 
-    const [formRaceId, setFormRaceId] = React.useState<string>()
+    const [formRaceId, setFormRaceId] = React.useState("")
     const [events, setEvents] = React.useState<NonNullable<RouterOutputs["race"]["getRaceEvents"]>["event"]>([])
 
     const getRaceEvents = api.race.getRaceEvents.useMutation({
@@ -100,6 +100,8 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
     const createRacer = api.racer.createRacer.useMutation({
         async onSuccess(data) {
             toast(`Úspěšně jste se přihlásili na závod "${data.race.name}"`)
+            setEvents([])
+            setFormRaceId("")
             form.reset()
         },
         async onError(error) {
@@ -254,7 +256,7 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel>Závod</FormLabel>
-                        <Select onValueChange={(event) => {field.onChange(event);setFormRaceId(event)}}>
+                        <Select onValueChange={(event) => {field.onChange(event);setFormRaceId(event)}} value={formRaceId}>
                             <FormControl>
                             <SelectTrigger>
                                 <SelectValue placeholder="Zvolte si závod" />

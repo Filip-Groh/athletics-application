@@ -19,7 +19,7 @@ import type { MeasurementType, PerformanceType } from "~/app/zavody/[raceId]/per
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { PlusIcon, Save } from "lucide-react"
-import { useArrayState } from "../hooks/useArrayState"
+import { useArrayState } from "~/components/hooks/useArrayState"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
 
@@ -86,6 +86,16 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
         {
             accessorKey: "sex",
             header: "Pohlaví",
+            accessorFn: (row) => {
+                switch (row.sex) {
+                    case "man":
+                        return "Muž"
+                     case "woman":
+                        return "Žena"
+                    default:
+                        return ""
+                }
+            }
         },
         {
             accessorKey: "birthDate",

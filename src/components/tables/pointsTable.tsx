@@ -15,43 +15,22 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import React from 'react'
-import type { RouterOutputs } from "~/trpc/react"
+import type { Data } from "~/app/zavody/[raceId]/points"
 
-function RegistredTable({data}: {data: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
-    const columns: ColumnDef<NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"][0]>[] = [
-        {
-            accessorKey: "name",
-            header: "Jméno",
-        },
-        {
-            accessorKey: "surname",
-            header: "Příjmení",
-        },
-        {
-            accessorKey: "birthDate",
-            header: "Datum narození",
-            accessorFn: (row) => {
-                return row.birthDate.toLocaleDateString()
-            }
-        },
-        {
-            accessorKey: "sex",
-            header: "Pohlaví",
-            accessorFn: (row) => {
-                switch (row.sex) {
-                    case "man":
-                        return "Muž"
-                     case "woman":
-                        return "Žena"
-                    default:
-                        return ""
-                }
-            }
-        },
-        {
-            accessorKey: "club",
-            header: "Oddíl",
+function PointsTable({eventNames, data}: {eventNames: string[], data: Data[]}) {
+    const eventColumns = eventNames.map((eventName) => {
+        return {
+            accessorKey: eventName,
+            header: eventName
         }
+    })
+
+    const columns: ColumnDef<Data>[] = [
+        {
+            accessorKey: "age",
+            header: "Věk",
+        },
+        ...eventColumns
     ]
 
     const table = useReactTable({
@@ -108,4 +87,4 @@ function RegistredTable({data}: {data: NonNullable<RouterOutputs["race"]["readRa
     )
 }
 
-export default RegistredTable
+export default PointsTable
