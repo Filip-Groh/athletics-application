@@ -21,7 +21,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
     })))
     
     const categoriesToAgeMap = new Map<string, number[]>()
-    const categoriesToEventNameMap = new Map<string, string[]>()
+    const categoriesToEventNameMap = new Map<string, {id: number, name: string}[]>()
     events.forEach((event) => {
         const currentAges = categoriesToAgeMap.get(event.category)
         const currentEventNames = categoriesToEventNameMap.get(event.category)
@@ -44,14 +44,20 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
 
         if (currentEventNames) {
             const include = currentEventNames.some((currentEventName) => {
-                return event.name === currentEventName
+                return event.id === currentEventName.id
             })
             if (!include) {
-                currentEventNames.push(event.name)
+                currentEventNames.push({
+                    id: event.id,
+                    name: event.name
+                })
             }
             categoriesToEventNameMap.set(event.category, currentEventNames)
         } else {
-            categoriesToEventNameMap.set(event.category, [event.name])
+            categoriesToEventNameMap.set(event.category, [{
+                id: event.id,
+                name: event.name
+            }])
         }
     }) 
 
@@ -69,21 +75,20 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
 
                 eventNames.forEach((eventName) => {
                     eventsLoop: for (const event of events) {
-                        if (event.category !== category || event.name !== eventName) {
-                            return
+                        if (event.category !== category || event.id !== eventName.id) {
+                            continue
                         }
 
                         for (const ageCoeficient of event.ageCoeficient) {
                             if (ageCoeficient.age !== age) {
-                                return
+                                continue
                             }
 
-                            returnData[eventName] = ageCoeficient.coeficient
+                            returnData[eventName.name] = ageCoeficient.coeficient
                             break eventsLoop
                         }
                     }
                 })
-
                 return returnData
             })
         } else {
@@ -92,7 +97,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
     })
 
     return (
-        <Tabs defaultValue={categories[0]} className="w-[400px]">
+        <Tabs defaultValue={categories[0]} className="w-full">
             <TabsList>
                 {categories.map((category) => {
                     return <TabsTrigger key={`trigger_${category}`} value={category}>{category}</TabsTrigger>
@@ -100,7 +105,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
             </TabsList>
             {categories.map((category) => {
                 const eventNamesAdept = categoriesToEventNameMap.get(category)
-                const eventNames: string[] = eventNamesAdept ? eventNamesAdept : []
+                const eventNames = eventNamesAdept ? eventNamesAdept : []
 
                 const dataAdept = dataset[category]
                 const data = dataAdept ? dataAdept : []

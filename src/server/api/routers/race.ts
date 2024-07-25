@@ -107,7 +107,11 @@ export const raceRouter = createTRPCRouter({
                                     measurement: true
                                 }
                             },
-                            ageCoeficient: true
+                            ageCoeficient: {
+                                orderBy: {
+                                    age: "asc"
+                                }
+                            }
                         }
                     },
                     racer: true
