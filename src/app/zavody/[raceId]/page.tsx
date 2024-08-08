@@ -5,7 +5,7 @@ import RegistredTab from './registred'
 import PerformanceTab from './performance'
 import PointsTab from './points'
 import BackupTab from './backup'
-import { notFound } from 'next/navigation';
+import { notFound } from 'next/navigation'
 import { api } from '~/trpc/server'
 
 async function PrehledPage({ params }: { params: { raceId: string } }) {

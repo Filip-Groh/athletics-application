@@ -49,6 +49,8 @@ const getRaceEventsSchema = z.object({
     id: z.number()
 })
 
+const getRaceByIdPublicSchema = getRaceEventsSchema
+
 export const raceRouter = createTRPCRouter({
     getRaces: publicProcedure
         .input(getRacesSchema)
@@ -73,6 +75,30 @@ export const raceRouter = createTRPCRouter({
                 },
                 include: {
                     event: true
+                }
+            })
+        }),
+
+    getRaceByIdPublic: publicProcedure
+        .input(getRaceByIdPublicSchema)
+        .query(({ctx, input}) => {
+            return ctx.db.race.findUnique({
+                where: {
+                    id: input.id,
+                    visible: true
+                },
+                include: {
+                    event: {
+                        include: {
+                            ageCoeficient: true,
+                            performance: {
+                                include: {
+                                    measurement: true,
+                                    racer: true
+                                }
+                            }
+                        }
+                    }
                 }
             })
         }),
