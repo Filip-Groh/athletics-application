@@ -90,6 +90,8 @@ model AgeCoeficient {
 
   event   Event @relation(fields: [eventId], references: [id])
   eventId Int
+
+  @@unique([age, eventId])
 }
 
 // Necessary for Next auth

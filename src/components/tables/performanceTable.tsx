@@ -16,28 +16,35 @@ import {
 } from "~/components/ui/table"
 import React from 'react'
 import type { MeasurementType, PerformanceType } from "~/app/zavody/[raceId]/performance"
-import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { PlusIcon, Save } from "lucide-react"
 import { useArrayState } from "~/components/hooks/useArrayState"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
+import NumericInput from "../elements/numericInput"
+import { inputStringToNumber } from "~/lib/utils"
 
 function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
-    const {push: pushMeasurement, state: measurements, change: changeMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
+    const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
         return {
             id: measurement.id,
             value: Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
         }
     }))
 
-    const inputToNumber = (input: string) => {
-        return Number(input.replace(",", "."))
-    }
-
     const saveMeasurements = api.measurement.saveMeasurementsOnPerformance.useMutation({
-        async onSuccess(data) {
-            toast(`Úspěšně uloženo ${data.length} měření.`)
+        async onSuccess(measurements) {
+            toast(`Úspěšně uloženo ${measurements.length} měření.`)
+
+            setMeasurement(measurements.map((measurement) => {
+                if (!measurement.value) {
+                    measurement.value = NaN
+                }
+                return {
+                    id: measurement.id,
+                    value:  Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
+                }
+            }))
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -52,7 +59,7 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
             measurements: measurements.map((measurement) => {
                 return {
                     id: measurement.id,
-                    value: inputToNumber(measurement.value)
+                    value: inputStringToNumber(measurement.value)
                 }
             })
         })
@@ -64,7 +71,11 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
                 <Save className="h-4 w-4" />
             </Button>
             {measurements.map((measurement, index) => {
-                return <Input key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" className={`${Number.isNaN(inputToNumber(measurement.value)) ? "border-destructive" : ""}`} value={measurement.value} onChange={(e) => {changeMeasurement(index, {id: measurement.id,value: e.target.value})}}/>
+                const handleChange = (newValue: string) => {
+                    changeMeasurement(index, {id: measurement.id,value: newValue})
+                }
+
+                return <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" numericValue={measurement.value} onChange={handleChange} />
             })}
             <Button variant="outline" size="icon" className="flex-shrink-0" onClick={() => {pushMeasurement({id: undefined, value: ""})}}>
                 <PlusIcon className="h-4 w-4" />

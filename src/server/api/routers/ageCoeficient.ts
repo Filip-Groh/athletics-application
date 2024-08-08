@@ -14,12 +14,14 @@ const addAgeCoeficientSchema = z.object({
     }))
 })
 
+const saveAgeCoeficientSchema = addAgeCoeficientSchema
+
 export const ageCoeficientRouter = createTRPCRouter({
     addAgeCoeficients: protectedProcedure
         .input(addAgeCoeficientSchema)
-        .mutation(({ ctx, input }) => {
-            return input.ageCoeficients.map(async (ageCoeficient) => {
-                return await ctx.db.ageCoeficient.create({
+        .mutation(async ({ ctx, input }) => {
+            const newAgeCoeficients = input.ageCoeficients.map((ageCoeficient) => {
+                return ctx.db.ageCoeficient.create({
                     data: {
                         age: input.age,
                         coeficient: ageCoeficient.coeficient,
@@ -28,8 +30,43 @@ export const ageCoeficientRouter = createTRPCRouter({
                                 id: ageCoeficient.eventId
                             }
                         }
+                    },
+                    include: {
+                        event: true
                     }
                 })
             })
+            return await Promise.all(newAgeCoeficients)
+        }),
+
+    saveAgeCoeficient: protectedProcedure
+        .input(saveAgeCoeficientSchema)
+        .mutation(async ({ ctx, input }) => {
+            const modifiedAgeCoeficients = input.ageCoeficients.map((ageCoeficient) => {
+                return ctx.db.ageCoeficient.upsert({
+                    where: {
+                        age_eventId: {
+                            age: input.age,
+                            eventId: ageCoeficient.eventId
+                        }
+                    },
+                    create: {
+                        age: input.age,
+                        coeficient: ageCoeficient.coeficient,
+                        event: {
+                            connect: {
+                                id: ageCoeficient.eventId
+                            }
+                        }
+                    },
+                    update: {
+                        coeficient: ageCoeficient.coeficient
+                    },
+                    include: {
+                        event: true
+                    }
+                })
+            })
+            return await Promise.all(modifiedAgeCoeficients)
         })
 });

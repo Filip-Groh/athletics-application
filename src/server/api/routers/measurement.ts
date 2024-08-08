@@ -18,7 +18,7 @@ export const measurementRouter = createTRPCRouter({
     saveMeasurementsOnPerformance: protectedProcedure
         .input(saveMeasurementsSchema)
         .mutation(async ({ ctx, input }) => {
-            return input.measurements.map(async (measurement) => {
+            const newMeasuement = input.measurements.map(async (measurement) => {
                 return await ctx.db.measurement.upsert({
                     where: {
                         performanceId: input.performanceId,
@@ -37,5 +37,6 @@ export const measurementRouter = createTRPCRouter({
                     }
                 })
             })
+            return await Promise.all(newMeasuement)
         }),
 });

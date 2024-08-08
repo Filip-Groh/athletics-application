@@ -111,7 +111,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
                 const data = dataAdept ? dataAdept : []
                 return (
                     <TabsContent key={`content_${category}`} value={category}>
-                        <PointsTable eventNames={eventNames} data={data}/>
+                        <PointsTable eventNames={eventNames} defaultData={data}/>
                     </TabsContent>
                 )
             })}
