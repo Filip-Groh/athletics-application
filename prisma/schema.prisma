@@ -33,6 +33,10 @@ model Event {
   name     String
   category String
 
+  a Float
+  b Float
+  c Float
+
   performance   Performance[]
   ageCoeficient AgeCoeficient[]
   race          Race            @relation(fields: [raceId], references: [id])

@@ -4,7 +4,7 @@ import type { RouterOutputs } from '~/trpc/react'
 
 function RegistredTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     return (
-        <RegistredTable data={race.racer}/>
+        <RegistredTable defaultData={race.racer}/>
     )
 }
 

@@ -75,6 +75,7 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
     })
 
     const [formRaceId, setFormRaceId] = React.useState("")
+    const [sex, setSex] = React.useState("man")
     const [events, setEvents] = React.useState<NonNullable<RouterOutputs["race"]["getRaceEvents"]>["event"]>([])
 
     const getRaceEvents = api.race.getRaceEvents.useMutation({
@@ -88,14 +89,20 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
     })
 
     React.useEffect(() => {
-        if (formRaceId) {
+        let sexEnum: "man" | "woman" = "man"
+        if (sex === "woman") {
+            sexEnum = sex
+        }
+
+        if (formRaceId && sex) {
             getRaceEvents.mutate({
-                id: Number(formRaceId)
+                id: Number(formRaceId),
+                sex: sexEnum
             })
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [formRaceId])
+    }, [formRaceId, sex])
 
     const createRacer = api.racer.createRacer.useMutation({
         async onSuccess(data) {
@@ -208,7 +215,7 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
                         <FormLabel>Zvolte pohlaví</FormLabel>
                         <FormControl>
                             <RadioGroup
-                            onValueChange={field.onChange}
+                            onValueChange={(event) => {field.onChange(event);setSex(event)}}
                             defaultValue={field.value}
                             className="flex flex-col space-y-1"
                             >

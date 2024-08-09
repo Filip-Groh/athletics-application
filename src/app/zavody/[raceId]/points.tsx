@@ -2,6 +2,7 @@ import React from 'react'
 import PointsTable from '~/components/tables/pointsTable'
 import { type RouterOutputs } from '~/trpc/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { formatSex } from '~/lib/utils'
 
 export type Data = {
     age: number,
@@ -100,7 +101,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
         <Tabs defaultValue={categories[0]} className="w-full">
             <TabsList>
                 {categories.map((category) => {
-                    return <TabsTrigger key={`trigger_${category}`} value={category}>{category}</TabsTrigger>
+                    return <TabsTrigger key={`trigger_${category}`} value={category}>{formatSex(category, true)}</TabsTrigger>
                 })}
             </TabsList>
             {categories.map((category) => {

@@ -16,9 +16,30 @@ import {
 } from "~/components/ui/table"
 import React from 'react'
 import type { RouterOutputs } from "~/trpc/react"
+import { formatSex } from "~/lib/utils"
 
-function RegistredTable({data}: {data: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
-    const columns: ColumnDef<NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"][0]>[] = [
+type RegistredData = {
+    name: string,
+    surname: string,
+    birthDate: Date,
+    sex: string,
+    club: string,
+    eventCount: number
+}
+
+function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
+    const data: RegistredData[] = defaultData.map((racer) => {
+        return {
+            name: racer.name,
+            surname: racer.surname,
+            birthDate: racer.birthDate,
+            sex: racer.sex,
+            club: racer.club,
+            eventCount: racer.performace.length
+        }
+    })
+
+    const columns: ColumnDef<RegistredData>[] = [
         {
             accessorKey: "name",
             header: "Jméno",
@@ -38,19 +59,16 @@ function RegistredTable({data}: {data: NonNullable<RouterOutputs["race"]["readRa
             accessorKey: "sex",
             header: "Pohlaví",
             accessorFn: (row) => {
-                switch (row.sex) {
-                    case "man":
-                        return "Muž"
-                     case "woman":
-                        return "Žena"
-                    default:
-                        return ""
-                }
+                return formatSex(row.sex, false)
             }
         },
         {
             accessorKey: "club",
             header: "Oddíl",
+        },
+        {
+            accessorKey: "eventCount",
+            header: "Počet disciplín"
         }
     ]
 

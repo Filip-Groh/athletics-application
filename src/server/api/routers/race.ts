@@ -46,10 +46,13 @@ const updateRaceScheme = z.object({
 })
 
 const getRaceEventsSchema = z.object({
-    id: z.number()
+    id: z.number(),
+    sex: z.enum(["man", "woman"])
 })
 
-const getRaceByIdPublicSchema = getRaceEventsSchema
+const getRaceByIdPublicSchema = z.object({
+    id: z.number()
+})
 
 export const raceRouter = createTRPCRouter({
     getRaces: publicProcedure
@@ -71,10 +74,14 @@ export const raceRouter = createTRPCRouter({
         .mutation(({ ctx, input }) => {
             return ctx.db.race.findUnique({
                 where: {
-                    id: input.id
+                    id: input.id,
                 },
                 include: {
-                    event: true
+                    event: {
+                        where: {
+                            category: input.sex
+                        }
+                    }
                 }
             })
         }),
@@ -140,7 +147,11 @@ export const raceRouter = createTRPCRouter({
                             }
                         }
                     },
-                    racer: true
+                    racer: {
+                        include: {
+                            performace: true
+                        }
+                    }
                 }
             })
         }),

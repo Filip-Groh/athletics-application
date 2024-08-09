@@ -2,6 +2,7 @@ import React from 'react'
 import ScoreTable from '~/components/tables/scoreTable'
 import { type RouterOutputs } from '~/trpc/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
+import { formatSex } from '~/lib/utils'
 
 export type ScoreData = {
     name: string,
@@ -31,6 +32,9 @@ function getAge(birthDate: Date) {
 
 function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>}) {
     const events: Events[] = race.event.map((event) => {
+        const a = event.a as number
+        const b = event.b as number
+        const c = event.c as number
         const ageCoeficients = new Map<number, number>()
         event.ageCoeficient.forEach((ageCoeficient) => {
             ageCoeficients.set(ageCoeficient.age, ageCoeficient.coeficient)
@@ -56,7 +60,7 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
                 club: performance.racer.club,
                 measurements: measurements,
                 bestMeasurement: bestMeasurement,
-                points: countPoints(bestMeasurement, coeficient, 13.0449, 7, 1.05)
+                points: countPoints(bestMeasurement, coeficient, a, b, c)
             }
         }).sort((a, b) => {
             return b.points - a.points
@@ -80,7 +84,7 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
             <TabsList>
                 {events.map((event) => {
                     return (
-                        <TabsTrigger key={`trigger_event_${event.id}`} value={`event_${event.id}`}>{event.name} - {event.category}</TabsTrigger>
+                        <TabsTrigger key={`trigger_event_${event.id}`} value={`event_${event.id}`}>{event.name} - {formatSex(event.category, true)}</TabsTrigger>
                     )
                 })}
             </TabsList>

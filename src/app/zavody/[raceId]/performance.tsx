@@ -5,6 +5,7 @@ import NewEventForm from '~/components/forms/newEventForm'
 import { useArrayWithIdState } from '~/components/hooks/useArrayWithIdState'
 import PerformanceTable from '~/components/tables/performanceTable'
 import { VerticalTabs, VerticalTabsContent, VerticalTabsList, VerticalTabsTrigger } from '~/components/ui/verticalTabs'
+import { formatSex } from '~/lib/utils'
 import type { RouterOutputs } from '~/trpc/react'
 
 export type MeasurementType = {
@@ -30,7 +31,7 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
                 <VerticalTabsList>
                     {events.map((event) => {
                         return (
-                            <VerticalTabsTrigger key={`eventTrigger_${event.id}`} value={event.id.toString()}>{event.name}</VerticalTabsTrigger>
+                            <VerticalTabsTrigger key={`eventTrigger_${event.id}`} value={event.id.toString()}>{event.name} - {formatSex(event.category, true)}</VerticalTabsTrigger>
                         )
                     })}
                     <VerticalTabsTrigger key="eventTrigger_new" value="event_new">Přidat disciplínu</VerticalTabsTrigger>

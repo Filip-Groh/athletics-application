@@ -46,6 +46,9 @@ function NewRaceForm() {
         place: z.string().min(1, {
             message: "Místo konání musí mít alespoň 1 znak."
         }),
+        time: z.string().min(1, {
+            message: "Musíte zvolit čas konání."
+        }),
         visible: z.boolean()
     })
     
@@ -72,6 +75,8 @@ function NewRaceForm() {
     })
     
     async function onSubmit(values: z.infer<typeof createRaceSchema>) {
+        const [hours, minutes] = values.time.split(":")
+        values.date.setHours(Number(hours), Number(minutes))
         createRace.mutate(values)
     }
 
@@ -164,6 +169,22 @@ function NewRaceForm() {
                             Vyberte datum konání závodu.
                         </FormDescription>
                         <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="time"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Čas konání</FormLabel>
+                            <FormControl>
+                                <Input type="time" placeholder="Čas konání" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                Napište čas konání závodu.
+                            </FormDescription>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />

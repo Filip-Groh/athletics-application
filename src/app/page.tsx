@@ -80,7 +80,7 @@ export default async function HomePage() {
                         <Card key={`race_${race.id}`}>
                             <CardHeader>
                                 <CardTitle>{race.name}</CardTitle>
-                                <CardDescription>Koná se {race.date.toLocaleDateString()}</CardDescription>
+                                <CardDescription>Koná se {race.date.toLocaleDateString()} v {race.date.toLocaleTimeString(navigator.language, {hour: "2-digit", minute: "2-digit"})}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <p>Závod se pořádá zde: {race.place}</p>
@@ -95,3 +95,9 @@ export default async function HomePage() {
         </div>
     );
 }
+
+
+/*
+TODO:
+- deleting things
+*/

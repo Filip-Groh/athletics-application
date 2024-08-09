@@ -42,6 +42,9 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
         date: z.date({
             required_error: "Musíte vybrat datum.",
         }),
+        time: z.string().min(1, {
+            message: "Musíte zvolit čas konání."
+        }),
         place: z.string().min(1, {
             message: "Místo konání musí mít alespoň 1 znak.",
         }),
@@ -56,6 +59,7 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
         defaultValues: {
             name: race.name,
             date: race.date,
+            time: race.date.toLocaleTimeString(navigator.language, {hour: "2-digit", minute: "2-digit"}),
             place: race.place,
             organizer: race.organizer,
             visible: race.visible
@@ -75,7 +79,16 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
     })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        updateRace.mutate({ id: race.id, ...values })
+        const [hours, minutes] = values.time.split(":")
+        values.date.setHours(Number(hours), Number(minutes))
+        updateRace.mutate({ 
+            id: race.id, 
+            name: values.name,
+            date: values.date,
+            place: values.place,
+            organizer: values.organizer,
+            visible: values.visible
+        })
     }
 
     return (
@@ -167,6 +180,22 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
                             Vyberte datum konání závodu.
                         </FormDescription>
                         <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="time"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Čas konání</FormLabel>
+                            <FormControl>
+                                <Input type="time" placeholder="Čas konání" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                Napište čas konání závodu.
+                            </FormDescription>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />

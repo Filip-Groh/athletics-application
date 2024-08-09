@@ -22,7 +22,7 @@ import { useArrayState } from "~/components/hooks/useArrayState"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
 import NumericInput from "../elements/numericInput"
-import { inputStringToNumber } from "~/lib/utils"
+import { formatSex, inputStringToNumber } from "~/lib/utils"
 
 function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
     const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
@@ -98,14 +98,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             accessorKey: "sex",
             header: "Pohlaví",
             accessorFn: (row) => {
-                switch (row.sex) {
-                    case "man":
-                        return "Muž"
-                     case "woman":
-                        return "Žena"
-                    default:
-                        return ""
-                }
+                return formatSex(row.sex, false)
             }
         },
         {
