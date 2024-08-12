@@ -47,7 +47,10 @@ export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [
     function pop(id: number) {
         arrayState.forEach((element, index) => {
             if (element.id == id) {
-                setArrayState(arrayState.splice(index, 1))
+                const arrayStateCopy = arrayState.slice()
+                arrayStateCopy.splice(index, 1)
+        
+                setArrayState(arrayStateCopy)
             }
         })
 

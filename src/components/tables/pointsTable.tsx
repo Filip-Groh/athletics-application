@@ -18,7 +18,7 @@ import {
 import React from 'react'
 import type { Data } from "~/app/zavody/[raceId]/points"
 import { Button } from "../ui/button"
-import { PlusIcon, Save } from "lucide-react"
+import { PlusIcon, Save, Trash2 } from "lucide-react"
 import { Input } from "../ui/input"
 import { useArrayState } from "../hooks/useArrayState"
 import { api, type RouterOutputs } from "~/trpc/react"
@@ -132,6 +132,22 @@ function PointsTable({eventNames, defaultData}: {eventNames: {id: number, name: 
         },
     })
 
+    const deleteAgeCoeficient = api.ageCoeficient.deleteAgeCoeficient.useMutation({
+        async onSuccess(ageCoeficients) {
+            toast(`Úspěšně smazáno ${ageCoeficients.length} koeficientů.`)
+            const uniqueAges = new Set(ageCoeficients.map((ageCoeficient) => {
+                return ageCoeficient.age.toLocaleString()
+            }))
+            setData(data.filter((item) => {
+                return !uniqueAges.has(item.age)
+            }))
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
+
     const eventColumns: ColumnDef<DataInString>[] = eventNames.map((eventName) => {
         return {
             accessorKey: eventName.name,
@@ -157,7 +173,7 @@ function PointsTable({eventNames, defaultData}: {eventNames: {id: number, name: 
         ...eventColumns,
         {
             accessorKey: "action",
-            header: "Uložit",
+            header: "Uložit / Smazat",
             cell: ({ row }) => {
                 const handleSave = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                     e.preventDefault();
@@ -177,10 +193,24 @@ function PointsTable({eventNames, defaultData}: {eventNames: {id: number, name: 
                     })
                 }
 
+                const handleDelete = () => {
+                    deleteAgeCoeficient.mutate({
+                        age: inputStringToNumber(row.original.age),
+                        eventIds: eventNames.map((eventName) => {
+                            return eventName.id
+                        })
+                    })
+                }
+
                 return (
-                    <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave}>
-                        <Save className="h-4 w-4" />
-                    </Button>
+                    <div className="flex flex-row gap-2">
+                        <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave}>
+                            <Save className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={handleDelete}>
+                            <Trash2 className="h-4 w-4" />
+                        </Button>
+                    </div>
                 )
             }
         },
@@ -289,7 +319,7 @@ function PointsTable({eventNames, defaultData}: {eventNames: {id: number, name: 
                             )
                         })}
                         <TableCell>
-                            <Button onClick={handleSubmit}>
+                            <Button size="icon" onClick={handleSubmit}>
                                 <PlusIcon className="h-4 w-4" />
                             </Button>
                         </TableCell>

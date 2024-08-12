@@ -31,6 +31,7 @@ import { useRouter } from 'next/navigation'
 import { Checkbox } from "~/components/ui/checkbox"
 import type { RouterOutputs } from '~/trpc/react'
 import { api } from '~/trpc/react'
+import DeleteConfirm from '../elements/deleteConfirm'
 
 function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     const router = useRouter()
@@ -69,8 +70,17 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
     const updateRace = api.race.updateRace.useMutation({
         async onSuccess(data) {
             toast(`Závod "${data.name}" byl upraven.`)
-            form.reset()
-            router.push(`/zavody/${data.id}`)
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
+
+    const deleteRace = api.race.deleteRace.useMutation({
+        async onSuccess(data) {
+            toast(`Závod "${data.name}" byl smazán.`)
+            router.push(`/zavody`)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -88,6 +98,12 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
             place: values.place,
             organizer: values.organizer,
             visible: values.visible
+        })
+    }
+
+    const onDelete = () => {
+        deleteRace.mutate({
+            id: race.id
         })
     }
 
@@ -221,7 +237,12 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Updatovat</Button>
+                <div className='flex flex-row gap-2'>
+                    <Button type="submit">Updatovat</Button>
+                    <DeleteConfirm onConfirm={onDelete}>
+                        <Button variant="destructive">Vymazat</Button>
+                    </DeleteConfirm>
+                </div>
             </form>
         </Form>
     )

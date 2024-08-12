@@ -30,7 +30,7 @@ const readRaceByIdSchema = z.object({
     id: z.number()
 })
 
-const updateRaceScheme = z.object({
+const updateRaceSchema = z.object({
     id: z.number(),
     name: z.optional(z.string().min(1, {
         message: "Jméno musí mít alespoň 1 znak."
@@ -51,6 +51,10 @@ const getRaceEventsSchema = z.object({
 })
 
 const getRaceByIdPublicSchema = z.object({
+    id: z.number()
+})
+
+const deleteRaceSchema = z.object({
     id: z.number()
 })
 
@@ -157,7 +161,7 @@ export const raceRouter = createTRPCRouter({
         }),
 
     updateRace: protectedProcedure
-        .input(updateRaceScheme)
+        .input(updateRaceSchema)
         .mutation(({ ctx, input }) => {
             return ctx.db.race.update({
                 where: {
@@ -165,6 +169,16 @@ export const raceRouter = createTRPCRouter({
                 },
                 data: {
                     ...input
+                }
+            })
+        }),
+
+    deleteRace: protectedProcedure
+        .input(deleteRaceSchema)
+        .mutation(({ctx, input}) => {
+            return ctx.db.race.delete({
+                where: {
+                    id: input.id
                 }
             })
         })

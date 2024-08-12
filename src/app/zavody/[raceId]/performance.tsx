@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import EventForm from '~/components/forms/eventForm'
 import NewEventForm from '~/components/forms/newEventForm'
 import { useArrayWithIdState } from '~/components/hooks/useArrayWithIdState'
 import PerformanceTable from '~/components/tables/performanceTable'
@@ -54,7 +55,8 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
                     })
 
                     return (
-                        <VerticalTabsContent key={`eventContent_${event.id}`} value={event.id.toString()}>
+                        <VerticalTabsContent key={`eventContent_${event.id}`} value={event.id.toString()} className='flex flex-col gap-8'>
+                            <EventForm event={event} />
                             <PerformanceTable data={tableData} />
                         </VerticalTabsContent>
                     )

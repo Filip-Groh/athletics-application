@@ -4,7 +4,9 @@ import type { RouterOutputs } from '~/trpc/react'
 
 function OverviewTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     return (
-        <OverviewForm race={race} />
+        <>
+            <OverviewForm race={race} />
+        </>
     )
 }
 

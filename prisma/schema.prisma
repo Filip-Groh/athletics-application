@@ -39,7 +39,7 @@ model Event {
 
   performance   Performance[]
   ageCoeficient AgeCoeficient[]
-  race          Race            @relation(fields: [raceId], references: [id])
+  race          Race            @relation(fields: [raceId], references: [id], onDelete: Cascade)
   raceId        Int
 }
 
@@ -49,7 +49,7 @@ model Measurement {
   updatedAt DateTime @updatedAt
 
   value         Float?
-  performance   Performance @relation(fields: [performanceId], references: [id])
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
   performanceId Int
 }
 
@@ -60,9 +60,9 @@ model Performance {
 
   measurement Measurement[]
 
-  racer   Racer @relation(fields: [racerId], references: [id])
+  racer   Racer @relation(fields: [racerId], references: [id], onDelete: Cascade)
   racerId Int
-  event   Event @relation(fields: [eventId], references: [id])
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId Int
 
   @@unique([racerId, eventId])
@@ -80,7 +80,7 @@ model Racer {
   club      String
 
   performace Performance[]
-  race       Race          @relation(fields: [raceId], references: [id])
+  race       Race          @relation(fields: [raceId], references: [id], onDelete: Cascade)
   raceId     Int
 }
 
@@ -92,7 +92,7 @@ model AgeCoeficient {
   age        Int
   coeficient Float
 
-  event   Event @relation(fields: [eventId], references: [id])
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId Int
 
   @@unique([age, eventId])

@@ -14,6 +14,11 @@ const saveMeasurementsSchema = z.object({
     }))
 })
 
+const deleteMeasurementSchema = z.object({
+    id: z.number(),
+    index: z.number()
+})
+
 export const measurementRouter = createTRPCRouter({
     saveMeasurementsOnPerformance: protectedProcedure
         .input(saveMeasurementsSchema)
@@ -39,4 +44,14 @@ export const measurementRouter = createTRPCRouter({
             })
             return await Promise.all(newMeasuement)
         }),
+
+    deleteMeasurement: protectedProcedure
+        .input(deleteMeasurementSchema)
+        .mutation(({ctx, input}) => {
+            return {measurement: ctx.db.measurement.delete({
+                where: {
+                    id: input.id
+                }
+            }), index: input.index}
+        })
 });

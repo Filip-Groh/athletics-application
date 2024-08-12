@@ -25,12 +25,12 @@ import NumericInput from "../elements/numericInput"
 import { formatSex, inputStringToNumber } from "~/lib/utils"
 
 function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
-    const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
+    const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement, pop: popMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
         return {
             id: measurement.id,
             value: Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
         }
-    }))
+    }), true)
 
     const saveMeasurements = api.measurement.saveMeasurementsOnPerformance.useMutation({
         async onSuccess(measurements) {
@@ -45,6 +45,16 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
                     value:  Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
                 }
             }))
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
+
+    const deleteMeasurement = api.measurement.deleteMeasurement.useMutation({
+        async onSuccess(measurement) {
+            popMeasurement(measurement.index)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -75,7 +85,20 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
                     changeMeasurement(index, {id: measurement.id,value: newValue})
                 }
 
-                return <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" numericValue={measurement.value} onChange={handleChange} />
+                const handleDelete = () => {
+                    if (!measurement.id) {
+                        popMeasurement(index)
+                    } else {
+                        deleteMeasurement.mutate({
+                            id: measurement.id,
+                            index: index
+                        })
+                    }
+                }
+
+                return (
+                    <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" numericValue={measurement.value} onChange={handleChange} onDelete={handleDelete} />
+                )
             })}
             <Button variant="outline" size="icon" className="flex-shrink-0" onClick={() => {pushMeasurement({id: undefined, value: ""})}}>
                 <PlusIcon className="h-4 w-4" />

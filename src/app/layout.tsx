@@ -40,7 +40,7 @@ const menuItems: Array<MenuItemType> = [
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="cs" className={`${GeistSans.variable}`}>
+        <html lang="cs" className={`${GeistSans.variable}`} suppressHydrationWarning>
             <body>
                 <TRPCReactProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >

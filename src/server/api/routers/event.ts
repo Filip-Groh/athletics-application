@@ -18,6 +18,20 @@ const createEventSchema = z.object({
     c: z.number()
 })
 
+const updateEventSchema = z.object({
+    id: z.number(),
+    name: z.optional(z.string().min(1, {
+        message: "Jméno musí mít alespoň 1 znak."
+    })),
+    a: z.number(),
+    b: z.number(),
+    c: z.number()
+})
+
+const deleteEventSchema = z.object({
+    id: z.number()
+})
+
 export const eventRouter = createTRPCRouter({
     createEvent: protectedProcedure
         .input(createEventSchema)
@@ -45,4 +59,27 @@ export const eventRouter = createTRPCRouter({
                 }
             })
         }),
+
+    updateEvent: protectedProcedure
+        .input(updateEventSchema)
+        .mutation(({ctx, input}) => {
+            return ctx.db.event.update({
+                where: {
+                    id: input.id
+                },
+                data: {
+                    ...input
+                }
+            })
+        }),
+
+    deleteEvent: protectedProcedure
+        .input(deleteEventSchema)
+        .mutation(({ctx, input}) => {
+            return ctx.db.event.delete({
+                where: {
+                    id: input.id,
+                },
+            })
+        })
 });

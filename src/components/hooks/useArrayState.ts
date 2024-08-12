@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export enum PushDirection {
     PushToEnd,
@@ -9,6 +9,12 @@ export enum PushDirection {
 
 export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
     const [arrayState, setArrayState] = useState<Array<T>>(array);
+
+    useEffect(() => {
+        if (logChanges) {
+            console.log(arrayState)
+        }
+    }, [arrayState, logChanges])
 
     function set(array: Array<T>) {
         setArrayState(array)
@@ -41,7 +47,10 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
     }
 
     function pop(index: number) {
-        setArrayState(arrayState.splice(index, 1))
+        const arrayStateCopy = arrayState.slice()
+        arrayStateCopy.splice(index, 1)
+
+        setArrayState(arrayStateCopy)
 
         if (logChanges) {
             console.log({

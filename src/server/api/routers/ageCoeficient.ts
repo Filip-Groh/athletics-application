@@ -16,6 +16,11 @@ const addAgeCoeficientSchema = z.object({
 
 const saveAgeCoeficientSchema = addAgeCoeficientSchema
 
+const deleteAgeCoeficientSchema = z.object({
+    age: z.number(),
+    eventIds: z.array(z.number())
+})
+
 export const ageCoeficientRouter = createTRPCRouter({
     addAgeCoeficients: protectedProcedure
         .input(addAgeCoeficientSchema)
@@ -68,5 +73,21 @@ export const ageCoeficientRouter = createTRPCRouter({
                 })
             })
             return await Promise.all(modifiedAgeCoeficients)
+        }),
+
+    deleteAgeCoeficient: protectedProcedure
+        .input(deleteAgeCoeficientSchema)
+        .mutation(async ({ctx, input}) => {
+            const deletedAgeCoeficients = input.eventIds.map((eventId) => {
+                return ctx.db.ageCoeficient.delete({
+                    where: {
+                        age_eventId: {
+                            age: input.age,
+                            eventId: eventId
+                        }
+                    }
+                })
+            })
+            return await Promise.all(deletedAgeCoeficients)
         })
 });
