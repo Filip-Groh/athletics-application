@@ -116,7 +116,7 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
                 ) : (
                     <TableRow>
                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                        No results.
+                        Žádní registrovaní závodníci.
                     </TableCell>
                     </TableRow>
                 )}

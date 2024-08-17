@@ -77,9 +77,12 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
 
     return (
         <span className="flex flex-row gap-2">
-            <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave}>
-                <Save className="h-4 w-4" />
-            </Button>
+            {measurements.length > 0 ? (
+                <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave}>
+                    <Save className="h-4 w-4" />
+                </Button>
+            ) : null}
+
             {measurements.map((measurement, index) => {
                 const handleChange = (newValue: string) => {
                     changeMeasurement(index, {id: measurement.id,value: newValue})
@@ -181,7 +184,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
                 ) : (
                     <TableRow>
                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                        No results.
+                        Žádní zapsaný závodníci.
                     </TableCell>
                     </TableRow>
                 )}
