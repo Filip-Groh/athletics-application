@@ -20,7 +20,11 @@ export type PerformanceType = {
     surname: string,
     sex: string,
     birthDate: string,
-    measurement: MeasurementType[]
+    measurement: MeasurementType[],
+    options: {
+        racerId: number,
+        eventId: number
+    }
 }
 
 function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
@@ -50,7 +54,11 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
                                     id: measurement.id,
                                     value: measurement.value ? measurement.value : NaN
                                 }
-                            })
+                            }),
+                            options: {
+                                racerId: value.racer.id,
+                                eventId: event.id
+                            }
                         }
                     })
 

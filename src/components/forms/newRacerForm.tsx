@@ -207,50 +207,50 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
                                 classNames={{
                                     dropdown_year: "bg-red-500"
                                 }}
-                                components={{
-                                    Dropdown: ({value, name, onChange}) => {
-                                        if (name === "years") {
-                                            const years = []
-                                            for (let year = 1900; year <= new Date().getFullYear(); year++) {
-                                                years.push(year)
-                                            }
-                                            return (
-                                                <Select defaultValue={value?.toString()}>
-                                                    <SelectTrigger className="w-[280px]">
-                                                        <SelectValue placeholder="Vyberte rok" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {years.map((year) => {
-                                                            return <SelectItem key={`years_${year}`} value={year.toString()}>{year}</SelectItem>
-                                                        })}
-                                                    </SelectContent>
-                                                </Select>
-                                            )
-                                        } else {
-                                            return (
-                                                <Select defaultValue={value?.toString()} value={value?.toString()} onOpenChange={handleChange}>
-                                                    <SelectTrigger className="w-[280px]">
-                                                        <SelectValue placeholder="Vyberte měsíc" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="1">Leden</SelectItem>
-                                                        <SelectItem value="2">Únor</SelectItem>
-                                                        <SelectItem value="3">Březen</SelectItem>
-                                                        <SelectItem value="4">Duben</SelectItem>
-                                                        <SelectItem value="5">Květen</SelectItem>
-                                                        <SelectItem value="6">Červen</SelectItem>
-                                                        <SelectItem value="7">Červenec</SelectItem>
-                                                        <SelectItem value="8">Srpen</SelectItem>
-                                                        <SelectItem value="9">Září</SelectItem>
-                                                        <SelectItem value="10">Říjen</SelectItem>
-                                                        <SelectItem value="11">Listopad</SelectItem>
-                                                        <SelectItem value="12">Prosinec</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            )
-                                        }
-                                    }
-                                }}
+                                // components={{
+                                //     Dropdown: ({value, name, onChange}) => {
+                                //         if (name === "years") {
+                                //             const years = []
+                                //             for (let year = 1900; year <= new Date().getFullYear(); year++) {
+                                //                 years.push(year)
+                                //             }
+                                //             return (
+                                //                 <Select defaultValue={value?.toString()}>
+                                //                     <SelectTrigger className="w-[280px]">
+                                //                         <SelectValue placeholder="Vyberte rok" />
+                                //                     </SelectTrigger>
+                                //                     <SelectContent>
+                                //                         {years.map((year) => {
+                                //                             return <SelectItem key={`years_${year}`} value={year.toString()}>{year}</SelectItem>
+                                //                         })}
+                                //                     </SelectContent>
+                                //                 </Select>
+                                //             )
+                                //         } else {
+                                //             return (
+                                //                 <Select defaultValue={value?.toString()} value={value?.toString()} onOpenChange={handleChange}>
+                                //                     <SelectTrigger className="w-[280px]">
+                                //                         <SelectValue placeholder="Vyberte měsíc" />
+                                //                     </SelectTrigger>
+                                //                     <SelectContent>
+                                //                         <SelectItem value="1">Leden</SelectItem>
+                                //                         <SelectItem value="2">Únor</SelectItem>
+                                //                         <SelectItem value="3">Březen</SelectItem>
+                                //                         <SelectItem value="4">Duben</SelectItem>
+                                //                         <SelectItem value="5">Květen</SelectItem>
+                                //                         <SelectItem value="6">Červen</SelectItem>
+                                //                         <SelectItem value="7">Červenec</SelectItem>
+                                //                         <SelectItem value="8">Srpen</SelectItem>
+                                //                         <SelectItem value="9">Září</SelectItem>
+                                //                         <SelectItem value="10">Říjen</SelectItem>
+                                //                         <SelectItem value="11">Listopad</SelectItem>
+                                //                         <SelectItem value="12">Prosinec</SelectItem>
+                                //                     </SelectContent>
+                                //                 </Select>
+                                //             )
+                                //         }
+                                //     }
+                                // }}
                             />
                             </PopoverContent>
                         </Popover>

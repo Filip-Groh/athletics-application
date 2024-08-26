@@ -101,7 +101,6 @@ export default async function HomePage() {
 TODO:
 - Page stylying
 - Datun in czech
-- Odhlásit závodníka ze závodu a disciplíny
 - Startovní číslo
 - Show unsaved progress
 - Backup

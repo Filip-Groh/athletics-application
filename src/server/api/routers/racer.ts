@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
     createTRPCRouter,
+    protectedProcedure,
     publicProcedure,
 } from "~/server/api/trpc";
 
@@ -27,6 +28,15 @@ const createRacerSchema = z.object({
     event: z.array(z.number()).refine((value) => value.some((item) => item), {
         message: "Vyberte si alespoň 1 disciplínu.",
     })
+})
+
+const deleteRacerSchema = z.object({
+    racerId: z.number()
+})
+
+const disconnectRacerSchema = z.object({
+    racerId: z.number(),
+    eventId: z.number()
 })
 
 export const racerRouter = createTRPCRouter({
@@ -74,4 +84,31 @@ export const racerRouter = createTRPCRouter({
 
             return createdRacer
         }),
+
+    deleteRacer: protectedProcedure
+        .input(deleteRacerSchema)
+        .mutation(({ ctx, input}) => {
+            return ctx.db.racer.delete({
+                where: {
+                    id: input.racerId
+                }
+            })
+        }),
+
+    disconnectRacer: protectedProcedure
+        .input(disconnectRacerSchema)
+        .mutation(({ctx, input}) => {
+            return ctx.db.performance.delete({
+                where: {
+                    racerId_eventId: {
+                        racerId: input.racerId,
+                        eventId: input.eventId
+                    }
+                },
+                include: {
+                    racer: true,
+                    event: true
+                }
+            })
+        })
 });

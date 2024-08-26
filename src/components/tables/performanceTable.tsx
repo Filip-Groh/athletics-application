@@ -17,14 +17,22 @@ import {
 import React from 'react'
 import type { MeasurementType, PerformanceType } from "~/app/zavody/[raceId]/performance"
 import { Button } from "~/components/ui/button"
-import { PlusIcon, Save } from "lucide-react"
+import { PlusIcon, Save, EllipsisVertical, Trash2 } from "lucide-react"
 import { useArrayState } from "~/components/hooks/useArrayState"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
 import NumericInput from "../elements/numericInput"
 import { formatSex, inputStringToNumber } from "~/lib/utils"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu"
 
-function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
+function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
     const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement, pop: popMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
         return {
             id: measurement.id,
@@ -110,7 +118,45 @@ function Cell({performanceId, originalMeasurements, rowIndex}: {performanceId: n
     )
 }
 
+function OptionsCell({index, racerId, eventId, popRacer}: {index: number, racerId: number, eventId: number, popRacer: (index: number) => void}) {
+    const disconnectRacer = api.racer.disconnectRacer.useMutation({
+        async onSuccess(disconnectRacer) {
+            toast(`Odhlásili jste závodníka "${disconnectRacer.racer.name} ${disconnectRacer.racer.surname}" z disciplíny "${disconnectRacer.event.name} - ${formatSex(disconnectRacer.event.category, true)}".`)
+            popRacer(index)
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
+
+    const handleDelete = () => {
+        disconnectRacer.mutate({
+            racerId: racerId,
+            eventId: eventId
+        })
+    }
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuLabel>Možnosti</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleDelete}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    <span>Odhlásit závodníka z disciplíny</span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+
 function PerformanceTable({data}: {data: PerformanceType[]}) {
+    const {state: performance, pop: popPerformance} = useArrayState(data)
+
     const columns: ColumnDef<PerformanceType>[] = [
         {
             accessorKey: "name",
@@ -135,13 +181,20 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             accessorKey: "measurement",
             header: "Naměřeno",
             cell: ({ row }) => {
-                return (<Cell performanceId={row.original.id} originalMeasurements={row.original.measurement} rowIndex={row.index}/>)
+                return (<MeasurementCell performanceId={row.original.id} originalMeasurements={row.original.measurement} rowIndex={row.index}/>)
+            }
+        },
+        {
+            accessorKey: "options",
+            header: "Možnosti",
+            cell: ({row}) => {
+                return (<OptionsCell index={row.index} racerId={row.original.options.racerId} eventId={row.original.options.eventId} popRacer={popPerformance}/>)
             }
         }
     ]
 
     const table = useReactTable({
-        data,
+        data: performance,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
