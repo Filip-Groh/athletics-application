@@ -16,6 +16,8 @@ export type MeasurementType = {
 
 export type PerformanceType = {
     id: number,
+    orderNumber: number,
+    startingNumber: number,
     name: string,
     surname: string,
     sex: string,
@@ -45,6 +47,8 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
                     const tableData: PerformanceType[] = event.performance.map<PerformanceType>((value) => {
                         return {
                             id: value.id,
+                            orderNumber: value.racer.orderNumber,
+                            startingNumber: value.racer.startingNumber,
                             name: value.racer.name,
                             surname: value.racer.surname,
                             sex: value.racer.sex,

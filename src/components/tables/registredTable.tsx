@@ -30,6 +30,7 @@ import { toast } from "sonner"
 import { useArrayState } from "../hooks/useArrayState"
 
 type RegistredData = {
+    startingNumber: number,
     name: string,
     surname: string,
     birthDate: Date,
@@ -79,6 +80,7 @@ function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRa
 function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
     const {state: racers, pop: popRacers} = useArrayState<RegistredData>(defaultData.map((racer) => {
         return {
+            startingNumber: racer.startingNumber,
             name: racer.name,
             surname: racer.surname,
             birthDate: racer.birthDate,
@@ -92,6 +94,10 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
     }))
 
     const columns: ColumnDef<RegistredData>[] = [
+        {
+            accessorKey: "startingNumber",
+            header: "Startovací číslo"
+        },
         {
             accessorKey: "name",
             header: "Jméno",

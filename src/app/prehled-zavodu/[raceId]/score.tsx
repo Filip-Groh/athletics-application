@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { formatSex } from '~/lib/utils'
 
 export type ScoreData = {
+    startingNumber: number
     name: string,
     surname: string,
     age: number,
@@ -32,9 +33,9 @@ function getAge(birthDate: Date) {
 
 function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>}) {
     const events: Events[] = race.event.map((event) => {
-        const a = event.a as number
-        const b = event.b as number
-        const c = event.c as number
+        const a = event.a
+        const b = event.b
+        const c = event.c
         const ageCoeficients = new Map<number, number>()
         event.ageCoeficient.forEach((ageCoeficient) => {
             ageCoeficients.set(ageCoeficient.age, ageCoeficient.coeficient)
@@ -46,7 +47,7 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
             })
             const bestMeasurement = measurements.reduce((prev, curr) => {
                 return Math.max(prev, curr)
-            }) ?? 0
+            }, 0)
             const age = getAge(performance.racer.birthDate)
             let coeficient = 1
             for (let i = age; i > 0; i--) {
@@ -54,6 +55,7 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
                 coeficient = ageCoeficient ?? coeficient
             }
             return {
+                startingNumber: performance.racer.startingNumber,
                 name: performance.racer.name,
                 surname: performance.racer.surname,
                 age: age,

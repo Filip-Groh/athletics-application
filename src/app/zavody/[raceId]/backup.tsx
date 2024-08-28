@@ -69,6 +69,9 @@ const backupFileSchema = z.object({
         birthDate: z.coerce.date(),
         sex: z.string(),
         club: z.string(),
+
+        startingNumber: z.number(),
+        orderNumber: z.number(),
         
         performace: z.array(z.object({
             id: z.number(),

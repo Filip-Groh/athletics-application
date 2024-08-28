@@ -53,6 +53,9 @@ const loadBackupFileSchema = z.object({
             birthDate: z.date(),
             sex: z.string(),
             club: z.string(),
+
+            startingNumber: z.number(),
+            orderNumber: z.number(),
             
             performace: z.array(z.object({
                 id: z.number(),
@@ -167,6 +170,9 @@ export const backupRouter = createTRPCRouter({
                         birthDate: racer.birthDate,
                         sex: racer.sex,
                         club: racer.club,
+
+                        startingNumber: racer.startingNumber,
+                        orderNumber: racer.orderNumber,
 
                         raceId: input.raceId
                     }

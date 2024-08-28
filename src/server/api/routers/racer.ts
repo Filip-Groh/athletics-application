@@ -43,6 +43,38 @@ export const racerRouter = createTRPCRouter({
     createRacer: publicProcedure
         .input(createRacerSchema)
         .mutation(async ({ ctx, input}) => {
+            const existingRacersNumbers = await ctx.db.racer.findMany({
+                where: {
+                    raceId: input.raceId
+                },
+                select: {
+                    startingNumber: true,
+                    orderNumber: true
+                }
+            })
+
+            let startingNumber = 1
+            let orderNumber = 1
+            while (true) {
+                let startingNumberExist = false
+                let orderNumberExist = false
+                for (const existingRacersNumber of existingRacersNumbers) {
+                    startingNumberExist = startingNumberExist || startingNumber === existingRacersNumber.startingNumber
+                    orderNumberExist = orderNumberExist || orderNumber === existingRacersNumber.orderNumber
+
+                    if (startingNumberExist && orderNumberExist) {
+                        break
+                    }
+                }
+
+                startingNumber += startingNumberExist ? 1 : 0
+                orderNumber += orderNumberExist ? 1 : 0
+
+                if (!startingNumberExist && !orderNumberExist) {
+                    break
+                }
+            }
+
             const createdRacer = await ctx.db.racer.create({
                 data: {
                     name: input.name,
@@ -50,6 +82,10 @@ export const racerRouter = createTRPCRouter({
                     birthDate: input.birthDate,
                     sex: input.sex,
                     club: input.club,
+
+                    startingNumber: startingNumber,
+                    orderNumber: orderNumber,
+
                     race: {
                         connect: {
                             id: input.raceId

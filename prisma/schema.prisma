@@ -81,9 +81,14 @@ model Racer {
   sex       String
   club      String
 
+  startingNumber Int
+  orderNumber    Int
+
   performace Performance[]
   race       Race          @relation(fields: [raceId], references: [id], onDelete: Cascade)
   raceId     Int
+
+  @@unique([startingNumber, raceId])
 }
 
 model AgeCoeficient {

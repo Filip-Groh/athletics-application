@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    type SortingState,
+    getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -17,7 +19,7 @@ import {
 import React from 'react'
 import type { MeasurementType, PerformanceType } from "~/app/zavody/[raceId]/performance"
 import { Button } from "~/components/ui/button"
-import { PlusIcon, Save, EllipsisVertical, Trash2 } from "lucide-react"
+import { PlusIcon, Save, EllipsisVertical, Trash2, Shuffle } from "lucide-react"
 import { useArrayState } from "~/components/hooks/useArrayState"
 import { api } from "~/trpc/react"
 import { toast } from "sonner"
@@ -31,6 +33,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
     const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement, pop: popMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
@@ -38,7 +41,7 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
             id: measurement.id,
             value: Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
         }
-    }), true)
+    }))
 
     const saveMeasurements = api.measurement.saveMeasurementsOnPerformance.useMutation({
         async onSuccess(measurements) {
@@ -155,9 +158,35 @@ function OptionsCell({index, racerId, eventId, popRacer}: {index: number, racerI
 }
 
 function PerformanceTable({data}: {data: PerformanceType[]}) {
-    const {state: performance, pop: popPerformance} = useArrayState(data)
+    const {state: performance, pop: popPerformance, set: setPerformance} = useArrayState(data)
+
+    const [sorting, setSorting] = React.useState<SortingState>([])
 
     const columns: ColumnDef<PerformanceType>[] = [
+        {
+            accessorKey: "orderNumber",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Pořadí
+                        </Button>
+                        <Button variant={"ghost"} size={"icon"} onClick={handleShuffle}>
+                            <Shuffle className="h-4 w-4" />
+                        </Button>
+                    </span>
+                    
+                )
+            },
+            accessorFn: (row) => {
+                return `${row.orderNumber}.`
+            },
+        },
+        {
+            accessorKey: "startingNumber",
+            header: "Startovací číslo"
+        },
         {
             accessorKey: "name",
             header: "Jméno",
@@ -197,7 +226,29 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
         data: performance,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        state: {
+            sorting
+        }
     })
+
+    const handleShuffle = () => {
+        const orderNumbers = performance.map((item) => {
+            return item.orderNumber
+        })
+        const orderNumbersShuffled: number[] = []
+        const orderNumberLength = orderNumbers.length
+        for (let i = 0; i < orderNumberLength; i++) {
+            const selected = Math.floor(Math.random() * orderNumbers.length)
+            orderNumbersShuffled.push(orderNumbers[selected]!)
+            orderNumbers.splice(selected, 1)
+        }
+        setPerformance(performance.map((item, index) => {
+            item.orderNumber = orderNumbersShuffled[index]!
+            return item
+        }))
+    }
 
     return (
         <div className="rounded-md border">
@@ -243,7 +294,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
                 )}
                 </TableBody>
             </Table>
-        </div>
+        </div>    
     )
 }
 

@@ -27,6 +27,10 @@ function ScoreTable({data}: {data: ScoreData[]}) {
             }
         },
         {
+            accessorKey: "startingNumber",
+            header: "Startovací číslo"
+        },
+        {
             accessorKey: "name",
             header: "Jméno",
         },
@@ -69,7 +73,7 @@ function ScoreTable({data}: {data: ScoreData[]}) {
                     return measurement.toLocaleString()
                 }).reduce((prev, curr) => {
                     return `${prev}; ${curr}`
-                })
+                }, "")
             }
         }
     ]

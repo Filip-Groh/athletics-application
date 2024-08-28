@@ -99,11 +99,10 @@ export default async function HomePage() {
 
 /*
 TODO:
-- Backup
+
 
 - Page stylying
 - Race search
-- Startovní číslo
 
 - Edit racer info
 - Datun in czech
