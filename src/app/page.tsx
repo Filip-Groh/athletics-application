@@ -99,9 +99,16 @@ export default async function HomePage() {
 
 /*
 TODO:
-- Page stylying
-- Datun in czech
-- Startovní číslo
-- Show unsaved progress
 - Backup
+
+- Page stylying
+- Race search
+- Startovní číslo
+
+- Edit racer info
+- Datun in czech
+- Show unsaved progress
+- Tables control
+- Dynamic update
+- User roles
 */

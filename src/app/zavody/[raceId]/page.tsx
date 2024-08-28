@@ -39,7 +39,7 @@ async function PrehledPage({ params }: { params: { raceId: string } }) {
                 <PointsTab events={race.event}/>
             </TabsContent>
             <TabsContent value="backup">
-                <BackupTab />
+                <BackupTab raceId={race.id}/>
             </TabsContent>
         </Tabs>
     )

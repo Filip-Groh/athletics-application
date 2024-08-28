@@ -5,6 +5,7 @@ import { measurementRouter } from "~/server/api/routers/measurement";
 import { performanceRouter } from "~/server/api/routers/performance";
 import { racerRouter } from "~/server/api/routers/racer";
 import { ageCoeficientRouter } from "~/server/api/routers/ageCoeficient";
+import { backupRouter } from "./routers/backup";
 
 /**
  * This is the primary router for your server.
@@ -17,7 +18,8 @@ export const appRouter = createTRPCRouter({
   measurement: measurementRouter,
   performance: performanceRouter,
   racer: racerRouter,
-  ageCoeficient: ageCoeficientRouter
+  ageCoeficient: ageCoeficientRouter,
+  backup: backupRouter
 });
 
 // export type definition of API

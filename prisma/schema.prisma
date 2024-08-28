@@ -41,6 +41,8 @@ model Event {
   ageCoeficient AgeCoeficient[]
   race          Race            @relation(fields: [raceId], references: [id], onDelete: Cascade)
   raceId        Int
+
+  @@unique([name, category])
 }
 
 model Measurement {
