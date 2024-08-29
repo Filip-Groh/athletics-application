@@ -21,7 +21,7 @@ import type { RouterOutputs } from '~/trpc/react'
 import { api } from '~/trpc/react'
 import DeleteConfirm from '../elements/deleteConfirm'
 
-function EventForm({event}: {event: NonNullable<RouterOutputs["race"]["readRaceById"]>["event"][0]}) {
+function EventForm({event, popEvent}: {event: NonNullable<RouterOutputs["race"]["readRaceById"]>["event"][0], popEvent: (id: number) => void}) {
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
@@ -54,6 +54,7 @@ function EventForm({event}: {event: NonNullable<RouterOutputs["race"]["readRaceB
     const deleteEvent = api.event.deleteEvent.useMutation({
         async onSuccess(data) {
             toast(`Disciplína "${data.name} - ${formatSex(data.category, true)}" byla smazána.`)
+            popEvent(data.id)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

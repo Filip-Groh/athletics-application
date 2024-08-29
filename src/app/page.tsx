@@ -100,13 +100,20 @@ export default async function HomePage() {
 /*
 TODO:
 
+
 - Page stylying
 - Race search
 
 - Edit racer info
-- Datun in czech
+- Datum in czech
 - Show unsaved progress
 - Tables control
-- Dynamic update
 - User roles
+- Dynamic update
+*/
+
+/*
+BUGS:
+
+- Cannot delete empty coeficients
 */

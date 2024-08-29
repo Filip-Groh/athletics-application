@@ -93,6 +93,11 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
         }
     }))
 
+    const popUpdateRacers = (index: number) => {
+        popRacers(index)
+        defaultData.splice(index, 1)
+    }
+
     const columns: ColumnDef<RegistredData>[] = [
         {
             accessorKey: "startingNumber",
@@ -132,7 +137,7 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
             accessorKey: "options",
             header: "Možnosti",
             cell: ({ row }) => {
-                return (<Cell racerId={row.original.options.racerId} index={row.index} popRacer={popRacers}/>)
+                return (<Cell racerId={row.original.options.racerId} index={row.index} popRacer={popUpdateRacers}/>)
             }
         }
     ]

@@ -30,7 +30,7 @@ export type PerformanceType = {
 }
 
 function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
-    const {state: events, push: pushEvents} = useArrayWithIdState(race.event, true)
+    const {state: events, push: pushEvents, pop: popEvents} = useArrayWithIdState(race.event, true)
 
     return (
         <div>
@@ -68,7 +68,7 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
 
                     return (
                         <VerticalTabsContent key={`eventContent_${event.id}`} value={event.id.toString()} className='flex flex-col gap-8'>
-                            <EventForm event={event} />
+                            <EventForm event={event} popEvent={popEvents}/>
                             <PerformanceTable data={tableData} />
                         </VerticalTabsContent>
                     )

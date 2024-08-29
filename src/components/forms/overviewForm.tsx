@@ -70,6 +70,12 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
     const updateRace = api.race.updateRace.useMutation({
         async onSuccess(data) {
             toast(`Závod "${data.name}" byl upraven.`)
+
+            race.name = data.name
+            race.date = data.date
+            race.place = data.place
+            race.organizer = data.organizer
+            race.visible = data.visible
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

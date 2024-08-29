@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 import PointsTable from '~/components/tables/pointsTable'
 import { type RouterOutputs } from '~/trpc/react'
@@ -112,7 +114,7 @@ function PointsTab({events}: {events: NonNullable<RouterOutputs["race"]["readRac
                 const data = dataAdept ? dataAdept : []
                 return (
                     <TabsContent key={`content_${category}`} value={category}>
-                        <PointsTable eventNames={eventNames} defaultData={data}/>
+                        <PointsTable eventNames={eventNames} defaultData={data} />
                     </TabsContent>
                 )
             })}
