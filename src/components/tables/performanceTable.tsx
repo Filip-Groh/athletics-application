@@ -170,7 +170,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
                     <span className="flex flex-row gap-1 items-center">
                         <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
-                            Pořadí
+                            Startovací Pořadí
                         </Button>
                         <Button variant={"ghost"} size={"icon"} onClick={handleShuffle}>
                             <Shuffle className="h-4 w-4" />
@@ -233,6 +233,16 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
         }
     })
 
+    const changeRacersOrderNumber = api.racer.changeRacersOrderNumber.useMutation({
+        async onSuccess(changeRacersOrderNumber) {
+            console.log(changeRacersOrderNumber)
+        },
+        async onError(error) {
+            toast("Někde se stala chyba, více informací v console.log().")
+            console.log(error)
+        },
+    })
+
     const handleShuffle = () => {
         const orderNumbers = performance.map((item) => {
             return item.orderNumber
@@ -244,9 +254,16 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             orderNumbersShuffled.push(orderNumbers[selected]!)
             orderNumbers.splice(selected, 1)
         }
-        setPerformance(performance.map((item, index) => {
+        const newPerformance = performance.map((item, index) => {
             item.orderNumber = orderNumbersShuffled[index]!
             return item
+        })
+        setPerformance(newPerformance)
+        changeRacersOrderNumber.mutate(newPerformance.map((item) => {
+            return {
+                performanceId: item.id,
+                newOrderNumber: item.orderNumber
+            }
         }))
     }
 

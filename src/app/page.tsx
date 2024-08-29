@@ -100,7 +100,6 @@ export default async function HomePage() {
 /*
 TODO:
 
-
 - Page stylying
 - Race search
 

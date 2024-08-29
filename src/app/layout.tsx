@@ -8,6 +8,7 @@ import { ThemeProvider } from "~/components/theme/theme-provider"
 import MainMenu, { type MenuItemType } from "~/components/menu/mainMenu";
 import { Toaster } from "~/components/ui/sonner"
 import { HydrateClient } from "~/trpc/server";
+import { getServerAuthSession } from "~/server/auth"
 
 export const metadata: Metadata = {
     title: "Create T3 App",
@@ -38,14 +39,16 @@ const menuItems: Array<MenuItemType> = [
     }
 ]
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const session = await getServerAuthSession()
+
     return (
         <html lang="cs" className={`${GeistSans.variable}`} suppressHydrationWarning>
             <body>
                 <TRPCReactProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
                         <header>
-                            <MainMenu menuItems={menuItems} isAdmin={true}/>
+                            <MainMenu menuItems={menuItems} isAdmin={session !== null}/>
                         </header>
                         <main>
                             <HydrateClient>

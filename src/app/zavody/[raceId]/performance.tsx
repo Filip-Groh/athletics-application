@@ -47,7 +47,7 @@ function PerformanceTab({race}: {race: NonNullable<RouterOutputs["race"]["readRa
                     const tableData: PerformanceType[] = event.performance.map<PerformanceType>((value) => {
                         return {
                             id: value.id,
-                            orderNumber: value.racer.orderNumber,
+                            orderNumber: value.orderNumber,
                             startingNumber: value.racer.startingNumber,
                             name: value.racer.name,
                             surname: value.racer.surname,

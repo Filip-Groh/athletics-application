@@ -55,7 +55,6 @@ const loadBackupFileSchema = z.object({
             club: z.string(),
 
             startingNumber: z.number(),
-            orderNumber: z.number(),
             
             performace: z.array(z.object({
                 id: z.number(),
@@ -63,6 +62,8 @@ const loadBackupFileSchema = z.object({
                 updatedAt: z.date(),
     
                 eventId: z.number(),
+
+                orderNumber: z.number(),
     
                 measurement: z.array(z.object({
                     id: z.number(),
@@ -172,7 +173,6 @@ export const backupRouter = createTRPCRouter({
                         club: racer.club,
 
                         startingNumber: racer.startingNumber,
-                        orderNumber: racer.orderNumber,
 
                         raceId: input.raceId
                     }
@@ -203,7 +203,9 @@ export const backupRouter = createTRPCRouter({
                             updatedAt: performance.updatedAt,
 
                             racerId: racer.id,
-                            eventId: eventsIdMap.get(performance.eventId)!
+                            eventId: eventsIdMap.get(performance.eventId)!,
+
+                            orderNumber: performance.orderNumber
                         }
                     })
                 })

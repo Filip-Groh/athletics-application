@@ -31,6 +31,10 @@ function ScoreTable({data}: {data: ScoreData[]}) {
             header: "Startovací číslo"
         },
         {
+            accessorKey: "orderNumber",
+            header: "Startovací pořadí"
+        },
+        {
             accessorKey: "name",
             header: "Jméno",
         },
@@ -72,6 +76,9 @@ function ScoreTable({data}: {data: ScoreData[]}) {
                 return row.measurements.map((measurement) => {
                     return measurement.toLocaleString()
                 }).reduce((prev, curr) => {
+                    if (prev === "") {
+                        return `${curr}`
+                    }
                     return `${prev}; ${curr}`
                 }, "")
             }

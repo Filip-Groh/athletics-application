@@ -5,7 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { formatSex } from '~/lib/utils'
 
 export type ScoreData = {
-    startingNumber: number
+    startingNumber: number,
+    orderNumber: number,
     name: string,
     surname: string,
     age: number,
@@ -56,6 +57,7 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
             }
             return {
                 startingNumber: performance.racer.startingNumber,
+                orderNumber: performance.orderNumber,
                 name: performance.racer.name,
                 surname: performance.racer.surname,
                 age: age,

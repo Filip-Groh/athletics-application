@@ -39,6 +39,11 @@ const disconnectRacerSchema = z.object({
     eventId: z.number()
 })
 
+const changeRacersOrderNumberSchema = z.array(z.object({
+    performanceId: z.number(),
+    newOrderNumber: z.number()
+}))
+
 export const racerRouter = createTRPCRouter({
     createRacer: publicProcedure
         .input(createRacerSchema)
@@ -48,29 +53,24 @@ export const racerRouter = createTRPCRouter({
                     raceId: input.raceId
                 },
                 select: {
-                    startingNumber: true,
-                    orderNumber: true
+                    startingNumber: true
                 }
             })
 
             let startingNumber = 1
-            let orderNumber = 1
             while (true) {
                 let startingNumberExist = false
-                let orderNumberExist = false
                 for (const existingRacersNumber of existingRacersNumbers) {
                     startingNumberExist = startingNumberExist || startingNumber === existingRacersNumber.startingNumber
-                    orderNumberExist = orderNumberExist || orderNumber === existingRacersNumber.orderNumber
 
-                    if (startingNumberExist && orderNumberExist) {
+                    if (startingNumberExist) {
                         break
                     }
                 }
 
                 startingNumber += startingNumberExist ? 1 : 0
-                orderNumber += orderNumberExist ? 1 : 0
 
-                if (!startingNumberExist && !orderNumberExist) {
+                if (!startingNumberExist) {
                     break
                 }
             }
@@ -84,7 +84,6 @@ export const racerRouter = createTRPCRouter({
                     club: input.club,
 
                     startingNumber: startingNumber,
-                    orderNumber: orderNumber,
 
                     race: {
                         connect: {
@@ -98,8 +97,36 @@ export const racerRouter = createTRPCRouter({
             })
 
             const createPerformance = async (eventId: number) => {
+                const existingOrderNumbers = await ctx.db.performance.findMany({
+                    where: {
+                        eventId: eventId
+                    },
+                    select: {
+                        orderNumber: true
+                    }
+                })
+    
+                let orderNumber = 1
+                while (true) {
+                    let orderNumberExist = false
+                    for (const existingOrderNumber of existingOrderNumbers) {
+                        orderNumberExist = orderNumberExist || orderNumber === existingOrderNumber.orderNumber
+    
+                        if (orderNumberExist) {
+                            break
+                        }
+                    }
+    
+                    orderNumber += orderNumberExist ? 1 : 0
+    
+                    if (!orderNumberExist) {
+                        break
+                    }
+                }
+
                 await ctx.db.performance.create({
                     data: {
+                        orderNumber: orderNumber,
                         racer: {
                             connect: {
                                 id: createdRacer.id
@@ -145,6 +172,21 @@ export const racerRouter = createTRPCRouter({
                     racer: true,
                     event: true
                 }
+            })
+        }),
+
+    changeRacersOrderNumber: protectedProcedure
+        .input(changeRacersOrderNumberSchema)
+        .mutation(({ctx, input}) => {
+            return input.map(async (newOrder) => {
+                return await ctx.db.performance.update({
+                    where: {
+                        id: newOrder.performanceId
+                    },
+                    data: {
+                        orderNumber: newOrder.newOrderNumber
+                    }
+                })
             })
         })
 });
