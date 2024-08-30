@@ -99,23 +99,40 @@ export default async function HomePage() {
 
 /*
 TODO:
-
-
-- Page stylying
-- Race search
-
 - !!! USE REACT QUERY !!!
 
 - Edit racer info
 - Datum in czech
 - Show unsaved progress
 - Tables control
-- User roles
 - Dynamic update
+- Prisma error handling
+- Page stylying
+- Race search
+- Tooltips and anomalies (problems with data)
+- Better homepage
+- Geolocation based recommendation
+
+- User roles
+    - Admin - Event types, coeficients and parameters
+    - Race manager - Whole race management
+    - Event manager - Fills out measurements
+    - Racer - Signs to races with account
+
+- Group of events - Tree like structure
 */
 
 /*
 BUGS:
-
 - Cannot delete empty coeficients
+*/
+
+/*
+COMMENTS:
+- Penvé koeficienty a parametry skryté ovládané adminem
+- Výběr závodu na začátku formuláře
+- Uzamknout startovací pořadí (race manager)
+- Startovací číslo = startovní číslo
+- Nezaokhroulovat body ale usekávat
+- Přihlasit se u specifického závodu
 */
