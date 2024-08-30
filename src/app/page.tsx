@@ -104,6 +104,8 @@ TODO:
 - Page stylying
 - Race search
 
+- !!! USE REACT QUERY !!!
+
 - Edit racer info
 - Datum in czech
 - Show unsaved progress
