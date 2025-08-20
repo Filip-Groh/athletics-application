@@ -35,6 +35,7 @@ import DeleteConfirm from '../elements/deleteConfirm'
 
 function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
     const router = useRouter()
+    const utils = api.useUtils()
     
     const formSchema = z.object({
         name: z.string().min(1, {
@@ -76,6 +77,8 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
             race.place = data.place
             race.organizer = data.organizer
             race.visible = data.visible
+
+            await utils.race.getOwnedRaces.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -86,7 +89,8 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
     const deleteRace = api.race.deleteRace.useMutation({
         async onSuccess(data) {
             toast(`Závod "${data.name}" byl smazán.`)
-            router.push(`/zavody`)
+            await utils.race.getOwnedRaces.invalidate()
+            router.push(`/zavod`)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

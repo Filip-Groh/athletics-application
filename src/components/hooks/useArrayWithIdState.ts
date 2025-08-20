@@ -62,10 +62,29 @@ export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [
         }
     }
 
+    function get(id: number): T | null {
+        let returnValue: T | null = null
+        arrayState.forEach((element) => {
+            if (element.id == id) {
+                returnValue = element
+            }
+        })
+
+        if (logChanges) {
+            console.log({
+                paramId: id,
+                internalArray: arrayState
+            })
+        }
+
+        return returnValue
+    }
+
     return {
         state: arrayState,
         set: set,
         push: push,
-        pop: pop
+        pop: pop,
+        get: get
     }
 }

@@ -23,18 +23,8 @@ const menuItems: Array<MenuItemType> = [
         adminOnly: false
     },
     {
-        text: "Přihlášky",
-        link: "/prihlasky",
-        adminOnly: false
-    },
-    {
         text: "Zápis výkonů",
-        link: "/zavody",
-        adminOnly: true
-    },
-    {
-        text: "Nový závod",
-        link: "/zavody/novy",
+        link: "/zavod",
         adminOnly: true
     }
 ]

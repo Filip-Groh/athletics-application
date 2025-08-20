@@ -2,15 +2,14 @@ import { z } from "zod";
 
 import {
     createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+    protectedProcedureAdmin
 } from "~/server/api/trpc";
 
 const addAgeCoeficientSchema = z.object({
     age: z.number(),
     ageCoeficients: z.array(z.object({
         coeficient: z.number(),
-        eventId: z.number()
+        subEventId: z.number()
     }))
 })
 
@@ -18,11 +17,11 @@ const saveAgeCoeficientSchema = addAgeCoeficientSchema
 
 const deleteAgeCoeficientSchema = z.object({
     age: z.number(),
-    eventIds: z.array(z.number())
+    subEventIds: z.array(z.number())
 })
 
 export const ageCoeficientRouter = createTRPCRouter({
-    addAgeCoeficients: protectedProcedure
+    addAgeCoeficients: protectedProcedureAdmin
         .input(addAgeCoeficientSchema)
         .mutation(async ({ ctx, input }) => {
             const newAgeCoeficients = input.ageCoeficients.map((ageCoeficient) => {
@@ -30,37 +29,37 @@ export const ageCoeficientRouter = createTRPCRouter({
                     data: {
                         age: input.age,
                         coeficient: ageCoeficient.coeficient,
-                        event: {
+                        subEvent: {
                             connect: {
-                                id: ageCoeficient.eventId
+                                id: ageCoeficient.subEventId
                             }
                         }
                     },
                     include: {
-                        event: true
+                        subEvent: true
                     }
                 })
             })
             return await Promise.all(newAgeCoeficients)
         }),
 
-    saveAgeCoeficient: protectedProcedure
+    saveAgeCoeficient: protectedProcedureAdmin
         .input(saveAgeCoeficientSchema)
         .mutation(async ({ ctx, input }) => {
             const modifiedAgeCoeficients = input.ageCoeficients.map((ageCoeficient) => {
                 return ctx.db.ageCoeficient.upsert({
                     where: {
-                        age_eventId: {
+                        age_subEventId: {
                             age: input.age,
-                            eventId: ageCoeficient.eventId
+                            subEventId: ageCoeficient.subEventId
                         }
                     },
                     create: {
                         age: input.age,
                         coeficient: ageCoeficient.coeficient,
-                        event: {
+                        subEvent: {
                             connect: {
-                                id: ageCoeficient.eventId
+                                id: ageCoeficient.subEventId
                             }
                         }
                     },
@@ -68,22 +67,22 @@ export const ageCoeficientRouter = createTRPCRouter({
                         coeficient: ageCoeficient.coeficient
                     },
                     include: {
-                        event: true
+                        subEvent: true
                     }
                 })
             })
             return await Promise.all(modifiedAgeCoeficients)
         }),
 
-    deleteAgeCoeficient: protectedProcedure
+    deleteAgeCoeficient: protectedProcedureAdmin
         .input(deleteAgeCoeficientSchema)
         .mutation(async ({ctx, input}) => {
-            const deletedAgeCoeficients = input.eventIds.map((eventId) => {
+            const deletedAgeCoeficients = input.subEventIds.map((subEventId) => {
                 return ctx.db.ageCoeficient.delete({
                     where: {
-                        age_eventId: {
+                        age_subEventId: {
                             age: input.age,
-                            eventId: eventId
+                            subEventId: subEventId
                         }
                     }
                 })

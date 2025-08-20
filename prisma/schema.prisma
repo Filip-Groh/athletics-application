@@ -11,6 +11,53 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Event {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String?
+  category String
+
+  subEvent SubEvent[]
+  race     Race[]
+
+  @@unique([name, category])
+}
+
+model SubEvent {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+  a    Float
+  b    Float
+  c    Float
+
+  performance   Performance[]
+  ageCoeficient AgeCoeficient[]
+
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId Int
+
+  @@unique([name, eventId])
+}
+
+model AgeCoeficient {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  age        Int
+  coeficient Float
+
+  subEvent   SubEvent @relation(fields: [subEventId], references: [id], onDelete: Cascade)
+  subEventId Int
+
+  @@unique([age, subEventId])
+}
+
 model Race {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -21,28 +68,14 @@ model Race {
   place     String
   organizer String
   visible   Boolean
-  event     Event[]
-  racer     Racer[]
-}
 
-model Event {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  event       Event[]
+  racer       Racer[]
+  performance Performance[]
 
-  name     String
-  category String
-
-  a Float
-  b Float
-  c Float
-
-  performance   Performance[]
-  ageCoeficient AgeCoeficient[]
-  race          Race            @relation(fields: [raceId], references: [id], onDelete: Cascade)
-  raceId        Int
-
-  @@unique([name, category])
+  owner    User   @relation(name: "owner", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  String
+  managers User[] @relation(name: "manager")
 }
 
 model Measurement {
@@ -50,7 +83,8 @@ model Measurement {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  value         Float?
+  value Float?
+
   performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
   performanceId Int
 }
@@ -63,15 +97,34 @@ model Performance {
   measurement Measurement[]
   orderNumber Int
 
-  racer   Racer @relation(fields: [racerId], references: [id], onDelete: Cascade)
-  racerId Int
-  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId Int
+  race       Race     @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  raceId     Int
+  subEvent   SubEvent @relation(fields: [subEventId], references: [id], onDelete: Cascade)
+  subEventId Int
+  racer      Racer    @relation(fields: [racerId], references: [id], onDelete: Cascade)
+  racerId    Int
 
-  @@unique([racerId, eventId])
+  @@unique([racerId, subEventId, raceId])
 }
 
 model Racer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  personalData   PersonalData @relation(fields: [personalDataId], references: [id])
+  personalDataId Int
+
+  startingNumber Int
+
+  performace Performance[]
+  race       Race          @relation(fields: [raceId], references: [id], onDelete: Cascade)
+  raceId     Int
+
+  @@unique([personalDataId, startingNumber, raceId])
+}
+
+model PersonalData {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,30 +135,34 @@ model Racer {
   sex       String
   club      String
 
-  startingNumber Int
-
-  performace Performance[]
-  race       Race          @relation(fields: [raceId], references: [id], onDelete: Cascade)
-  raceId     Int
-
-  @@unique([startingNumber, raceId])
-}
-
-model AgeCoeficient {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  age        Int
-  coeficient Float
-
-  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  eventId Int
-
-  @@unique([age, eventId])
+  racer  Racer[]
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @unique
 }
 
 // Necessary for Next auth
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  // Roles:
+  // Admin = 3,
+  // RaceManager = 2,
+  // EventManager = 1,
+  // Racer = 0
+  role         Int           @default(0)
+  personalData PersonalData?
+
+  ownedRaces    Race[] @relation(name: "owner")
+  managingRaces Race[] @relation(name: "manager")
+
+  accounts Account[]
+  sessions Session[]
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -131,16 +188,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
 }
 
 model VerificationToken {

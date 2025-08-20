@@ -1,29 +1,75 @@
-# Create T3 App
+# Athletics Application
+## Current state
+### Login
+| Feature | Is Implemented | Does Work
+| ------- | -------------- | --------- |
+| Login via Email | false |  |
+| Login via Google | true | true |
+| Login via Discord | true | true |
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+### Account
+| Feature | Is Implemented | Does Work |
+| ------- | -------------- | --------- |
+| New Personal Info | true | true |
+| Update Personal Info | true | true |
+| Remove Personal Info | false |  |
+|
+| New Race | true | true |
+|
+| Change Role Management | true | partially - account menu doesn't devalidate |
+| Racer Role | true | true |
+| Event Manager Role | true | true |
+| Race Manager Role | true | partially - role change to admin visible |
+| Admin Role | true | true |
+|
+| New Event | true | true |
+| New Event both genders | true | true |
+| Update Event | true | true |
+| Remove Event | true | true |
+| New Group Event | true | true |
+| New Group Event both genders | true | true |
+| Update Group Event | true | true |
+| Remove Group Event | true | true |
+| New Sub Event | true | true |
+| Update Sub Event | true | true |
+| Remove Sub Event | true | true |
+|
+| Coeficient Table | true | partially - doesn't sort by age, creating / updateing / removing events / subevents doesn't update table |
+| New Coeficient | true | true |
+| Update Coeficient | true | partially - null allowed to send, doesn't update |
+| Delete Coeficient | true | true |
 
-## What's next? How do I make an app with this?
+### Race Admin Panel
+| Feature | Is Implemented | Does Work |
+| ------- | -------------- | --------- |
+| Update Race | true | partially - doesn't update homepage |
+| Delete Race | true | true |
+|
+| Table of Registered Racers | true | true |
+| Removing Racers | true | true |
+|
+| Table of Performances | true | partially - reloads and destroys unsaved |
+| Add Event | true | partially - adding new event doesn't update menu |
+| Remove Event | true | partially - removing event doesn't update menu |
+|
+| Add Measurement | true | true |
+| Update Measurement | true | true |
+| Remove Measurement | true | true |
+| Removing Racers from Events | true | true |
+| Mixing Racers Order | true | true |
+|
+| Race Backup | false | false - wrong because old |
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Race Signup
+| Feature | Is Implemented | Does Work |
+| ------- | -------------- | --------- |
+| Signup With Account | true | partially - allows signup when not sign in |
+| Change Personal Info in signup | false |  |
+| Shows Account Race Signup | false |  |
+| Signup Without Account | true | true |
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### Race Panel
+| Feature | Is Implemented | Does Work |
+| ------- | -------------- | --------- |
+| Basic Race Overview | true | true |
+| Score Table | true | true - not tested on real data |

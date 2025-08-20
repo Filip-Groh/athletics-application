@@ -344,46 +344,46 @@ function NewRacerForm({races}: {races: NonNullable<RouterOutputs["race"]["getRac
                         name="event"
                         render={() => (
                             <FormItem>
-                            <div className="mb-4">
-                                <FormLabel className="text-base">Disciplíny</FormLabel>
-                                <FormDescription>
-                                Vyberte si disciplíny, ve kterých chcete soutěžit.
-                                </FormDescription>
-                            </div>
-                            {events.map((event) => (
-                                <FormField
-                                key={event.id.toString()}
-                                control={form.control}
-                                name="event"
-                                render={({ field }) => {
-                                    return (
-                                    <FormItem
-                                        key={event.id.toString()}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                    >
-                                        <FormControl>
-                                        <Checkbox
-                                            checked={field.value?.includes(event.id.toString())}
-                                            onCheckedChange={(checked) => {
-                                            return checked
-                                                ? field.onChange([...(field.value ? field.value : []), event.id.toString()])
-                                                : field.onChange(
-                                                    field.value?.filter(
-                                                    (value) => value !== event.id.toString()
+                                <div className="mb-4">
+                                    <FormLabel className="text-base">Disciplíny</FormLabel>
+                                    <FormDescription>
+                                    Vyberte si disciplíny, ve kterých chcete soutěžit.
+                                    </FormDescription>
+                                </div>
+                                {events.map((event) => (
+                                    <FormField
+                                    key={event.id.toString()}
+                                    control={form.control}
+                                    name="event"
+                                    render={({ field }) => {
+                                        return (
+                                        <FormItem
+                                            key={event.id.toString()}
+                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                        >
+                                            <FormControl>
+                                            <Checkbox
+                                                checked={field.value?.includes(event.id.toString())}
+                                                onCheckedChange={(checked) => {
+                                                return checked
+                                                    ? field.onChange([...(field.value ? field.value : []), event.id.toString()])
+                                                    : field.onChange(
+                                                        field.value?.filter(
+                                                        (value) => value !== event.id.toString()
+                                                        )
                                                     )
-                                                )
-                                            }}
-                                        />
-                                        </FormControl>
-                                        <FormLabel className="font-normal">
-                                        {event.name}
-                                        </FormLabel>
-                                    </FormItem>
-                                    )
-                                }}
-                                />
-                            ))}
-                            <FormMessage />
+                                                }}
+                                            />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">
+                                            {event.name}
+                                            </FormLabel>
+                                        </FormItem>
+                                        )
+                                    }}
+                                    />
+                                ))}
+                                <FormMessage />
                             </FormItem>
                         )}
                     />

@@ -45,7 +45,7 @@ type RegistredData = {
 function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRacer: (index: number) => void}) {
     const deleteRacer = api.racer.deleteRacer.useMutation({
         async onSuccess(deletedRacer) {
-            toast(`Odhlásili jste závodníka "${deletedRacer.name} ${deletedRacer.surname}".`)
+            toast(`Odhlásili jste závodníka "${deletedRacer.personalData.name} ${deletedRacer.personalData.surname}".`)
             popRacer(index)
         },
         async onError(error) {
@@ -81,11 +81,11 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
     const {state: racers, pop: popRacers} = useArrayState<RegistredData>(defaultData.map((racer) => {
         return {
             startingNumber: racer.startingNumber,
-            name: racer.name,
-            surname: racer.surname,
-            birthDate: racer.birthDate,
-            sex: racer.sex,
-            club: racer.club,
+            name: racer.personalData.name,
+            surname: racer.personalData.surname,
+            birthDate: racer.personalData.birthDate,
+            sex: racer.personalData.sex,
+            club: racer.personalData.club,
             eventCount: racer.performace.length,
             options: {
                 racerId: racer.id

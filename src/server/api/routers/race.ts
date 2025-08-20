@@ -4,6 +4,8 @@ import {
     createTRPCRouter,
     protectedProcedure,
     publicProcedure,
+    protectedProcedureEventManager,
+    protectedProcedureRaceManager
 } from "~/server/api/trpc";
 
 const getRacesSchema = z.object({
@@ -46,8 +48,7 @@ const updateRaceSchema = z.object({
 })
 
 const getRaceEventsSchema = z.object({
-    id: z.number(),
-    sex: z.enum(["man", "woman"])
+    id: z.number()
 })
 
 const getRaceByIdPublicSchema = z.object({
@@ -58,7 +59,120 @@ const deleteRaceSchema = z.object({
     id: z.number()
 })
 
+const setRaceEventsSchema = z.object({
+    raceId: z.number(),
+    eventIds: z.array(z.number())
+})
+
 export const raceRouter = createTRPCRouter({
+    getOwnedRaces: protectedProcedureEventManager
+        .query(({ctx}) => {
+            return ctx.db.race.findMany({
+                where: {
+                    ownerId: ctx.session.user.id
+                }
+            })
+        }),
+
+    getAssignedRaces: protectedProcedureEventManager
+        .query(({ctx}) => {
+            return ctx.db.race.findMany({
+                where: {
+                    managers: {
+                        some: {
+                            id: ctx.session.user.id
+                        }
+                    }
+                }
+            })
+        }),
+
+    getPublicRaces: publicProcedure
+        .query(({ctx}) => {
+            return ctx.db.race.findMany({
+                where: {
+                    visible: true
+                }
+            })
+        }),
+
+    createRace: protectedProcedureRaceManager
+        .input(createRaceSchema)
+        .mutation(({ ctx, input}) => {
+            return ctx.db.race.create({
+                data: {
+                    name: input.name,
+                    date: input.date,
+                    organizer: input.organizer,
+                    place: input.place,
+                    visible: input.visible,
+                    owner: {
+                        connect: {
+                            id: ctx.session.user.id
+                        }
+                    }
+                }
+            })
+        }),
+
+    getRaceEvents: publicProcedure
+        .input(getRaceEventsSchema)
+        .query(({ ctx, input }) => {
+            return ctx.db.event.findMany({
+                where: {
+                    race: {
+                        some: {
+                            id: input.id
+                        }
+                    }
+                },
+                include: {
+                    subEvent: true
+                }
+            })
+        }),
+
+    setRaceEvents: protectedProcedureRaceManager
+        .input(setRaceEventsSchema)
+        .mutation(({ ctx, input}) => {
+            const events = input.eventIds.map((eventId) => {
+                return {
+                    id: eventId
+                }
+            })
+
+            return ctx.db.race.update({
+                where: {
+                    id: input.raceId
+                },
+                data: {
+                    event: {
+                        set: events
+                    }
+                },
+                include: {
+                    _count: {
+                        select: {
+                            event: true
+                        }
+                    }
+                }
+            })
+        }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     getRaces: publicProcedure
         .input(getRacesSchema)
         .query(({ ctx, input }) => {
@@ -69,23 +183,6 @@ export const raceRouter = createTRPCRouter({
             return ctx.db.race.findMany({
                 where: {
                     visible: true
-                }
-            })
-        }),
-
-    getRaceEvents: publicProcedure
-        .input(getRaceEventsSchema)
-        .mutation(({ ctx, input }) => {
-            return ctx.db.race.findUnique({
-                where: {
-                    id: input.id,
-                },
-                include: {
-                    event: {
-                        where: {
-                            category: input.sex
-                        }
-                    }
                 }
             })
         }),
@@ -101,29 +198,23 @@ export const raceRouter = createTRPCRouter({
                 include: {
                     event: {
                         include: {
-                            ageCoeficient: true,
-                            performance: {
+                            subEvent: {
                                 include: {
-                                    measurement: true,
-                                    racer: true
+                                    ageCoeficient: true,
+                                    performance: {
+                                        include: {
+                                            measurement: true,
+                                            racer: {
+                                                include: {
+                                                    personalData: true
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            })
-        }),
-
-    createRace: protectedProcedure
-        .input(createRaceSchema)
-        .mutation(({ ctx, input}) => {
-            return ctx.db.race.create({
-                data: {
-                    name: input.name,
-                    date: input.date,
-                    organizer: input.organizer,
-                    place: input.place,
-                    visible: input.visible
                 }
             })
         }),
@@ -138,22 +229,31 @@ export const raceRouter = createTRPCRouter({
                 include: {
                     event: {
                         include: {
-                            performance: {
+                            subEvent: {
                                 include: {
-                                    racer: true,
-                                    measurement: true
-                                }
-                            },
-                            ageCoeficient: {
-                                orderBy: {
-                                    age: "asc"
+                                    performance: {
+                                        include: {
+                                            racer: {
+                                                include: {
+                                                    personalData: true
+                                                }
+                                            },
+                                            measurement: true
+                                        }
+                                    },
+                                    ageCoeficient: {
+                                        orderBy: {
+                                            age: "asc"
+                                        }
+                                    }
                                 }
                             }
                         }
                     },
                     racer: {
                         include: {
-                            performace: true
+                            performace: true,
+                            personalData: true
                         }
                     }
                 }

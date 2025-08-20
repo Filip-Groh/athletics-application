@@ -2,30 +2,24 @@ import { z } from "zod";
 
 import {
     createTRPCRouter,
-    protectedProcedure
+    protectedProcedure,
+    protectedProcedureAdmin
 } from "~/server/api/trpc";
 
 const createEventSchema = z.object({
-    name: z.string().min(1, {
+    name: z.optional(z.string().min(1, {
         message: "Jméno disciplíny musí mít alespoň 1 znak.",
-    }),
+    })),
     category: z.enum(["man", "woman"], {
         required_error: "Vyberte kategorii.",
-    }),
-    raceId: z.number(),
-    a: z.number(),
-    b: z.number(),
-    c: z.number()
+    })
 })
 
 const updateEventSchema = z.object({
     id: z.number(),
     name: z.optional(z.string().min(1, {
         message: "Jméno musí mít alespoň 1 znak."
-    })),
-    a: z.number(),
-    b: z.number(),
-    c: z.number()
+    }))
 })
 
 const deleteEventSchema = z.object({
@@ -33,34 +27,40 @@ const deleteEventSchema = z.object({
 })
 
 export const eventRouter = createTRPCRouter({
-    createEvent: protectedProcedure
-        .input(createEventSchema)
-        .mutation(({ ctx, input}) => {
-            return ctx.db.event.create({
-                data: {
-                    name: input.name,
-                    category: input.category,
-                    a: input.a,
-                    b: input.b,
-                    c: input.c,
-                    race: {
-                        connect: {
-                            id: input.raceId
-                        }
-                    }
-                },
+    getEvents: protectedProcedureAdmin
+        .query(({ctx}) => {
+            return ctx.db.event.findMany({
                 include: {
-                    performance: {
+                    subEvent: true
+                }
+            })
+        }),
+
+    getEventsWithAgeCoeficients: protectedProcedure
+        .query(({ctx}) => {
+            return ctx.db.event.findMany({
+                include: {
+                    subEvent: {
                         include: {
-                            racer: true,
-                            measurement: true
+                            ageCoeficient: true
                         }
                     }
                 }
             })
         }),
 
-    updateEvent: protectedProcedure
+    createEvent: protectedProcedureAdmin
+        .input(createEventSchema)
+        .mutation(({ ctx, input}) => {
+            return ctx.db.event.create({
+                data: {
+                    name: input.name,
+                    category: input.category,
+                }
+            })
+        }),
+
+    updateEvent: protectedProcedureAdmin
         .input(updateEventSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.event.update({
@@ -68,12 +68,12 @@ export const eventRouter = createTRPCRouter({
                     id: input.id
                 },
                 data: {
-                    ...input
+                    name: input.name
                 }
             })
         }),
 
-    deleteEvent: protectedProcedure
+    deleteEvent: protectedProcedureAdmin
         .input(deleteEventSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.event.delete({

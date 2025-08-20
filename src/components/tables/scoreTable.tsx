@@ -15,7 +15,7 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import React from 'react'
-import { type ScoreData } from "~/app/prehled-zavodu/[raceId]/score"
+import { type ScoreData } from "~/app/zavod/[raceId]/score"
 
 function ScoreTable({data}: {data: ScoreData[]}) {
     const columns: ColumnDef<ScoreData>[] = [

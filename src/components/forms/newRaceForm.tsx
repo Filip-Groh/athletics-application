@@ -32,6 +32,7 @@ import { api } from "~/trpc/react"
 
 function NewRaceForm() {
     const router = useRouter()
+    const utils = api.useUtils()
 
     const createRaceSchema = z.object({
         name: z.string().min(1, {
@@ -66,7 +67,8 @@ function NewRaceForm() {
         async onSuccess(data) {
             toast(`Nový závod "${data.name}" byl naplánován na ${data.date.toLocaleDateString()} organizátorem "${data.organizer}".`)
             form.reset()
-            router.push(`/zavody/${data.id}`)
+            await utils.race.getOwnedRaces.invalidate()
+            router.push(`/zavod/${data.id}/admin`)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

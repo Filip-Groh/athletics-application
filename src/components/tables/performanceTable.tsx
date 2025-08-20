@@ -17,7 +17,7 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import React from 'react'
-import type { MeasurementType, PerformanceType } from "~/app/zavody/[raceId]/performance"
+import type { MeasurementType, PerformanceType } from "~/app/zavod/[raceId]/admin/performance"
 import { Button } from "~/components/ui/button"
 import { PlusIcon, Save, EllipsisVertical, Trash2, Shuffle } from "lucide-react"
 import { useArrayState } from "~/components/hooks/useArrayState"
@@ -121,10 +121,10 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
     )
 }
 
-function OptionsCell({index, racerId, eventId, popRacer}: {index: number, racerId: number, eventId: number, popRacer: (index: number) => void}) {
+function OptionsCell({index, raceId, racerId, eventId, popRacer}: {index: number, raceId: number, racerId: number, eventId: number, popRacer: (index: number) => void}) {
     const disconnectRacer = api.racer.disconnectRacer.useMutation({
         async onSuccess(disconnectRacer) {
-            toast(`Odhlásili jste závodníka "${disconnectRacer.racer.name} ${disconnectRacer.racer.surname}" z disciplíny "${disconnectRacer.event.name} - ${formatSex(disconnectRacer.event.category, true)}".`)
+            toast(`Odhlásili jste závodníka "${disconnectRacer.racer?.personalData.name} ${disconnectRacer.racer?.personalData.surname}" z ${disconnectRacer.subEventCount} disciplín.`)
             popRacer(index)
         },
         async onError(error) {
@@ -135,6 +135,7 @@ function OptionsCell({index, racerId, eventId, popRacer}: {index: number, racerI
 
     const handleDelete = () => {
         disconnectRacer.mutate({
+            raceId: raceId,
             racerId: racerId,
             eventId: eventId
         })
@@ -217,7 +218,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             accessorKey: "options",
             header: "Možnosti",
             cell: ({row}) => {
-                return (<OptionsCell index={row.index} racerId={row.original.options.racerId} eventId={row.original.options.eventId} popRacer={popPerformance}/>)
+                return (<OptionsCell index={row.index} raceId={row.original.options.raceId} racerId={row.original.options.racerId} eventId={row.original.options.eventId} popRacer={popPerformance}/>)
             }
         }
     ]

@@ -4,8 +4,9 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
+import type { Adapter, AdapterSession, AdapterUser } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -16,19 +17,64 @@ import { db } from "~/server/db";
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
+
+export enum UserRole {
+  Admin = 3,
+  RaceManager = 2,
+  EventManager = 1,
+  Racer = 0
+}
+
 declare module "next-auth" {
+  interface User {
+    role: UserRole,
+    personalData: {
+      id: number;
+      createdAt: Date;
+      updatedAt: Date;
+      name: string;
+      surname: string;
+      birthDate: Date;
+      sex: "man" | "woman";
+      club: string;
+      userId: string | null;
+    } | null
+  }
+
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      role: UserRole,
+      personalData: {
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
+        name: string;
+        surname: string;
+        birthDate: Date;
+        sex: "man" | "woman";
+        club: string;
+        userId: string | null;
+      } | null
     } & DefaultSession["user"];
   }
+}
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+const adapter = PrismaAdapter(db)
+adapter.getSessionAndUser = async (sessionToken) => {
+  const userAndSession = await db.session.findUnique({
+    where: { sessionToken },
+    include: { 
+      user: {
+        include: {
+          personalData: true
+        }
+      } 
+    },
+  })
+  if (!userAndSession) return null
+  const { user, ...session } = userAndSession
+  return { user, session } as { user: AdapterUser; session: AdapterSession }
 }
 
 /**
@@ -43,11 +89,17 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+        role: user.role,
+        personalData: user.personalData
       },
     }),
   },
-  adapter: PrismaAdapter(db) as Adapter,
+  adapter: adapter as Adapter,
   providers: [
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,

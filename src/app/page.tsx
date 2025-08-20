@@ -55,43 +55,13 @@
 //   );
 // }
 
-import Link from 'next/link';
 import React from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-  } from "~/components/ui/card"
-import { api } from "~/trpc/server";
+import PublicRaceCards from '~/components/elements/publicRaceCards';
 
 export default async function HomePage() {
-    const races = await api.race.getRaces({
-        includeHidden: false
-    })
-
     return (
         <div>
-            {races.map((race) => {
-                return (
-                    <Link key={`race_${race.id}`} href={`/prehled-zavodu/${race.id}`}>
-                        <Card key={`race_${race.id}`}>
-                            <CardHeader>
-                                <CardTitle>{race.name}</CardTitle>
-                                <CardDescription>Koná se {race.date.toLocaleDateString()} v {race.date.toLocaleTimeString(navigator.language, {hour: "2-digit", minute: "2-digit"})}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p>Závod se pořádá zde: {race.place}</p>
-                            </CardContent>
-                            <CardFooter>
-                                <p>Pořádá {race.organizer}</p>
-                            </CardFooter>
-                        </Card>
-                    </Link>
-                )
-            })}
+            <PublicRaceCards />
         </div>
     );
 }
@@ -118,6 +88,11 @@ TODO:
     - Race manager - Whole race management
     - Event manager - Fills out measurements
     - Racer - Signs to races with account
+
+    DB:
+    - OAuth user - role, optional personal data
+    - Personal data - name, surname, birthdate, sex, club
+    - Racer - personal data
 
 - Group of events - Tree like structure
 */

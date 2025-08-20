@@ -67,6 +67,8 @@ interface MainMenuProps {
 export default async function MainMenu({menuItems, isAdmin}: MainMenuProps) {
     const session = await getServerAuthSession()
 
+    console.log(session?.user.image)
+
     return (
         <NavigationMenu>
             <NavigationMenuList>
@@ -91,7 +93,11 @@ export default async function MainMenu({menuItems, isAdmin}: MainMenuProps) {
                             <DropdownMenuSeparator />
                             {session ? 
                                 <>
-                                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <Link href="/ucet">
+                                            Přehled
+                                        </Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <LogOut className="mr-2 h-4 w-4" />
                                         <Link href="/api/auth/signout">
