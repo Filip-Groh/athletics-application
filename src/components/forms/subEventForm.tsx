@@ -14,6 +14,7 @@ import type { RouterOutputs } from '~/trpc/react'
 import { api } from '~/trpc/react'
 import DeleteConfirm from '../elements/deleteConfirm'
 import TextInput from './fields/textInput'
+import NumericInput from './fields/numericInput'
 
 function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<RouterOutputs["event"]["getEvents"]>[0]["subEvent"][0], isForEvent: boolean, eventId: number}) {
     const utils = api.useUtils()
@@ -42,7 +43,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
 
     const deleteEvent = api.event.deleteEvent.useMutation({
         async onSuccess(data) {
-            toast(`Disciplína "${data.name} - ${formatSex(data.category, true)}" byla smazána.`)
+            toast(`Disciplína "${data.subEvent[0]?.name} - ${formatSex(data.category, true)}" byla smazána.`)
             await utils.event.getEvents.invalidate()
         },
         async onError(error) {
@@ -77,9 +78,15 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
         }),
-        a: z.string(),
-        b: z.string(),
-        c: z.string()
+        a: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        }),
+        b: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        }),
+        c: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        })
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -96,9 +103,9 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-row gap-2">
                 <TextInput form={form} fieldName='name' label='Jméno disciplíny' placeholder='Jméno' description='Napište jméno disciplíny.' />
-                <TextInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A.' />
-                <TextInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B.' />
-                <TextInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C.' />
+                <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A.' />
+                <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B.' />
+                <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C.' />
                 <div>
                     <div className='flex flex-row gap-2 mt-8 mb-2'>
                         <Button type="submit" disabled={updateSubEvent.isPending || deleteSubEvent.isPending}>Updatovat</Button>

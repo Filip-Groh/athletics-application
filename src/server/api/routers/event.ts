@@ -80,6 +80,9 @@ export const eventRouter = createTRPCRouter({
                 where: {
                     id: input.id,
                 },
+                include: {
+                    subEvent: true
+                }
             })
         })
 });

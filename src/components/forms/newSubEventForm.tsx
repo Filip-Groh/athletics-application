@@ -11,7 +11,8 @@ import {
 import { toast } from "sonner"
 import { api } from '~/trpc/react'
 import TextInput from './fields/textInput'
-import { formatSex } from '~/lib/utils'
+import { formatSex, inputStringToNumber } from '~/lib/utils'
+import NumericInput from './fields/numericInput'
 
 function NewSubEventForm({eventId}: {eventId: number}) {
     const utils = api.useUtils()
@@ -31,9 +32,9 @@ function NewSubEventForm({eventId}: {eventId: number}) {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         createEvent.mutate({
             name: values.name,
-            a: Number(values.a),
-            b: Number(values.b),
-            c: Number(values.c),
+            a: inputStringToNumber(values.a),
+            b: inputStringToNumber(values.b),
+            c: inputStringToNumber(values.c),
             eventId: eventId
         })
     }
@@ -42,9 +43,15 @@ function NewSubEventForm({eventId}: {eventId: number}) {
         name: z.string().min(1, {
             message: "Jméno disciplíny musí mít alespoň 1 znak.",
         }),
-        a: z.string(),
-        b: z.string(),
-        c: z.string()
+        a: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        }),
+        b: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        }),
+        c: z.string().min(1, {
+            message: "Musíte zadat hodnotu."
+        })
     })
     
     const form = useForm<z.infer<typeof formSchema>>({
@@ -61,9 +68,9 @@ function NewSubEventForm({eventId}: {eventId: number}) {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <TextInput form={form} fieldName='name' label='Jméno disciplíny' placeholder='Jméno disciplíny' description='Napište jméno disciplíny.' />
-                <TextInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                <TextInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                <TextInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
                 <Button type="submit" disabled={createEvent.isPending}>Vytvořit disciplínu</Button>
             </form>
         </Form>

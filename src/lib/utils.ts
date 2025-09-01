@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function inputStringToNumber(input: string) {
-  return Number(input.replaceAll(" ", "").replaceAll(" ", "").replace(",", "."))
+  return input ? Number(input.replaceAll(" ", "").replaceAll(" ", "").replace(",", ".")) : NaN
 }
 
 export function formatSex(sex: string, plural: boolean) {

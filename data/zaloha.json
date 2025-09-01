@@ -1,0 +1,42 @@
+[
+    {
+        "id": 28,
+        "createdAt": "2025-09-01T14:18:02.994Z",
+        "updatedAt": "2025-09-01T14:18:02.994Z",
+        "name": null,
+        "category": "man",
+        "subEvent": [
+            {
+                "id": 27,
+                "createdAt": "2025-09-01T14:18:03.106Z",
+                "updatedAt": "2025-09-01T14:18:03.106Z",
+                "name": "60 m",
+                "a": 58.015,
+                "b": 11.5,
+                "c": 1.81,
+                "eventId": 28,
+                "ageCoeficient": []
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "createdAt": "2025-09-01T14:18:02.994Z",
+        "updatedAt": "2025-09-01T14:18:02.994Z",
+        "name": null,
+        "category": "woman",
+        "subEvent": [
+            {
+                "id": 26,
+                "createdAt": "2025-09-01T14:18:03.185Z",
+                "updatedAt": "2025-09-01T14:18:03.185Z",
+                "name": "60 m",
+                "a": 46.0849,
+                "b": 13,
+                "c": 1.81,
+                "eventId": 29,
+                "ageCoeficient": []
+            }
+        ]
+    }
+]
