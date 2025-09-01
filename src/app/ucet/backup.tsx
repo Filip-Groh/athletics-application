@@ -27,64 +27,49 @@ import { Label } from "~/components/ui/label"
 import { downloadJSON } from '~/lib/utils'
 import { api } from '~/trpc/react'
 
-const raceBackupFileSchema = z.object({
-    createdAt: z.date(),
-    updatedAt: z.date(),
+const backupFileSchema = z.array(z.object({
+    id: z.number(),
+    createdAt: z.string().transform((str) => new Date(str)),
+    updatedAt: z.string().transform((str) => new Date(str)),
 
-    name: z.string(),
-    date: z.date(),
-    place: z.string(),
-    organizer: z.string(),
-    visible: z.boolean(),
-    ownerId: z.string(),
+    name: z.nullable(z.string()),
+    category: z.enum(["man", "woman"]),
 
-    event: z.array(z.object({
-        id: z.number()
-    })),
-
-    racer: z.array(z.object({
+    subEvent: z.array(z.object({
         id: z.number(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
+        createdAt: z.string().transform((str) => new Date(str)),
+        updatedAt: z.string().transform((str) => new Date(str)),
 
-        personalDataId: z.number(),
-        startingNumber: z.number(),
-    })),
+        name: z.string(),
+        a: z.number(),
+        b: z.number(),
+        c: z.number(),
 
-    performace: z.array(z.object({
-        id: z.number(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
-
-        orderNumber: z.number(),
-        subEventId: z.number(),
-        racerId: z.number(),
-
-        measurement: z.array(z.object({
+        ageCoeficient: z.array(z.object({
             id: z.number(),
-            createdAt: z.date(),
-            updatedAt: z.date(),
+            createdAt: z.string().transform((str) => new Date(str)),
+            updatedAt: z.string().transform((str) => new Date(str)),
 
-            value: z.number()
+            age: z.number(),
+            coeficient: z.number()
         }))
-    })),
-
-    managers: z.array(z.object({
-        id: z.string()
     }))
-})
+}))
 
-function BackupTab({raceId}: {raceId: number}) {
+function Backup() {
     const [errorMessage, setErrorMessage] = React.useState("")
+    const utils = api.useUtils()
 
-    const getRaceBackupFile = api.backup.getRaceBackupFile.useMutation({
+    const getBackupFile = api.backup.getBackupFile.useMutation({
         async onSuccess(data) {
             if (!data) {
                 toast("Někde se stala chyba.")
                 return
             }
-            downloadJSON(data, `zavod_${raceId}`)
-            toast(`Backup soubor "zavod_${raceId}.json" úspěšně stažen.`)
+            downloadJSON(data, "zaloha")
+            toast(`Backup soubor "zaloha.json" úspěšně stažen.`)
+            await utils.event.getEvents.invalidate()
+            await utils.event.getEventsWithAgeCoeficients.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -92,9 +77,9 @@ function BackupTab({raceId}: {raceId: number}) {
         },
     })
 
-    const loadRaceBackupFile = api.backup.loadRaceBackupFile.useMutation({
+    const loadBackupFile = api.backup.loadBackupFile.useMutation({
         async onSuccess(data) {
-            toast(`Backup úspěšně načetl závod ${data.race.name} s ${data.measurements.flat().length} měřeními.`)
+            toast(`Backup úspěšně načetl ${data.length} disciplíny.`)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -112,7 +97,7 @@ function BackupTab({raceId}: {raceId: number}) {
             return
         }
 
-        const parseTry = raceBackupFileSchema.safeParse(await JSON.parse(await file.text()))
+        const parseTry = backupFileSchema.safeParse(await JSON.parse(await file.text()))
 
         if (!parseTry.success) {
             console.error(parseTry.error)
@@ -123,16 +108,11 @@ function BackupTab({raceId}: {raceId: number}) {
         const backup = parseTry.data
         console.warn("Upload!")
         console.log(backup)
-        loadRaceBackupFile.mutate({
-            raceId: raceId,
-            race: backup
-        })
+        loadBackupFile.mutate(backup)
     }
 
     const handleDownload = () => {
-        getRaceBackupFile.mutate({
-            raceId: raceId
-        })
+        getBackupFile.mutate()
     }
 
     return (
@@ -140,7 +120,7 @@ function BackupTab({raceId}: {raceId: number}) {
             <Card>
                 <CardHeader>
                     <CardTitle>Uložit zálohu</CardTitle>
-                    <CardDescription>Uložte si všechny data spojená s tímto závodem do 1 souboru.</CardDescription>
+                    <CardDescription>Uložte si všechna data disciplín do 1 souboru.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Button onClick={handleDownload}>Stáhnout zálohu</Button>
@@ -184,4 +164,4 @@ function BackupTab({raceId}: {raceId: number}) {
     )
 }
 
-export default BackupTab
+export default Backup

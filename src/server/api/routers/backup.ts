@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import {
     createTRPCRouter,
+    protectedProcedureAdmin,
     protectedProcedureRaceManager,
 } from "~/server/api/trpc";
 
@@ -59,15 +60,137 @@ const loadRaceBackupFileSchema = z.object({
     })
 })
 
-// type TypeEquality<T, U> = keyof T extends keyof U ? (keyof U extends keyof T ? true : false) : false;
+const loadBackupFileSchema = z.array(z.object({
+    id: z.number(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
 
-// const sameTypeCheck = 
+    name: z.nullable(z.string()),
+    category: z.enum(["man", "woman"]),
 
-// assert()
+    subEvent: z.array(z.object({
+        id: z.number(),
+        createdAt: z.date(),
+        updatedAt: z.date(),
 
-// NonNullable<RouterOutputs["backup"]["getBackupFile"]> === z.infer<typeof loadBackupFileSchema>
+        name: z.string(),
+        a: z.number(),
+        b: z.number(),
+        c: z.number(),
+
+        ageCoeficient: z.array(z.object({
+            id: z.number(),
+            createdAt: z.date(),
+            updatedAt: z.date(),
+
+            age: z.number(),
+            coeficient: z.number()
+        }))
+    }))
+}))
 
 export const backupRouter = createTRPCRouter({
+    getBackupFile: protectedProcedureAdmin
+        .mutation(({ ctx, input }) => {
+            return ctx.db.event.findMany({
+                include: {
+                    subEvent: {
+                        include: {
+                            ageCoeficient: true
+                        }
+                    }
+                }
+            })
+        }),
+
+    loadBackupFile: protectedProcedureAdmin
+        .input(loadBackupFileSchema)
+        .mutation(async ({ ctx, input }) => {
+            return await Promise.all(input.map((event) => {
+                return ctx.db.event.update({
+                    where: {
+                        id: event.id
+                    },
+                    data: {
+                        createdAt: event.createdAt,
+                        updatedAt: event.updatedAt,
+
+                        name: event.name,
+                        category: event.category,
+
+                        subEvent: {
+                            upsert: event.subEvent.map((subEvent) => {
+                                return {
+                                    where: {
+                                        id: subEvent.id
+                                    },
+                                    create: {
+                                        id: subEvent.id,
+                                        createdAt: subEvent.createdAt,
+                                        updatedAt: subEvent.updatedAt,
+
+                                        name: subEvent.name,
+                                        a: subEvent.a,
+                                        b: subEvent.b,
+                                        c: subEvent.c,
+
+                                        ageCoeficient: {
+                                            createMany: {
+                                                data: subEvent.ageCoeficient.map((ageCoeficient) => {
+                                                    return {
+                                                        createdAt: ageCoeficient.createdAt,
+                                                        updatedAt: ageCoeficient.updatedAt,
+
+                                                        age: ageCoeficient.age,
+                                                        coeficient: ageCoeficient.coeficient
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    },
+                                    update: {
+                                        createdAt: subEvent.createdAt,
+                                        updatedAt: subEvent.updatedAt,
+
+                                        name: subEvent.name,
+                                        a: subEvent.a,
+                                        b: subEvent.b,
+                                        c: subEvent.c,
+
+                                        ageCoeficient: {
+                                            upsert: subEvent.ageCoeficient.map((ageCoeficient) => {
+                                                return {
+                                                    where: {
+                                                        age_subEventId: {
+                                                            age: ageCoeficient.age,
+                                                            subEventId: subEvent.id
+                                                        }
+                                                    },
+                                                    create: {
+                                                        createdAt: ageCoeficient.createdAt,
+                                                        updatedAt: ageCoeficient.updatedAt,
+
+                                                        age: ageCoeficient.age,
+                                                        coeficient: ageCoeficient.coeficient
+                                                    },
+                                                    update: {
+                                                        createdAt: ageCoeficient.createdAt,
+                                                        updatedAt: ageCoeficient.updatedAt,
+
+                                                        coeficient: ageCoeficient.coeficient
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+            }))
+        }),
+
     getRaceBackupFile: protectedProcedureRaceManager
         .input(getRaceBackupFileSchema)
         .mutation(({ ctx, input }) => {

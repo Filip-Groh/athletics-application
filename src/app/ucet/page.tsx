@@ -6,6 +6,7 @@ import Races from './races'
 import Roles from './roles'
 import Events from './events'
 import Coeficients from './coeficients'
+import Backup from './backup'
 
 async function ProfilePage() {
     const session = await getServerAuthSession()
@@ -18,6 +19,7 @@ async function ProfilePage() {
                 {(session?.user.role ?? 0) >= UserRole.RaceManager ? <VerticalTabsTrigger key="rolesTrigger" value="roles">Správa rolí</VerticalTabsTrigger> : null}
                 {(session?.user.role ?? 0) >= UserRole.Admin ? <VerticalTabsTrigger key="eventsTrigger" value="events">Disciplíny</VerticalTabsTrigger> : null}
                 {(session?.user.role ?? 0) >= UserRole.Admin ? <VerticalTabsTrigger key="coeficientsTrigger" value="coeficients">Koeficienty</VerticalTabsTrigger> : null}
+                {(session?.user.role ?? 0) >= UserRole.Admin ? <VerticalTabsTrigger key="backupTrigger" value="backup">Backup</VerticalTabsTrigger> : null}
             </VerticalTabsList>
             <VerticalTabsContent key="overviewContent" value="overview">
                 <Overview />
@@ -33,6 +35,9 @@ async function ProfilePage() {
             </VerticalTabsContent> : null}
             {(session?.user.role ?? 0) >= UserRole.Admin ? <VerticalTabsContent key="coeficientsContent" value="coeficients">
                 <Coeficients />
+            </VerticalTabsContent> : null}
+            {(session?.user.role ?? 0) >= UserRole.Admin ? <VerticalTabsContent key="backupContent" value="backup">
+                <Backup />
             </VerticalTabsContent> : null}
         </VerticalTabs>
     )
