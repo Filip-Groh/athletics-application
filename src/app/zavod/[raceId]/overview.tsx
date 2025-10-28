@@ -12,7 +12,7 @@ function OverviewTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceBy
             <ul>
                 {race.event.map((event) => {
                     return (
-                        <li key={`event_${event.id}`}>{event.name} - {formatSex(event.category, true)}</li>
+                        <li key={`event_${event.id}`}>{event.name ?? event.subEvent[0]?.name} - {formatSex(event.category, true)}</li>
                     )
                 })}
             </ul>

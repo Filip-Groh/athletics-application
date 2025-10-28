@@ -15,10 +15,10 @@ import {
     TableRow,
 } from "~/components/ui/table"
 import React from 'react'
-import { type ScoreData } from "~/app/zavod/[raceId]/score"
+import { type GroupScoreData } from "~/app/zavod/[raceId]/score"
 
-function ScoreTable({data}: {data: ScoreData[]}) {
-    const columns: ColumnDef<ScoreData>[] = [
+function GroupScoreTable({data}: {data: GroupScoreData[]}) {
+    const columns: ColumnDef<GroupScoreData>[] = [
         {
             accessorKey: "position",
             header: "Umístění",
@@ -29,10 +29,6 @@ function ScoreTable({data}: {data: ScoreData[]}) {
         {
             accessorKey: "startingNumber",
             header: "Startovací číslo"
-        },
-        {
-            accessorKey: "orderNumber",
-            header: "Startovací pořadí"
         },
         {
             accessorKey: "name",
@@ -69,15 +65,11 @@ function ScoreTable({data}: {data: ScoreData[]}) {
             }
         },
         {
-            accessorKey: "bestMeasurement",
-            header: "Nejlepší výkon",
-        },
-        {
-            accessorKey: "measurements",
-            header: "Výkony",
+            accessorKey: "subEventPoints",
+            header: "Body v disciplínách",
             accessorFn: (row) => {
-                return row.measurements.map((measurement) => {
-                    return measurement.toLocaleString()
+                return row.subEventPoints.map((points) => {
+                    return points.toLocaleString()
                 }).reduce((prev, curr) => {
                     if (prev === "") {
                         return `${curr}`
@@ -143,4 +135,4 @@ function ScoreTable({data}: {data: ScoreData[]}) {
     )
 }
 
-export default ScoreTable
+export default GroupScoreTable

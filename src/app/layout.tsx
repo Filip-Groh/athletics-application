@@ -8,7 +8,7 @@ import { ThemeProvider } from "~/components/theme/theme-provider"
 import MainMenu, { type MenuItemType } from "~/components/menu/mainMenu";
 import { Toaster } from "~/components/ui/sonner"
 import { HydrateClient } from "~/trpc/server";
-import { getServerAuthSession } from "~/server/auth"
+import { getServerAuthSession, UserRole } from "~/server/auth"
 
 export const metadata: Metadata = {
     title: "Create T3 App",
@@ -20,12 +20,17 @@ const menuItems: Array<MenuItemType> = [
     {
         text: "Závody",
         link: "/",
-        adminOnly: false
+        minRole: false
+    },
+    {
+        text: "Přihlášené závody",
+        link: "/prihlasene-zavody",
+        minRole: UserRole.Racer
     },
     {
         text: "Zápis výkonů",
         link: "/zavod",
-        adminOnly: true
+        minRole: UserRole.EventManager
     }
 ]
 
@@ -38,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 <TRPCReactProvider>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
                         <header>
-                            <MainMenu menuItems={menuItems} isAdmin={session !== null}/>
+                            <MainMenu menuItems={menuItems} role={session?.user.role ?? false}/>
                         </header>
                         <main>
                             <HydrateClient>

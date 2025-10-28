@@ -1,9 +1,9 @@
 "use client"
 
 import React from 'react'
+import TreeTabs, { type DropdownNode, type SingleNode } from '~/components/elements/treeTabs'
 import RaceEventManagerForm from '~/components/forms/raceEventManagerForm'
 import PerformanceTable from '~/components/tables/performanceTable'
-import { VerticalTabs, VerticalTabsContent, VerticalTabsList, VerticalTabsTrigger } from '~/components/ui/verticalTabs'
 import { formatSex } from '~/lib/utils'
 import { api, type RouterOutputs } from '~/trpc/react'
 
@@ -48,65 +48,103 @@ function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]
     }
 
     if (isSuccessGetEvents && isSuccessGetRaceEvents) {
-        return (
-            <div>
-                <VerticalTabs defaultValue={race.event[0] ? race.event[0].id.toString() : "event_new"}>
-                    <VerticalTabsList>
-                        {race.event.map((event) => {
-                            return (
-                                <>
-                                    {event.subEvent.map((subEvent) => {
-                                        return (
-                                            <VerticalTabsTrigger key={`eventTrigger_${subEvent.id}`} value={subEvent.id.toString()}>{event.name ? `${event.name} - ` : ""}{subEvent.name} - {formatSex(event.category, true)}</VerticalTabsTrigger>
-                                        )
-                                    })}
-                                </>
+        const tree = race.event.flatMap<SingleNode | DropdownNode>((event) => {
+            if (event.name) {
+                const node: DropdownNode = {
+                    isDropdown: true,
+                    triggerText: `${event.name} - ${formatSex(event.category, true)}`,
+                    uniqueId: `event_${event.id}`,
+                    content: null,
+                    dropdownNodes: event.subEvent.map((subEvent) => {
+                        const tableData: PerformanceType[] = subEvent.performance.map<PerformanceType>((value) => {
+                            return {
+                                id: value.id,
+                                orderNumber: value.orderNumber,
+                                startingNumber: value.racer.startingNumber,
+                                name: value.racer.personalData.name,
+                                surname: value.racer.personalData.surname,
+                                sex: value.racer.personalData.sex,
+                                birthDate: value.racer.personalData.birthDate.toLocaleDateString(),
+                                measurement: value.measurement.map((measurement) => {
+                                    return {
+                                        id: measurement.id,
+                                        value: measurement.value ? measurement.value : NaN
+                                    }
+                                }),
+                                options: {
+                                    raceId: raceId,
+                                    racerId: value.racer.id,
+                                    eventId: event.id,
+                                    subEventId: subEvent.id
+                                }
+                            }
+                        })
+
+                        const node: SingleNode =  {
+                            isDropdown: false,
+                            triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
+                            uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
+                            content: (
+                                <PerformanceTable data={tableData} />
                             )
-                        })}
-                        <VerticalTabsTrigger key="eventTrigger_new" value="event_new">Disciplíny</VerticalTabsTrigger>
-                    </VerticalTabsList>
-                    {race.event.map((event) => {
-                        return (
-                            <>
-                                {event.subEvent.map((subEvent) => {
-                                    const tableData: PerformanceType[] = subEvent.performance.map<PerformanceType>((value) => {
-                                        return {
-                                            id: value.id,
-                                            orderNumber: value.orderNumber,
-                                            startingNumber: value.racer.startingNumber,
-                                            name: value.racer.personalData.name,
-                                            surname: value.racer.personalData.surname,
-                                            sex: value.racer.personalData.sex,
-                                            birthDate: value.racer.personalData.birthDate.toLocaleDateString(),
-                                            measurement: value.measurement.map((measurement) => {
-                                                return {
-                                                    id: measurement.id,
-                                                    value: measurement.value ? measurement.value : NaN
-                                                }
-                                            }),
-                                            options: {
-                                                raceId: raceId,
-                                                racerId: value.racer.id,
-                                                eventId: event.id,
-                                                subEventId: subEvent.id
-                                            }
-                                        }
-                                    })
-                
-                                    return (
-                                        <VerticalTabsContent key={`eventContent_${subEvent.id}`} value={subEvent.id.toString()} className='flex flex-col gap-8'>
-                                            <PerformanceTable data={tableData} />
-                                        </VerticalTabsContent>
-                                    )
-                                })}
-                            </>
+                        }
+
+                        return node
+                    })
+                }
+
+                return [node]
+            } else {
+                return event.subEvent.map((subEvent) => {
+                    const tableData: PerformanceType[] = subEvent.performance.map<PerformanceType>((value) => {
+                        return {
+                            id: value.id,
+                            orderNumber: value.orderNumber,
+                            startingNumber: value.racer.startingNumber,
+                            name: value.racer.personalData.name,
+                            surname: value.racer.personalData.surname,
+                            sex: value.racer.personalData.sex,
+                            birthDate: value.racer.personalData.birthDate.toLocaleDateString(),
+                            measurement: value.measurement.map((measurement) => {
+                                return {
+                                    id: measurement.id,
+                                    value: measurement.value ? measurement.value : NaN
+                                }
+                            }),
+                            options: {
+                                raceId: raceId,
+                                racerId: value.racer.id,
+                                eventId: event.id,
+                                subEventId: subEvent.id
+                            }
+                        }
+                    })
+
+                    const node: SingleNode =  {
+                        isDropdown: false,
+                        triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
+                        uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
+                        content: (
+                            <PerformanceTable data={tableData} />
                         )
-                    })}
-                    <VerticalTabsContent key="eventContent_new" value="event_new">
-                        <RaceEventManagerForm allEvents={allEvents} raceEvents={raceEvents} raceId={raceId}/>
-                    </VerticalTabsContent>
-                </VerticalTabs>
-            </div>
+                    }
+
+                    return node
+                })
+            }
+        })
+
+        tree.push({
+            isDropdown: false,
+            triggerText: "Disciplíny",
+            uniqueId: "event_new",
+            content: (
+                <RaceEventManagerForm allEvents={allEvents} raceEvents={raceEvents} raceId={raceId}/>
+            )
+        })
+
+        return (
+            <TreeTabs tree={tree} />
         )
     }
 }

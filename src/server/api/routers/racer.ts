@@ -33,6 +33,10 @@ import {
 //     })
 // })
 
+const getStartingNumberSchema = z.object({
+    raceId: z.number()
+})
+
 const disconnectRacerSchema = z.object({
     raceId: z.number(),
     racerId: z.number(),
@@ -141,6 +145,19 @@ async function getNextOrderNumber(db: PrismaClient, raceId: number, subEventId: 
 }
 
 export const racerRouter = createTRPCRouter({
+    getStartingNumber: protectedProcedure
+        .input(getStartingNumberSchema)
+        .query(({ctx, input}) => {
+            return ctx.db.racer.findFirst({
+                where: {
+                    raceId: input.raceId,
+                    personalData: {
+                        userId: ctx.session.user.id
+                    }
+                }
+            })
+        }),
+
     createRacerWithUsersPersonalInformation: protectedProcedure
         .input(createRacerWithUsersPersonalInformationSchema)
         .mutation(async ({ctx, input}) => {

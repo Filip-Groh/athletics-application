@@ -111,7 +111,7 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
                 }
 
                 return (
-                    <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" numericValue={measurement.value} onChange={handleChange} onDelete={handleDelete} />
+                    <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" allowEmpty numericValue={measurement.value} onChange={handleChange} onDelete={handleDelete} />
                 )
             })}
             <Button variant="outline" size="icon" className="flex-shrink-0" onClick={() => {pushMeasurement({id: undefined, value: ""})}}>
@@ -306,7 +306,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
                 ) : (
                     <TableRow>
                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                        Žádní zapsaný závodníci.
+                        Žádní zapsaní závodníci.
                     </TableCell>
                     </TableRow>
                 )}

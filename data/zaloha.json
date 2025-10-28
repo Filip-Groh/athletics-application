@@ -4617,5 +4617,1263 @@
                 ]
             }
         ]
+    },
+    {
+        "id": 66,
+        "createdAt": "2025-09-24T16:39:22.758Z",
+        "updatedAt": "2025-09-24T16:39:22.758Z",
+        "name": "Vrhačský pětiboj",
+        "category": "woman",
+        "subEvent": [
+            {
+                "id": 63,
+                "createdAt": "2025-09-24T16:40:55.791Z",
+                "updatedAt": "2025-09-24T16:43:13.268Z",
+                "name": "Hod kladivem",
+                "a": 13.3174,
+                "b": 5,
+                "c": 1.05,
+                "eventId": 66,
+                "ageCoeficient": [
+                    {
+                        "id": 590,
+                        "createdAt": "2025-09-24T17:03:07.764Z",
+                        "updatedAt": "2025-09-24T17:03:07.764Z",
+                        "age": 35,
+                        "coeficient": 1.0573,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 598,
+                        "createdAt": "2025-09-24T17:03:52.809Z",
+                        "updatedAt": "2025-09-24T17:03:52.809Z",
+                        "age": 40,
+                        "coeficient": 1.1616,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 602,
+                        "createdAt": "2025-09-24T17:04:45.533Z",
+                        "updatedAt": "2025-09-24T17:04:45.533Z",
+                        "age": 45,
+                        "coeficient": 1.2787,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 604,
+                        "createdAt": "2025-09-24T17:05:42.500Z",
+                        "updatedAt": "2025-09-24T17:05:42.500Z",
+                        "age": 50,
+                        "coeficient": 1.2225,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 612,
+                        "createdAt": "2025-09-24T17:06:39.957Z",
+                        "updatedAt": "2025-09-24T17:06:39.957Z",
+                        "age": 55,
+                        "coeficient": 1.3551,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 616,
+                        "createdAt": "2025-09-24T17:07:33.912Z",
+                        "updatedAt": "2025-09-24T17:07:33.912Z",
+                        "age": 60,
+                        "coeficient": 1.5099,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 620,
+                        "createdAt": "2025-09-24T17:08:30.628Z",
+                        "updatedAt": "2025-09-24T17:08:30.628Z",
+                        "age": 65,
+                        "coeficient": 1.694,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 628,
+                        "createdAt": "2025-09-24T17:09:23.796Z",
+                        "updatedAt": "2025-09-24T17:09:23.796Z",
+                        "age": 70,
+                        "coeficient": 1.9176,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 629,
+                        "createdAt": "2025-09-24T17:10:15.595Z",
+                        "updatedAt": "2025-09-24T17:10:15.595Z",
+                        "age": 75,
+                        "coeficient": 1.673,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 638,
+                        "createdAt": "2025-09-24T17:11:05.649Z",
+                        "updatedAt": "2025-09-24T17:11:05.649Z",
+                        "age": 80,
+                        "coeficient": 1.9458,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 639,
+                        "createdAt": "2025-09-24T17:11:56.350Z",
+                        "updatedAt": "2025-09-24T17:11:56.350Z",
+                        "age": 85,
+                        "coeficient": 2.311,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 648,
+                        "createdAt": "2025-09-24T17:12:45.230Z",
+                        "updatedAt": "2025-09-24T17:12:45.230Z",
+                        "age": 90,
+                        "coeficient": 2.8273,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 649,
+                        "createdAt": "2025-09-24T17:13:39.734Z",
+                        "updatedAt": "2025-09-24T17:13:39.734Z",
+                        "age": 95,
+                        "coeficient": 3.6161,
+                        "subEventId": 63
+                    },
+                    {
+                        "id": 656,
+                        "createdAt": "2025-09-24T17:14:27.157Z",
+                        "updatedAt": "2025-09-24T17:14:27.157Z",
+                        "age": 100,
+                        "coeficient": 4.9754,
+                        "subEventId": 63
+                    }
+                ]
+            },
+            {
+                "id": 64,
+                "createdAt": "2025-09-24T16:41:03.746Z",
+                "updatedAt": "2025-09-24T16:43:54.699Z",
+                "name": "Vrh koulí",
+                "a": 56.0211,
+                "b": 1.5,
+                "c": 1.05,
+                "eventId": 66,
+                "ageCoeficient": [
+                    {
+                        "id": 591,
+                        "createdAt": "2025-09-24T17:03:07.764Z",
+                        "updatedAt": "2025-09-24T17:03:07.764Z",
+                        "age": 35,
+                        "coeficient": 1.0368,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 594,
+                        "createdAt": "2025-09-24T17:03:52.809Z",
+                        "updatedAt": "2025-09-24T17:03:52.809Z",
+                        "age": 40,
+                        "coeficient": 1.1164,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 603,
+                        "createdAt": "2025-09-24T17:04:45.533Z",
+                        "updatedAt": "2025-09-24T17:04:45.533Z",
+                        "age": 45,
+                        "coeficient": 1.2062,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 608,
+                        "createdAt": "2025-09-24T17:05:42.500Z",
+                        "updatedAt": "2025-09-24T17:05:42.500Z",
+                        "age": 50,
+                        "coeficient": 1.133,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 613,
+                        "createdAt": "2025-09-24T17:06:39.957Z",
+                        "updatedAt": "2025-09-24T17:06:39.957Z",
+                        "age": 55,
+                        "coeficient": 1.2347,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 614,
+                        "createdAt": "2025-09-24T17:07:33.912Z",
+                        "updatedAt": "2025-09-24T17:07:33.912Z",
+                        "age": 60,
+                        "coeficient": 1.3534,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 619,
+                        "createdAt": "2025-09-24T17:08:30.628Z",
+                        "updatedAt": "2025-09-24T17:08:30.628Z",
+                        "age": 65,
+                        "coeficient": 1.4938,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 624,
+                        "createdAt": "2025-09-24T17:09:23.796Z",
+                        "updatedAt": "2025-09-24T17:09:23.796Z",
+                        "age": 70,
+                        "coeficient": 1.6631,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 631,
+                        "createdAt": "2025-09-24T17:10:15.595Z",
+                        "updatedAt": "2025-09-24T17:10:15.595Z",
+                        "age": 75,
+                        "coeficient": 1.5282,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 636,
+                        "createdAt": "2025-09-24T17:11:05.649Z",
+                        "updatedAt": "2025-09-24T17:11:05.649Z",
+                        "age": 80,
+                        "coeficient": 1.7433,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 640,
+                        "createdAt": "2025-09-24T17:11:56.350Z",
+                        "updatedAt": "2025-09-24T17:11:56.350Z",
+                        "age": 85,
+                        "coeficient": 2.0244,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 645,
+                        "createdAt": "2025-09-24T17:12:45.230Z",
+                        "updatedAt": "2025-09-24T17:12:45.230Z",
+                        "age": 90,
+                        "coeficient": 2.4079,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 652,
+                        "createdAt": "2025-09-24T17:13:39.734Z",
+                        "updatedAt": "2025-09-24T17:13:39.734Z",
+                        "age": 95,
+                        "coeficient": 2.9631,
+                        "subEventId": 64
+                    },
+                    {
+                        "id": 658,
+                        "createdAt": "2025-09-24T17:14:27.157Z",
+                        "updatedAt": "2025-09-24T17:14:27.157Z",
+                        "age": 100,
+                        "coeficient": 3.8399,
+                        "subEventId": 64
+                    }
+                ]
+            },
+            {
+                "id": 65,
+                "createdAt": "2025-09-24T16:41:12.505Z",
+                "updatedAt": "2025-09-24T16:44:16.590Z",
+                "name": "Hod diskem",
+                "a": 12.3311,
+                "b": 3,
+                "c": 1.1,
+                "eventId": 66,
+                "ageCoeficient": [
+                    {
+                        "id": 589,
+                        "createdAt": "2025-09-24T17:03:07.764Z",
+                        "updatedAt": "2025-09-24T17:03:07.764Z",
+                        "age": 35,
+                        "coeficient": 1,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 596,
+                        "createdAt": "2025-09-24T17:03:52.809Z",
+                        "updatedAt": "2025-09-24T17:03:52.809Z",
+                        "age": 40,
+                        "coeficient": 1.0733,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 600,
+                        "createdAt": "2025-09-24T17:04:45.533Z",
+                        "updatedAt": "2025-09-24T17:04:45.533Z",
+                        "age": 45,
+                        "coeficient": 1.1772,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 605,
+                        "createdAt": "2025-09-24T17:05:42.500Z",
+                        "updatedAt": "2025-09-24T17:05:42.500Z",
+                        "age": 50,
+                        "coeficient": 1.2949,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 610,
+                        "createdAt": "2025-09-24T17:06:39.957Z",
+                        "updatedAt": "2025-09-24T17:06:39.957Z",
+                        "age": 55,
+                        "coeficient": 1.433,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 615,
+                        "createdAt": "2025-09-24T17:07:33.912Z",
+                        "updatedAt": "2025-09-24T17:07:33.912Z",
+                        "age": 60,
+                        "coeficient": 1.5873,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 623,
+                        "createdAt": "2025-09-24T17:08:30.628Z",
+                        "updatedAt": "2025-09-24T17:08:30.628Z",
+                        "age": 65,
+                        "coeficient": 1.7735,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 626,
+                        "createdAt": "2025-09-24T17:09:23.796Z",
+                        "updatedAt": "2025-09-24T17:09:23.796Z",
+                        "age": 70,
+                        "coeficient": 1.9985,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 630,
+                        "createdAt": "2025-09-24T17:10:15.595Z",
+                        "updatedAt": "2025-09-24T17:10:15.595Z",
+                        "age": 75,
+                        "coeficient": 1.9717,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 637,
+                        "createdAt": "2025-09-24T17:11:05.649Z",
+                        "updatedAt": "2025-09-24T17:11:05.649Z",
+                        "age": 80,
+                        "coeficient": 2.2786,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 643,
+                        "createdAt": "2025-09-24T17:11:56.350Z",
+                        "updatedAt": "2025-09-24T17:11:56.350Z",
+                        "age": 85,
+                        "coeficient": 2.6843,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 644,
+                        "createdAt": "2025-09-24T17:12:45.230Z",
+                        "updatedAt": "2025-09-24T17:12:45.230Z",
+                        "age": 90,
+                        "coeficient": 3.2477,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 653,
+                        "createdAt": "2025-09-24T17:13:39.734Z",
+                        "updatedAt": "2025-09-24T17:13:39.734Z",
+                        "age": 95,
+                        "coeficient": 4.0861,
+                        "subEventId": 65
+                    },
+                    {
+                        "id": 655,
+                        "createdAt": "2025-09-24T17:14:27.157Z",
+                        "updatedAt": "2025-09-24T17:14:27.157Z",
+                        "age": 100,
+                        "coeficient": 5.4702,
+                        "subEventId": 65
+                    }
+                ]
+            },
+            {
+                "id": 66,
+                "createdAt": "2025-09-24T16:41:24.255Z",
+                "updatedAt": "2025-09-24T16:44:38.548Z",
+                "name": "Hod oštěpem",
+                "a": 15.9803,
+                "b": 3.8,
+                "c": 1.04,
+                "eventId": 66,
+                "ageCoeficient": [
+                    {
+                        "id": 592,
+                        "createdAt": "2025-09-24T17:03:07.764Z",
+                        "updatedAt": "2025-09-24T17:03:07.764Z",
+                        "age": 35,
+                        "coeficient": 1.0236,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 597,
+                        "createdAt": "2025-09-24T17:03:52.809Z",
+                        "updatedAt": "2025-09-24T17:03:52.809Z",
+                        "age": 40,
+                        "coeficient": 1.1298,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 601,
+                        "createdAt": "2025-09-24T17:04:45.533Z",
+                        "updatedAt": "2025-09-24T17:04:45.533Z",
+                        "age": 45,
+                        "coeficient": 1.2495,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 607,
+                        "createdAt": "2025-09-24T17:05:42.500Z",
+                        "updatedAt": "2025-09-24T17:05:42.500Z",
+                        "age": 50,
+                        "coeficient": 1.265,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 611,
+                        "createdAt": "2025-09-24T17:06:39.957Z",
+                        "updatedAt": "2025-09-24T17:06:39.957Z",
+                        "age": 55,
+                        "coeficient": 1.4077,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 617,
+                        "createdAt": "2025-09-24T17:07:33.912Z",
+                        "updatedAt": "2025-09-24T17:07:33.912Z",
+                        "age": 60,
+                        "coeficient": 1.5732,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 622,
+                        "createdAt": "2025-09-24T17:08:30.628Z",
+                        "updatedAt": "2025-09-24T17:08:30.628Z",
+                        "age": 65,
+                        "coeficient": 1.768,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 625,
+                        "createdAt": "2025-09-24T17:09:23.796Z",
+                        "updatedAt": "2025-09-24T17:09:23.796Z",
+                        "age": 70,
+                        "coeficient": 2.0006,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 632,
+                        "createdAt": "2025-09-24T17:10:15.595Z",
+                        "updatedAt": "2025-09-24T17:10:15.595Z",
+                        "age": 75,
+                        "coeficient": 2.0428,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 635,
+                        "createdAt": "2025-09-24T17:11:05.649Z",
+                        "updatedAt": "2025-09-24T17:11:05.649Z",
+                        "age": 80,
+                        "coeficient": 2.3589,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 641,
+                        "createdAt": "2025-09-24T17:11:56.350Z",
+                        "updatedAt": "2025-09-24T17:11:56.350Z",
+                        "age": 85,
+                        "coeficient": 2.7698,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 647,
+                        "createdAt": "2025-09-24T17:12:45.230Z",
+                        "updatedAt": "2025-09-24T17:12:45.230Z",
+                        "age": 90,
+                        "coeficient": 3.3387,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 650,
+                        "createdAt": "2025-09-24T17:13:39.734Z",
+                        "updatedAt": "2025-09-24T17:13:39.734Z",
+                        "age": 95,
+                        "coeficient": 4.183,
+                        "subEventId": 66
+                    },
+                    {
+                        "id": 654,
+                        "createdAt": "2025-09-24T17:14:27.157Z",
+                        "updatedAt": "2025-09-24T17:14:27.157Z",
+                        "age": 100,
+                        "coeficient": 5.5753,
+                        "subEventId": 66
+                    }
+                ]
+            },
+            {
+                "id": 67,
+                "createdAt": "2025-09-24T16:42:04.163Z",
+                "updatedAt": "2025-09-24T16:45:17.429Z",
+                "name": "Hod břemenem",
+                "a": 44.2593,
+                "b": 1.5,
+                "c": 1.05,
+                "eventId": 66,
+                "ageCoeficient": [
+                    {
+                        "id": 593,
+                        "createdAt": "2025-09-24T17:03:07.764Z",
+                        "updatedAt": "2025-09-24T17:03:07.764Z",
+                        "age": 35,
+                        "coeficient": 1.0355,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 595,
+                        "createdAt": "2025-09-24T17:03:52.809Z",
+                        "updatedAt": "2025-09-24T17:03:52.809Z",
+                        "age": 40,
+                        "coeficient": 1.1186,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 599,
+                        "createdAt": "2025-09-24T17:04:45.533Z",
+                        "updatedAt": "2025-09-24T17:04:45.533Z",
+                        "age": 45,
+                        "coeficient": 1.2126,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 606,
+                        "createdAt": "2025-09-24T17:05:42.500Z",
+                        "updatedAt": "2025-09-24T17:05:42.500Z",
+                        "age": 50,
+                        "coeficient": 1.1544,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 609,
+                        "createdAt": "2025-09-24T17:06:39.957Z",
+                        "updatedAt": "2025-09-24T17:06:39.957Z",
+                        "age": 55,
+                        "coeficient": 1.2633,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 618,
+                        "createdAt": "2025-09-24T17:07:33.912Z",
+                        "updatedAt": "2025-09-24T17:07:33.912Z",
+                        "age": 60,
+                        "coeficient": 1.1715,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 621,
+                        "createdAt": "2025-09-24T17:08:30.628Z",
+                        "updatedAt": "2025-09-24T17:08:30.628Z",
+                        "age": 65,
+                        "coeficient": 1.3004,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 627,
+                        "createdAt": "2025-09-24T17:09:23.796Z",
+                        "updatedAt": "2025-09-24T17:09:23.796Z",
+                        "age": 70,
+                        "coeficient": 1.4577,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 633,
+                        "createdAt": "2025-09-24T17:10:15.595Z",
+                        "updatedAt": "2025-09-24T17:10:15.595Z",
+                        "age": 75,
+                        "coeficient": 1.3741,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 634,
+                        "createdAt": "2025-09-24T17:11:05.649Z",
+                        "updatedAt": "2025-09-24T17:11:05.649Z",
+                        "age": 80,
+                        "coeficient": 1.5846,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 642,
+                        "createdAt": "2025-09-24T17:11:56.350Z",
+                        "updatedAt": "2025-09-24T17:11:56.350Z",
+                        "age": 85,
+                        "coeficient": 1.8666,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 646,
+                        "createdAt": "2025-09-24T17:12:45.230Z",
+                        "updatedAt": "2025-09-24T17:12:45.230Z",
+                        "age": 90,
+                        "coeficient": 2.2647,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 651,
+                        "createdAt": "2025-09-24T17:13:39.734Z",
+                        "updatedAt": "2025-09-24T17:13:39.734Z",
+                        "age": 95,
+                        "coeficient": 2.8706,
+                        "subEventId": 67
+                    },
+                    {
+                        "id": 657,
+                        "createdAt": "2025-09-24T17:14:27.157Z",
+                        "updatedAt": "2025-09-24T17:14:27.157Z",
+                        "age": 100,
+                        "coeficient": 3.9056,
+                        "subEventId": 67
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 67,
+        "createdAt": "2025-09-24T16:39:22.758Z",
+        "updatedAt": "2025-09-24T16:39:22.758Z",
+        "name": "Vrhačský pětiboj",
+        "category": "man",
+        "subEvent": [
+            {
+                "id": 68,
+                "createdAt": "2025-09-24T16:45:56.424Z",
+                "updatedAt": "2025-09-24T16:45:56.424Z",
+                "name": "Hod kladivem",
+                "a": 13.0941,
+                "b": 5.5,
+                "c": 1.05,
+                "eventId": 67,
+                "ageCoeficient": [
+                    {
+                        "id": 521,
+                        "createdAt": "2025-09-24T16:49:09.060Z",
+                        "updatedAt": "2025-09-24T16:49:09.060Z",
+                        "age": 35,
+                        "coeficient": 1,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 524,
+                        "createdAt": "2025-09-24T16:50:07.270Z",
+                        "updatedAt": "2025-09-24T16:50:07.270Z",
+                        "age": 40,
+                        "coeficient": 1.0496,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 531,
+                        "createdAt": "2025-09-24T16:51:31.024Z",
+                        "updatedAt": "2025-09-24T16:51:31.024Z",
+                        "age": 45,
+                        "coeficient": 1.119,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 535,
+                        "createdAt": "2025-09-24T16:52:21.866Z",
+                        "updatedAt": "2025-09-24T16:52:21.866Z",
+                        "age": 50,
+                        "coeficient": 1.0911,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 540,
+                        "createdAt": "2025-09-24T16:53:14.374Z",
+                        "updatedAt": "2025-09-24T16:53:14.374Z",
+                        "age": 55,
+                        "coeficient": 1.1783,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 547,
+                        "createdAt": "2025-09-24T16:54:14.063Z",
+                        "updatedAt": "2025-09-24T16:54:14.063Z",
+                        "age": 60,
+                        "coeficient": 1.1709,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 550,
+                        "createdAt": "2025-09-24T16:55:26.875Z",
+                        "updatedAt": "2025-09-24T16:55:26.875Z",
+                        "age": 65,
+                        "coeficient": 1.2865,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 554,
+                        "createdAt": "2025-09-24T16:56:27.587Z",
+                        "updatedAt": "2025-09-24T16:56:27.587Z",
+                        "age": 70,
+                        "coeficient": 1.2785,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 560,
+                        "createdAt": "2025-09-24T16:57:33.368Z",
+                        "updatedAt": "2025-09-24T16:57:33.368Z",
+                        "age": 75,
+                        "coeficient": 1.4403,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 566,
+                        "createdAt": "2025-09-24T16:58:17.795Z",
+                        "updatedAt": "2025-09-24T16:58:17.795Z",
+                        "age": 80,
+                        "coeficient": 1.4301,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 571,
+                        "createdAt": "2025-09-24T16:59:12.666Z",
+                        "updatedAt": "2025-09-24T16:59:12.666Z",
+                        "age": 85,
+                        "coeficient": 1.6779,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 574,
+                        "createdAt": "2025-09-24T17:00:07.230Z",
+                        "updatedAt": "2025-09-24T17:00:07.230Z",
+                        "age": 90,
+                        "coeficient": 2.0327,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 579,
+                        "createdAt": "2025-09-24T17:01:00.221Z",
+                        "updatedAt": "2025-09-24T17:01:00.221Z",
+                        "age": 95,
+                        "coeficient": 2.5823,
+                        "subEventId": 68
+                    },
+                    {
+                        "id": 584,
+                        "createdAt": "2025-09-24T17:01:48.018Z",
+                        "updatedAt": "2025-09-24T17:01:48.018Z",
+                        "age": 100,
+                        "coeficient": 3.5446,
+                        "subEventId": 68
+                    }
+                ]
+            },
+            {
+                "id": 69,
+                "createdAt": "2025-09-24T16:46:28.371Z",
+                "updatedAt": "2025-09-24T16:46:28.371Z",
+                "name": "Vrh koulí",
+                "a": 51.39,
+                "b": 1.5,
+                "c": 1.05,
+                "eventId": 67,
+                "ageCoeficient": [
+                    {
+                        "id": 519,
+                        "createdAt": "2025-09-24T16:49:09.060Z",
+                        "updatedAt": "2025-09-24T16:49:09.060Z",
+                        "age": 35,
+                        "coeficient": 1.0462,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 526,
+                        "createdAt": "2025-09-24T16:50:07.270Z",
+                        "updatedAt": "2025-09-24T16:50:07.270Z",
+                        "age": 40,
+                        "coeficient": 1.1125,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 532,
+                        "createdAt": "2025-09-24T16:51:31.024Z",
+                        "updatedAt": "2025-09-24T16:51:31.024Z",
+                        "age": 45,
+                        "coeficient": 1.1867,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 536,
+                        "createdAt": "2025-09-24T16:52:21.866Z",
+                        "updatedAt": "2025-09-24T16:52:21.866Z",
+                        "age": 50,
+                        "coeficient": 1.1551,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 541,
+                        "createdAt": "2025-09-24T16:53:14.374Z",
+                        "updatedAt": "2025-09-24T16:53:14.374Z",
+                        "age": 55,
+                        "coeficient": 1.242,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 548,
+                        "createdAt": "2025-09-24T16:54:14.063Z",
+                        "updatedAt": "2025-09-24T16:54:14.063Z",
+                        "age": 60,
+                        "coeficient": 1.2252,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 549,
+                        "createdAt": "2025-09-24T16:55:26.875Z",
+                        "updatedAt": "2025-09-24T16:55:26.875Z",
+                        "age": 65,
+                        "coeficient": 1.3317,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 555,
+                        "createdAt": "2025-09-24T16:56:27.587Z",
+                        "updatedAt": "2025-09-24T16:56:27.587Z",
+                        "age": 70,
+                        "coeficient": 1.3036,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 562,
+                        "createdAt": "2025-09-24T16:57:33.368Z",
+                        "updatedAt": "2025-09-24T16:57:33.368Z",
+                        "age": 75,
+                        "coeficient": 1.4385,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 565,
+                        "createdAt": "2025-09-24T16:58:17.795Z",
+                        "updatedAt": "2025-09-24T16:58:17.795Z",
+                        "age": 80,
+                        "coeficient": 1.3885,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 569,
+                        "createdAt": "2025-09-24T16:59:12.666Z",
+                        "updatedAt": "2025-09-24T16:59:12.666Z",
+                        "age": 85,
+                        "coeficient": 1.5671,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 575,
+                        "createdAt": "2025-09-24T17:00:07.230Z",
+                        "updatedAt": "2025-09-24T17:00:07.230Z",
+                        "age": 90,
+                        "coeficient": 1.7971,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 581,
+                        "createdAt": "2025-09-24T17:01:00.221Z",
+                        "updatedAt": "2025-09-24T17:01:00.221Z",
+                        "age": 95,
+                        "coeficient": 2.1043,
+                        "subEventId": 69
+                    },
+                    {
+                        "id": 588,
+                        "createdAt": "2025-09-24T17:01:48.018Z",
+                        "updatedAt": "2025-09-24T17:01:48.018Z",
+                        "age": 100,
+                        "coeficient": 2.5361,
+                        "subEventId": 69
+                    }
+                ]
+            },
+            {
+                "id": 70,
+                "createdAt": "2025-09-24T16:46:55.210Z",
+                "updatedAt": "2025-09-24T16:46:55.210Z",
+                "name": "Hod diskem",
+                "a": 12.91,
+                "b": 4,
+                "c": 1.1,
+                "eventId": 67,
+                "ageCoeficient": [
+                    {
+                        "id": 522,
+                        "createdAt": "2025-09-24T16:49:09.060Z",
+                        "updatedAt": "2025-09-24T16:49:09.060Z",
+                        "age": 35,
+                        "coeficient": 1,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 527,
+                        "createdAt": "2025-09-24T16:50:07.270Z",
+                        "updatedAt": "2025-09-24T16:50:07.270Z",
+                        "age": 40,
+                        "coeficient": 1.0187,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 529,
+                        "createdAt": "2025-09-24T16:51:31.024Z",
+                        "updatedAt": "2025-09-24T16:51:31.024Z",
+                        "age": 45,
+                        "coeficient": 1.0856,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 537,
+                        "createdAt": "2025-09-24T16:52:21.866Z",
+                        "updatedAt": "2025-09-24T16:52:21.866Z",
+                        "age": 50,
+                        "coeficient": 1.0078,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 542,
+                        "createdAt": "2025-09-24T16:53:14.374Z",
+                        "updatedAt": "2025-09-24T16:53:14.374Z",
+                        "age": 55,
+                        "coeficient": 1.0873,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 544,
+                        "createdAt": "2025-09-24T16:54:14.063Z",
+                        "updatedAt": "2025-09-24T16:54:14.063Z",
+                        "age": 60,
+                        "coeficient": 0.9653,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 553,
+                        "createdAt": "2025-09-24T16:55:26.875Z",
+                        "updatedAt": "2025-09-24T16:55:26.875Z",
+                        "age": 65,
+                        "coeficient": 1.059,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 556,
+                        "createdAt": "2025-09-24T16:56:27.587Z",
+                        "updatedAt": "2025-09-24T16:56:27.587Z",
+                        "age": 70,
+                        "coeficient": 1.1746,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 563,
+                        "createdAt": "2025-09-24T16:57:33.368Z",
+                        "updatedAt": "2025-09-24T16:57:33.368Z",
+                        "age": 75,
+                        "coeficient": 1.3205,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 564,
+                        "createdAt": "2025-09-24T16:58:17.795Z",
+                        "updatedAt": "2025-09-24T16:58:17.795Z",
+                        "age": 80,
+                        "coeficient": 1.5103,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 570,
+                        "createdAt": "2025-09-24T16:59:12.666Z",
+                        "updatedAt": "2025-09-24T16:59:12.666Z",
+                        "age": 85,
+                        "coeficient": 1.7672,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 578,
+                        "createdAt": "2025-09-24T17:00:07.230Z",
+                        "updatedAt": "2025-09-24T17:00:07.230Z",
+                        "age": 90,
+                        "coeficient": 2.1341,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 583,
+                        "createdAt": "2025-09-24T17:01:00.221Z",
+                        "updatedAt": "2025-09-24T17:01:00.221Z",
+                        "age": 95,
+                        "coeficient": 2.7,
+                        "subEventId": 70
+                    },
+                    {
+                        "id": 585,
+                        "createdAt": "2025-09-24T17:01:48.018Z",
+                        "updatedAt": "2025-09-24T17:01:48.018Z",
+                        "age": 100,
+                        "coeficient": 3.6863,
+                        "subEventId": 70
+                    }
+                ]
+            },
+            {
+                "id": 71,
+                "createdAt": "2025-09-24T16:47:20.679Z",
+                "updatedAt": "2025-09-24T16:47:20.679Z",
+                "name": "Hod oštěpem",
+                "a": 10.14,
+                "b": 7,
+                "c": 1.08,
+                "eventId": 67,
+                "ageCoeficient": [
+                    {
+                        "id": 520,
+                        "createdAt": "2025-09-24T16:49:09.060Z",
+                        "updatedAt": "2025-09-24T16:49:09.060Z",
+                        "age": 35,
+                        "coeficient": 1.0438,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 528,
+                        "createdAt": "2025-09-24T16:50:07.271Z",
+                        "updatedAt": "2025-09-24T16:50:07.271Z",
+                        "age": 40,
+                        "coeficient": 1.1218,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 533,
+                        "createdAt": "2025-09-24T16:51:31.024Z",
+                        "updatedAt": "2025-09-24T16:51:31.024Z",
+                        "age": 45,
+                        "coeficient": 1.211,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 538,
+                        "createdAt": "2025-09-24T16:52:21.866Z",
+                        "updatedAt": "2025-09-24T16:52:21.866Z",
+                        "age": 50,
+                        "coeficient": 1.2293,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 539,
+                        "createdAt": "2025-09-24T16:53:14.374Z",
+                        "updatedAt": "2025-09-24T16:53:14.374Z",
+                        "age": 55,
+                        "coeficient": 1.3425,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 545,
+                        "createdAt": "2025-09-24T16:54:14.063Z",
+                        "updatedAt": "2025-09-24T16:54:14.063Z",
+                        "age": 60,
+                        "coeficient": 1.3675,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 552,
+                        "createdAt": "2025-09-24T16:55:26.875Z",
+                        "updatedAt": "2025-09-24T16:55:26.875Z",
+                        "age": 65,
+                        "coeficient": 1.5184,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 558,
+                        "createdAt": "2025-09-24T16:56:27.587Z",
+                        "updatedAt": "2025-09-24T16:56:27.587Z",
+                        "age": 70,
+                        "coeficient": 1.5566,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 561,
+                        "createdAt": "2025-09-24T16:57:33.368Z",
+                        "updatedAt": "2025-09-24T16:57:33.368Z",
+                        "age": 75,
+                        "coeficient": 1.7731,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 568,
+                        "createdAt": "2025-09-24T16:58:17.795Z",
+                        "updatedAt": "2025-09-24T16:58:17.795Z",
+                        "age": 80,
+                        "coeficient": 1.8402,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 572,
+                        "createdAt": "2025-09-24T16:59:12.666Z",
+                        "updatedAt": "2025-09-24T16:59:12.666Z",
+                        "age": 85,
+                        "coeficient": 2.1894,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 576,
+                        "createdAt": "2025-09-24T17:00:07.230Z",
+                        "updatedAt": "2025-09-24T17:00:07.230Z",
+                        "age": 90,
+                        "coeficient": 2.6989,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 582,
+                        "createdAt": "2025-09-24T17:01:00.221Z",
+                        "updatedAt": "2025-09-24T17:01:00.221Z",
+                        "age": 95,
+                        "coeficient": 3.4861,
+                        "subEventId": 71
+                    },
+                    {
+                        "id": 587,
+                        "createdAt": "2025-09-24T17:01:48.018Z",
+                        "updatedAt": "2025-09-24T17:01:48.018Z",
+                        "age": 100,
+                        "coeficient": 4.7841,
+                        "subEventId": 71
+                    }
+                ]
+            },
+            {
+                "id": 72,
+                "createdAt": "2025-09-24T16:47:44.877Z",
+                "updatedAt": "2025-09-24T16:47:44.877Z",
+                "name": "Hod břemenem",
+                "a": 47.8338,
+                "b": 1.5,
+                "c": 1.05,
+                "eventId": 67,
+                "ageCoeficient": [
+                    {
+                        "id": 523,
+                        "createdAt": "2025-09-24T16:49:09.060Z",
+                        "updatedAt": "2025-09-24T16:49:09.060Z",
+                        "age": 35,
+                        "coeficient": 1,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 525,
+                        "createdAt": "2025-09-24T16:50:07.270Z",
+                        "updatedAt": "2025-09-24T16:50:07.270Z",
+                        "age": 40,
+                        "coeficient": 1.0668,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 530,
+                        "createdAt": "2025-09-24T16:51:31.024Z",
+                        "updatedAt": "2025-09-24T16:51:31.024Z",
+                        "age": 45,
+                        "coeficient": 1.1405,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 534,
+                        "createdAt": "2025-09-24T16:52:21.866Z",
+                        "updatedAt": "2025-09-24T16:52:21.866Z",
+                        "age": 50,
+                        "coeficient": 0.9978,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 543,
+                        "createdAt": "2025-09-24T16:53:14.374Z",
+                        "updatedAt": "2025-09-24T16:53:14.374Z",
+                        "age": 55,
+                        "coeficient": 1.0704,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 546,
+                        "createdAt": "2025-09-24T16:54:14.063Z",
+                        "updatedAt": "2025-09-24T16:54:14.063Z",
+                        "age": 60,
+                        "coeficient": 1.0071,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 551,
+                        "createdAt": "2025-09-24T16:55:26.875Z",
+                        "updatedAt": "2025-09-24T16:55:26.875Z",
+                        "age": 65,
+                        "coeficient": 1.0854,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 557,
+                        "createdAt": "2025-09-24T16:56:27.587Z",
+                        "updatedAt": "2025-09-24T16:56:27.587Z",
+                        "age": 70,
+                        "coeficient": 1.0263,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 559,
+                        "createdAt": "2025-09-24T16:57:33.368Z",
+                        "updatedAt": "2025-09-24T16:57:33.368Z",
+                        "age": 75,
+                        "coeficient": 1.1233,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 567,
+                        "createdAt": "2025-09-24T16:58:17.795Z",
+                        "updatedAt": "2025-09-24T16:58:17.795Z",
+                        "age": 80,
+                        "coeficient": 1.0544,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 573,
+                        "createdAt": "2025-09-24T16:59:12.666Z",
+                        "updatedAt": "2025-09-24T16:59:12.666Z",
+                        "age": 85,
+                        "coeficient": 1.2044,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 577,
+                        "createdAt": "2025-09-24T17:00:07.230Z",
+                        "updatedAt": "2025-09-24T17:00:07.230Z",
+                        "age": 90,
+                        "coeficient": 1.423,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 580,
+                        "createdAt": "2025-09-24T17:01:00.221Z",
+                        "updatedAt": "2025-09-24T17:01:00.221Z",
+                        "age": 95,
+                        "coeficient": 1.768,
+                        "subEventId": 72
+                    },
+                    {
+                        "id": 586,
+                        "createdAt": "2025-09-24T17:01:48.018Z",
+                        "updatedAt": "2025-09-24T17:01:48.018Z",
+                        "age": 100,
+                        "coeficient": 2.3883,
+                        "subEventId": 72
+                    }
+                ]
+            }
+        ]
     }
 ]

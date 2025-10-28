@@ -1,8 +1,11 @@
+"use client"
+
 import React from 'react'
 import ScoreTable from '~/components/tables/scoreTable'
 import { type RouterOutputs } from '~/trpc/react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { formatSex } from '~/lib/utils'
+import TreeTabs, { type DropdownNode, type SingleNode } from '~/components/elements/treeTabs'
+import GroupScoreTable from '~/components/tables/groupScoreTable'
 
 export type ScoreData = {
     startingNumber: number,
@@ -14,7 +17,20 @@ export type ScoreData = {
     position: number,
     points: number,
     bestMeasurement: number,
-    measurements: number[]
+    measurements: number[],
+    isMe: boolean
+}
+
+export type GroupScoreData = {
+    startingNumber: number,
+    name: string,
+    surname: string,
+    age: number,
+    club: string,
+    position: number,
+    points: number,
+    subEventPoints: number[],
+    isMe: boolean
 }
 
 type Events = {
@@ -29,14 +45,15 @@ type Events = {
 }
 
 function countPoints(measurement: number, coeficient: number, a: number, b: number, c: number) {
-    return a * (measurement * coeficient - b) ** c
+    const points = a * ((measurement * coeficient - b) ** c)
+    return Math.floor(points)
 }
 
 function getAge(birthDate: Date) {
     return Math.floor((Date.now() - birthDate.valueOf()) / 1000 / 60 / 60 / 24 / 365.25)
 }
 
-function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>}) {
+function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>, racer: RouterOutputs["racer"]["getStartingNumber"] | null}) {
     const events: Events[] = race.event.map((event) => {
         const subEvents = event.subEvent.map((subEvent) => {
             const a = subEvent.a
@@ -59,6 +76,9 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
                 for (let i = age; i > 0; i--) {
                     const ageCoeficient = ageCoeficients.get(i)
                     coeficient = ageCoeficient ?? coeficient
+                    if (ageCoeficient !== undefined) {
+                        break
+                    }
                 }
                 return {
                     startingNumber: performance.racer.startingNumber,
@@ -69,7 +89,8 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
                     club: performance.racer.personalData.club,
                     measurements: measurements,
                     bestMeasurement: bestMeasurement,
-                    points: countPoints(bestMeasurement, coeficient, a, b, c)
+                    points: countPoints(bestMeasurement, coeficient, a, b, c),
+                    isMe: racer?.startingNumber === performance.racer.startingNumber
                 }
             }).sort((a, b) => {
                 return b.points - a.points
@@ -95,23 +116,64 @@ function ScoreTab({race}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdP
         }
     })
 
-    return (
-        <Tabs defaultValue={`event_${race.event[0]?.id}`}>
-            <TabsList>
-                {events.map((event) => event.subEvents.map((subEvent) => {
-                    return (
-                        <TabsTrigger key={`trigger_event_${subEvent.id}`} value={`event_${subEvent.id}`}>{event.name ? `${event.name} - ` : ""}{subEvent.name} - {formatSex(event.category, true)}</TabsTrigger>
-                    )
-                }))}
-            </TabsList>
-            {events.map((event) => event.subEvents.map((subEvent) => {
-                return (
-                    <TabsContent key={`content_event_${subEvent.id}`} value={`event_${subEvent.id}`}>
+    const tree = events.flatMap<SingleNode | DropdownNode>((event) => {
+        if (event.name) {
+            const startingNumberPoints = new Map<number, GroupScoreData>()
+            event.subEvents.forEach((subEvent) => {
+                subEvent.data.forEach((scoreData) => {
+                    const groupScoreData = startingNumberPoints.get(scoreData.startingNumber) ?? {
+                        startingNumber: scoreData.startingNumber,
+                        name: scoreData.name,
+                        surname: scoreData.surname,
+                        age: scoreData.age,
+                        club: scoreData.club,
+                        position: scoreData.position,
+                        points: 0,
+                        subEventPoints: [],
+                        isMe: scoreData.isMe
+                    }
+                    groupScoreData.subEventPoints.push(Number.isNaN(scoreData.points) ? 0 : scoreData.points)
+                    groupScoreData.points += Number.isNaN(scoreData.points) ? 0 : scoreData.points
+                    startingNumberPoints.set(scoreData.startingNumber, groupScoreData)
+                })
+            })
+
+            const groupScoreData: GroupScoreData[] = Array.from(startingNumberPoints.values())
+
+            return [{
+                isDropdown: true,
+                triggerText: `${event.name} - ${formatSex(event.category, true)}`,
+                uniqueId: `event_${event.id}`,
+                content: (
+                    <GroupScoreTable data={groupScoreData} />
+                ),
+                dropdownNodes: event.subEvents.map((subEvent) => {
+                    return {
+                        isDropdown: false,
+                        triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
+                        uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
+                        content: (
+                            <ScoreTable data={subEvent.data}/>
+                        )
+                    }
+                })
+            }]
+        } else {
+            return event.subEvents.map((subEvent) => {
+                return {
+                    isDropdown: false,
+                    triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
+                    uniqueId: `event_${subEvent.id}`,
+                    content: (
                         <ScoreTable data={subEvent.data}/>
-                    </TabsContent>
-                )
-            }))}
-        </Tabs>
+                    )
+                }
+            })
+        }
+    })
+
+    return (
+        <TreeTabs tree={tree} />
     )
 }
 

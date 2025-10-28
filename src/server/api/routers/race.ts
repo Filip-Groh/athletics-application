@@ -65,6 +65,21 @@ const setRaceEventsSchema = z.object({
 })
 
 export const raceRouter = createTRPCRouter({
+    getSignUpRaces: protectedProcedure
+        .query(({ctx}) => {
+            return ctx.db.race.findMany({
+                where: {
+                    racer: {
+                        some: {
+                            personalData: {
+                                userId: ctx.session.user.id
+                            }
+                        }
+                    }
+                }
+            })
+        }),
+
     getOwnedRaces: protectedProcedureEventManager
         .query(({ctx}) => {
             return ctx.db.race.findMany({

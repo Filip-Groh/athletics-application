@@ -64,7 +64,7 @@ function DropdownTabContent({triggerText, uniqueId, content, dropdownNodes}: {tr
 
 function TreeTabs({tree}: {tree: (DropdownNode | SingleNode)[]}) {
     return (
-        <VerticalTabs defaultValue='overview'>
+        <VerticalTabs defaultValue={tree[0]?.uniqueId}>
             <VerticalTabsList>
                 {tree.map((node) => {
                     if (node.isDropdown) {

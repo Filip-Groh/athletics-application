@@ -25,7 +25,7 @@ import {
     DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu"
 
-import { getServerAuthSession } from "~/server/auth"
+import { getServerAuthSession, type UserRole } from "~/server/auth"
 
 import {
     LogOut,
@@ -37,16 +37,16 @@ import {
 export type MenuItemType = {
     text: string,
     link: string,
-    adminOnly: boolean
+    minRole: UserRole | false
 }
 
 interface MenuItemProps {
     menuItem: MenuItemType,
-    isAdmin: boolean
+    role: UserRole | false
 }
 
-function MenuItem({menuItem, isAdmin}: MenuItemProps) {
-    if (!menuItem.adminOnly || isAdmin) {
+function MenuItem({menuItem, role}: MenuItemProps) {
+    if ((role !== false ? role : -1) >= (menuItem.minRole !== false ? menuItem.minRole : -1)) {
         return (
             <NavigationMenuItem>
                 <Link href={menuItem.link} legacyBehavior passHref>
@@ -61,10 +61,10 @@ function MenuItem({menuItem, isAdmin}: MenuItemProps) {
 
 interface MainMenuProps {
     menuItems: Array<MenuItemType>,
-    isAdmin: boolean
+    role: UserRole | false
 }
 
-export default async function MainMenu({menuItems, isAdmin}: MainMenuProps) {
+export default async function MainMenu({menuItems, role}: MainMenuProps) {
     const session = await getServerAuthSession()
 
     console.log(session?.user.image)
@@ -73,7 +73,7 @@ export default async function MainMenu({menuItems, isAdmin}: MainMenuProps) {
         <NavigationMenu>
             <NavigationMenuList>
                 {menuItems.map((item, index) => {
-                    return (<MenuItem key={`menuItem${index}`} menuItem={item} isAdmin={isAdmin} />)
+                    return (<MenuItem key={`menuItem${index}`} menuItem={item} role={role} />)
                 })}
                 <NavigationMenuItem>
                     <ModeToggle />

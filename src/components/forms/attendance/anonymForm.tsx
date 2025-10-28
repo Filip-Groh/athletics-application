@@ -24,6 +24,7 @@ import RadioGroupInput from '../fields/radioGroupInput'
 
 function AnonymForm({raceId, events}: {raceId: number, events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>}) {
     const router = useRouter()
+    const utils = api.useUtils()
 
     const formSchema = z.object({
         name: z.string().min(1, {
@@ -62,6 +63,7 @@ function AnonymForm({raceId, events}: {raceId: number, events: NonNullable<Route
     const createRacerWithFormData = api.racer.createRacerWithFormData.useMutation({
         async onSuccess(data) {
             toast(`Úspěšně jste se přihlásili na závod se startovním číslem ${data.startingNumber}.`)
+            await utils.race.getRaceByIdPublic.invalidate()
             router.push(`/zavod/${raceId}`)
         },
         async onError(error) {

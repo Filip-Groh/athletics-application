@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation'
 
 function AccontForm({sessionPersonalData, raceId, events}: {sessionPersonalData: PersonalData | null, raceId: number, events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>}) {
     const router = useRouter()
+    const utils = api.useUtils()
 
     const formSchema = z.object({
         event: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -37,6 +38,7 @@ function AccontForm({sessionPersonalData, raceId, events}: {sessionPersonalData:
     const createRacerWithUsersPersonalInformation = api.racer.createRacerWithUsersPersonalInformation.useMutation({
         async onSuccess(data) {
             toast(`Úspěšně jste se přihlásili na závod se startovním číslem ${data.startingNumber}.`)
+            await utils.race.getRaceByIdPublic.invalidate()
             router.push(`/zavod/${raceId}`)
         },
         async onError(error) {
