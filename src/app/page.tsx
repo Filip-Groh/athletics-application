@@ -56,12 +56,16 @@
 // }
 
 import React from 'react'
-import PublicRaceCards from '~/components/elements/publicRaceCards';
+import TodaysRaceCards from '~/components/elements/todaysRaceCards';
+import UpcomingRaceCards from '~/components/elements/upcomingRaceCards';
 
 export default async function HomePage() {
     return (
         <div>
-            <PublicRaceCards />
+            <h2>Dnešní závody</h2>
+            <TodaysRaceCards />
+            <h2>Nadcházející závody</h2>
+            <UpcomingRaceCards />
         </div>
     );
 }

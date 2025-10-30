@@ -5,16 +5,14 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "~/components/ui/card"
 import { api } from '~/trpc/react'
 import Link from 'next/link'
-import { Button } from '../ui/button'
 
-function PublicRaceCards() {
-    const {data, isSuccess, isLoading, error} = api.race.getPublicRaces.useQuery()
+function PastRaceCards({page, pageSize}: {page: number, pageSize: number}) {
+    const {data, isSuccess, isLoading, error} = api.race.getPastRaces.useQuery({page, pageSize})
 
     if (error) {
         return <div>Nastala chyba: {error.message}</div>
@@ -36,19 +34,11 @@ function PublicRaceCards() {
                                     <CardDescription>{race.date.toLocaleString()}</CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <p>Organizuje: {race.organizer}</p>
+                                    <p>Organizoval: {race.organizer}</p>
                                     <p>Na místě: {race.place}</p>
                                 </CardContent>
-                                <CardFooter>
-                                    <Button asChild>
-                                        <Link href={`/zavod/${race.id}/prihlasky`}>
-                                            Přihlásit se na závod
-                                        </Link>
-                                    </Button>
-                                </CardFooter>
                             </Card>
                         </Link>
-
                     )
                 })}
             </>
@@ -56,4 +46,4 @@ function PublicRaceCards() {
     }
 }
 
-export default PublicRaceCards
+export default PastRaceCards

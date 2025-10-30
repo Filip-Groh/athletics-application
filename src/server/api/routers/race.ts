@@ -8,6 +8,11 @@ import {
     protectedProcedureRaceManager
 } from "~/server/api/trpc";
 
+const getPastRacesSchema = z.object({
+    page: z.number().min(1),
+    pageSize: z.number().min(1).max(100)
+})
+
 const getRacesSchema = z.object({
     includeHidden: z.boolean()
 })
@@ -65,6 +70,79 @@ const setRaceEventsSchema = z.object({
 })
 
 export const raceRouter = createTRPCRouter({
+    getTodayRaces: publicProcedure
+        .query(({ctx}) => {
+            const today = new Date()
+            today.setHours(0,0,0,0)
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            return ctx.db.race.findMany({
+                where: {
+                    date: {
+                        gte: today,
+                        lt: tomorrow
+                    },
+                    visible: true
+                },
+                orderBy: {
+                    date: "asc"
+                }
+            })
+        }),
+
+    getUpcomingRaces: publicProcedure
+        .query(({ctx}) => {
+            const today = new Date()
+            today.setHours(0,0,0,0)
+            const tomorrow = new Date(today)
+            tomorrow.setDate(tomorrow.getDate() + 1)
+            return ctx.db.race.findMany({
+                where: {
+                    date: {
+                        gte: tomorrow
+                    },
+                    visible: true
+                },
+                orderBy: {
+                    date: "asc"
+                }
+            })
+        }),
+
+    getNumberOfPastRaces: publicProcedure
+        .query(({ctx}) => {
+            const today = new Date()
+            today.setHours(0,0,0,0)
+            return ctx.db.race.count({
+                where: {
+                    date: {
+                        lt: today
+                    },
+                    visible: true
+                }
+            })
+        }),
+
+    getPastRaces: publicProcedure
+        .input(getPastRacesSchema)
+        .query(({ctx, input}) => {
+            const today = new Date()
+            today.setHours(0,0,0,0)
+            return ctx.db.race.findMany({
+                where: {
+                    date: {
+                        lt: today
+                    },
+                    visible: true
+                },
+                skip: (input.page - 1) * input.pageSize,
+                take: input.pageSize,
+                orderBy: {
+                    date: "desc"
+                }
+            })
+        }),
+
     getSignUpRaces: protectedProcedure
         .query(({ctx}) => {
             return ctx.db.race.findMany({

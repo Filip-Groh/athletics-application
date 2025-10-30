@@ -22,6 +22,11 @@ const menuItems: Array<MenuItemType> = [
         link: "/",
         minRole: false
     },
+        {
+        text: "Historie závodů",
+        link: "/historie",
+        minRole: false
+    },
     {
         text: "Přihlášené závody",
         link: "/prihlasene-zavody",
