@@ -38,6 +38,7 @@ import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
     const utils = api.useUtils()
 
+    const [allowSave, setAllowSave] = React.useState(false)
     const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement, pop: popMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
         return {
             id: measurement.id,
@@ -92,10 +93,33 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
         })
     }
 
+    React.useEffect(() => {
+        const originalMeasurementsMap = new Map<number, string>()
+        originalMeasurements.forEach((measurement) => {
+            originalMeasurementsMap.set(measurement.id!, Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString())
+        })
+
+        for (const measurement of measurements) {
+            if (measurement.id === undefined) {
+                setAllowSave(true)
+                return
+            }
+
+            const original = originalMeasurementsMap.get(measurement.id)
+
+            if (original === undefined || measurement.value !== original) {
+                setAllowSave(true)
+                return
+            }
+        }
+
+        setAllowSave(false)
+    }, [measurements, originalMeasurements])
+
     return (
         <span className="flex flex-row gap-2">
             {measurements.length > 0 ? (
-                <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave}>
+                <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave} disabled={!allowSave}>
                     <Save className="h-4 w-4" />
                 </Button>
             ) : null}
