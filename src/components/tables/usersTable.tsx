@@ -51,6 +51,8 @@ enum UserRole {
   }
 
 function RoleCell({id, role}: {id: string, role: UserRole}) {
+    const utils = api.useUtils()
+
     const [selected, setSelected] = React.useState(role.toString())
     const [newValue, setNewValue] = React.useState(selected)
     const [alertOpen, setAlertOpen] = React.useState(false)
@@ -73,6 +75,7 @@ function RoleCell({id, role}: {id: string, role: UserRole}) {
         }
         toast(`Uživatel ${newUser.name} úspěšně obdržel novou roli ${newRole}`)
         setSelected(newValue)
+        await utils.invalidate()
     }
 
     async function onError(error: unknown) {

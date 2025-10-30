@@ -1,20 +1,32 @@
+"use client"
+
 import { notFound } from 'next/navigation'
 import React from 'react'
 import AnonymForm from '~/components/forms/attendance/anonymForm'
-import { api } from '~/trpc/server'
+import { api } from '~/trpc/react'
 
-async function AnonymAttendRequestPage({ params }: { params: { raceId: string } }) {
-    const events = await api.race.getRaceEvents({
+function AnonymAttendRequestPage({ params }: { params: { raceId: string } }) {
+    const {data, isSuccess, isLoading, error} = api.race.getRaceEvents.useQuery({
         id: Number(params.raceId)
     })
 
-    if (!events) {
-        notFound()
+    if (error) {
+        return <div>Nastala chyba: {error.message}</div>
     }
 
-    return (
-        <AnonymForm raceId={Number(params.raceId)} events={events}/>
-    )
+    if (isLoading) {
+        return <div>Loading ...</div>
+    }
+
+    if (isSuccess) {
+        if (!data) {
+            notFound()
+        }
+
+        return (
+            <AnonymForm raceId={Number(params.raceId)} events={data}/>
+        )
+    }
 }
 
 export default AnonymAttendRequestPage

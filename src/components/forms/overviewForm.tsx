@@ -78,7 +78,7 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
             race.organizer = data.organizer
             race.visible = data.visible
 
-            await utils.race.getOwnedRaces.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -89,7 +89,7 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
     const deleteRace = api.race.deleteRace.useMutation({
         async onSuccess(data) {
             toast(`Závod "${data.name}" byl smazán.`)
-            await utils.race.getOwnedRaces.invalidate()
+            await utils.invalidate()
             router.push(`/zavod`)
         },
         async onError(error) {

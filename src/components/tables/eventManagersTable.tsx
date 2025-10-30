@@ -40,7 +40,7 @@ function RoleCell({isSelected, userId, raceId}: {isSelected: boolean, userId: st
                 toast(`Uživatel ${data.name} již není zapisovatel`)
             }
 
-            await utils.user.getEventManagers.invalidate()
+            await utils.invalidate()
         },
         onError: async (error) => {
             toast("Někde se stala chyba, více informací v console.log().")

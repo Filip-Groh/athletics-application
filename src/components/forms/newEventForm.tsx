@@ -19,7 +19,7 @@ function NewEventForm() {
     const createEvent = api.event.createEvent.useMutation({
         async onSuccess(data) {
             toast(`Nová skupina disciplín ${data.name ? `"${data.name}"` : ""} pro kategorii "${data.category}" byla přidána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
             form.reset()
         },
         async onError(error) {

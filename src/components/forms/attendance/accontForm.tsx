@@ -38,7 +38,7 @@ function AccontForm({sessionPersonalData, raceId, events}: {sessionPersonalData:
     const createRacerWithUsersPersonalInformation = api.racer.createRacerWithUsersPersonalInformation.useMutation({
         async onSuccess(data) {
             toast(`Úspěšně jste se přihlásili na závod se startovním číslem ${data.startingNumber}.`)
-            await utils.race.getRaceByIdPublic.invalidate()
+            await utils.invalidate()
             router.push(`/zavod/${raceId}`)
         },
         async onError(error) {

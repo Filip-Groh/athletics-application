@@ -20,7 +20,7 @@ function NewSubEventForm({eventId}: {eventId: number}) {
     const createEvent = api.subevent.createSubEvent.useMutation({
         async onSuccess(data) {
             toast(`Nová disciplína "${data.name}" pro "${data.event.name} - ${formatSex(data.event.category, true)}" byla přidána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
             form.reset()
         },
         async onError(error) {

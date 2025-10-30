@@ -30,7 +30,7 @@ export type PerformanceType = {
     }
 }
 
-function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>, raceId: number}) {
+function PerformanceTab({race, raceId, isRaceManagerOrAbove}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>, raceId: number, isRaceManagerOrAbove: boolean}) {
     const {data: allEvents, isSuccess: isSuccessGetEvents, isLoading: isLoadingGetEvents, error: errorGetEvents} = api.event.getEvents.useQuery()
     const {data: raceEvents, isSuccess: isSuccessGetRaceEvents, isLoading: isLoadingGetRaceEvents, error: errorGetRaceEvents} = api.race.getRaceEvents.useQuery({
         id: raceId
@@ -91,7 +91,7 @@ function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]
                             triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
                             uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
                             content: (
-                                <PerformanceTable data={tableData} />
+                                <PerformanceTable performance={tableData} isRaceManagerOrAbove={isRaceManagerOrAbove} />
                             )
                         }
 
@@ -131,7 +131,7 @@ function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]
                         triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
                         uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
                         content: (
-                            <PerformanceTable data={tableData} />
+                            <PerformanceTable performance={tableData} isRaceManagerOrAbove={isRaceManagerOrAbove} />
                         )
                     }
 
@@ -140,14 +140,16 @@ function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]
             }
         })
 
-        tree.push({
-            isDropdown: false,
-            triggerText: "Disciplíny",
-            uniqueId: "event_new",
-            content: (
-                <RaceEventManagerForm allEvents={allEvents} raceEvents={raceEvents} raceId={raceId}/>
-            )
-        })
+        if (isRaceManagerOrAbove) {
+            tree.push({
+                isDropdown: false,
+                triggerText: "Disciplíny",
+                uniqueId: "event_new",
+                content: (
+                    <RaceEventManagerForm allEvents={allEvents} raceEvents={raceEvents} raceId={raceId}/>
+                )
+            })
+        }
 
         return (
             <TreeTabs tree={tree} />

@@ -3,7 +3,8 @@ import { z } from "zod";
 import {
     createTRPCRouter,
     protectedProcedure,
-    protectedProcedureAdmin
+    protectedProcedureAdmin,
+    protectedProcedureEventManager
 } from "~/server/api/trpc";
 
 const createEventSchema = z.object({
@@ -27,7 +28,7 @@ const deleteEventSchema = z.object({
 })
 
 export const eventRouter = createTRPCRouter({
-    getEvents: protectedProcedureAdmin
+    getEvents: protectedProcedureEventManager
         .query(({ctx}) => {
             return ctx.db.event.findMany({
                 include: {

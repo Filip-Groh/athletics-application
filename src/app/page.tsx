@@ -56,30 +56,17 @@
 // }
 
 import React from 'react'
-import TodaysRaceCards from '~/components/elements/todaysRaceCards';
-import UpcomingRaceCards from '~/components/elements/upcomingRaceCards';
-import { getServerAuthSession } from '~/server/auth';
-import { type RouterOutputs } from '~/trpc/react';
-import { api } from '~/trpc/server';
+import { getServerAuthSession } from '~/server/auth'
+import HomeClientPage from './clientPage'
 
 export default async function HomePage() {
     const session = await getServerAuthSession()
     const optionalPersonalData = session?.user.personalData
     const personalData = optionalPersonalData ?? null
 
-    let signupRaces: RouterOutputs["race"]["getSignUpRaces"] = []
-    if (session) {
-        signupRaces = await api.race.getSignUpRaces()
-    }
-
     return (
-        <div>
-            <h2>Dnešní závody</h2>
-            <TodaysRaceCards signupRaces={signupRaces} isLoggedIn={session !== null} hasPersonalData={personalData !== null} />
-            <h2>Nadcházející závody</h2>
-            <UpcomingRaceCards signupRaces={signupRaces} isLoggedIn={session !== null} hasPersonalData={personalData !== null} />
-        </div>
-    );
+        <HomeClientPage isSession={session !== null} hasPersonalData={personalData !== null} />
+    )
 }
 
 
@@ -97,6 +84,5 @@ TODO:
 
 /*
 COMMENTS:
-- Penvé koeficienty a parametry skryté ovládané adminem
 - Uzamknout startovací pořadí (race manager)
 */

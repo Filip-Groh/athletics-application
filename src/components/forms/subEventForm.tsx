@@ -22,7 +22,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
     const updateSubEvent = api.subevent.updateSubEvent.useMutation({
         async onSuccess(data) {
             toast(`Disciplína "${data.name} - ${formatSex(data.event.category, true)}" byla upraven.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -33,7 +33,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
     const deleteSubEvent = api.subevent.deleteSubEvent.useMutation({
         async onSuccess(data) {
             toast(`Disciplína "${data.name} - ${formatSex(data.event.category, true)}" byla smazána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -44,7 +44,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
     const deleteEvent = api.event.deleteEvent.useMutation({
         async onSuccess(data) {
             toast(`Disciplína "${data.subEvent[0]?.name} - ${formatSex(data.category, true)}" byla smazána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

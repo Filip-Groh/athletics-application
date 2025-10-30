@@ -36,6 +36,8 @@ import {
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
+    const utils = api.useUtils()
+
     const {push: pushMeasurement, state: measurements, change: changeMeasurement, set: setMeasurement, pop: popMeasurement} = useArrayState(originalMeasurements.map((measurement) => {
         return {
             id: measurement.id,
@@ -56,6 +58,8 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
                     value:  Number.isNaN(measurement.value) ? "" : measurement.value.toLocaleString()
                 }
             }))
+            await utils.race.readRaceById.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -66,6 +70,8 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
     const deleteMeasurement = api.measurement.deleteMeasurement.useMutation({
         async onSuccess(measurement) {
             popMeasurement(measurement.index)
+            await utils.race.readRaceById.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -121,11 +127,13 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
     )
 }
 
-function OptionsCell({index, raceId, racerId, eventId, popRacer}: {index: number, raceId: number, racerId: number, eventId: number, popRacer: (index: number) => void}) {
+function OptionsCell({raceId, racerId, eventId}: {raceId: number, racerId: number, eventId: number}) {
+    const utils = api.useUtils()
+
     const disconnectRacer = api.racer.disconnectRacer.useMutation({
         async onSuccess(disconnectRacer) {
             toast(`Odhlásili jste závodníka "${disconnectRacer.racer?.personalData.name} ${disconnectRacer.racer?.personalData.surname}" z ${disconnectRacer.subEventCount} disciplín.`)
-            popRacer(index)
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -158,8 +166,8 @@ function OptionsCell({index, raceId, racerId, eventId, popRacer}: {index: number
     )
 }
 
-function PerformanceTable({data}: {data: PerformanceType[]}) {
-    const {state: performance, pop: popPerformance, set: setPerformance} = useArrayState(data)
+function PerformanceTable({performance, isRaceManagerOrAbove}: {performance: PerformanceType[], isRaceManagerOrAbove: boolean}) {
+    const utils = api.useUtils()
 
     const [sorting, setSorting] = React.useState<SortingState>([])
 
@@ -213,15 +221,18 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             cell: ({ row }) => {
                 return (<MeasurementCell performanceId={row.original.id} originalMeasurements={row.original.measurement} rowIndex={row.index}/>)
             }
-        },
-        {
+        }
+    ]
+
+    if (isRaceManagerOrAbove) {
+        columns.push({
             accessorKey: "options",
             header: "Možnosti",
             cell: ({row}) => {
-                return (<OptionsCell index={row.index} raceId={row.original.options.raceId} racerId={row.original.options.racerId} eventId={row.original.options.eventId} popRacer={popPerformance}/>)
+                return (<OptionsCell raceId={row.original.options.raceId} racerId={row.original.options.racerId} eventId={row.original.options.eventId} />)
             }
-        }
-    ]
+        })
+    }
 
     const table = useReactTable({
         data: performance,
@@ -237,6 +248,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
     const changeRacersOrderNumber = api.racer.changeRacersOrderNumber.useMutation({
         async onSuccess(changeRacersOrderNumber) {
             console.log(changeRacersOrderNumber)
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -259,7 +271,6 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
             item.orderNumber = orderNumbersShuffled[index]!
             return item
         })
-        setPerformance(newPerformance)
         changeRacersOrderNumber.mutate(newPerformance.map((item) => {
             return {
                 performanceId: item.id,

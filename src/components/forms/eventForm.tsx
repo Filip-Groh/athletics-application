@@ -21,7 +21,7 @@ function EventForm({event}: {event: NonNullable<RouterOutputs["event"]["getEvent
     const updateEvent = api.event.updateEvent.useMutation({
         async onSuccess(data) {
             toast(`Skupina disciplín "${data.name} - ${formatSex(data.category, true)}" byla upravena.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -32,7 +32,7 @@ function EventForm({event}: {event: NonNullable<RouterOutputs["event"]["getEvent
     const deleteEvent = api.event.deleteEvent.useMutation({
         async onSuccess(data) {
             toast(`Skupina disciplín "${data.name} - ${formatSex(data.category, true)}" byla smazána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

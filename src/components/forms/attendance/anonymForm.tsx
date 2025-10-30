@@ -63,7 +63,7 @@ function AnonymForm({raceId, events}: {raceId: number, events: NonNullable<Route
     const createRacerWithFormData = api.racer.createRacerWithFormData.useMutation({
         async onSuccess(data) {
             toast(`Úspěšně jste se přihlásili na závod se startovním číslem ${data.startingNumber}.`)
-            await utils.race.getRaceByIdPublic.invalidate()
+            await utils.invalidate()
             router.push(`/zavod/${raceId}`)
         },
         async onError(error) {

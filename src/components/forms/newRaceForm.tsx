@@ -67,7 +67,7 @@ function NewRaceForm() {
         async onSuccess(data) {
             toast(`Nový závod "${data.name}" byl naplánován na ${data.date.toLocaleDateString()} organizátorem "${data.organizer}".`)
             form.reset()
-            await utils.race.getOwnedRaces.invalidate()
+            await utils.invalidate()
             router.push(`/zavod/${data.id}/admin`)
         },
         async onError(error) {

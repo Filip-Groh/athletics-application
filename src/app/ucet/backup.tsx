@@ -68,8 +68,7 @@ function Backup() {
             }
             downloadJSON(data, "zaloha")
             toast(`Backup soubor "zaloha.json" úspěšně stažen.`)
-            await utils.event.getEvents.invalidate()
-            await utils.event.getEventsWithAgeCoeficients.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

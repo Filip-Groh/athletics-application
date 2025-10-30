@@ -22,7 +22,7 @@ function NewSubEventOnlyForm() {
     const createEvent = api.subevent.createSubEventWithEvent.useMutation({
         async onSuccess(data) {
             toast(`Nová disciplína "${data.name}" pro kategorii "${data.category}" byla přidána.`)
-            await utils.event.getEvents.invalidate()
+            await utils.invalidate()
             form.reset()
         },
         async onError(error) {

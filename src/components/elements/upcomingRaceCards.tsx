@@ -32,6 +32,26 @@ function UpcomingRaceCards({signupRaces, isLoggedIn, hasPersonalData}: {signupRa
         return (
             <>
                 {data.map((race) => {
+                    if (signupRaces.some(signupRace => signupRace.id === race.id)) {
+                        return (
+                            <Link key={`race_${race.id}`} href={`/zavod/${race.id}`}>
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>{race.name}</CardTitle>
+                                        <CardDescription>{race.date.toLocaleString()}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p>Organizuje: {race.organizer}</p>
+                                        <p>Na místě: {race.place}</p>
+                                    </CardContent>
+                                    <CardFooter>
+                                        <div>Již jste přihlášeni na tento závod.</div>
+                                    </CardFooter>
+                                </Card>
+                            </Link>
+                        )
+                    }
+
                     return (
                         <Card key={`race_${race.id}`}>
                             <Link href={`/zavod/${race.id}`}>
@@ -45,11 +65,7 @@ function UpcomingRaceCards({signupRaces, isLoggedIn, hasPersonalData}: {signupRa
                                 </CardContent>
                             </Link>
                             <CardFooter>
-                                {signupRaces.some(signupRace => signupRace.id === race.id) ? (
-                                    <div>Již jste přihlášeni na tento závod.</div>
-                                ) : (
-                                    <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
-                                )}
+                                <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
                             </CardFooter>
                         </Card>
                     )

@@ -127,7 +127,7 @@ function CoeficientsTable({subEventNames, defaultData}: {subEventNames: {id: num
         async onSuccess(ageCoeficients) {
             toast(`Úspěšně uloženo ${ageCoeficients.length} koeficientů.`)
             addNewCoeficients(ageCoeficients)
-            await utils.event.getEventsWithAgeCoeficients.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -144,7 +144,7 @@ function CoeficientsTable({subEventNames, defaultData}: {subEventNames: {id: num
             setData(data.filter((item) => {
                 return !uniqueAges.has(item.age)
             }))
-            await utils.event.getEventsWithAgeCoeficients.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -230,7 +230,7 @@ function CoeficientsTable({subEventNames, defaultData}: {subEventNames: {id: num
         async onSuccess(newAgeCoeficients) {
             toast(`Úspěšně uloženo ${newAgeCoeficients.length}.`)
             addNewCoeficients(newAgeCoeficients)
-            await utils.event.getEventsWithAgeCoeficients.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

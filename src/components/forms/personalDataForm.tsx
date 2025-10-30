@@ -42,6 +42,8 @@ function PersonalDataForm({personalInformation}: {personalInformation: {
     club: string;
     userId: string | null;
 } | null | undefined}) {
+    const utils = api.useUtils()
+    
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
@@ -76,6 +78,7 @@ function PersonalDataForm({personalInformation}: {personalInformation: {
     const setPersonalDataToUser = api.personalData.setPersonalDataToUser.useMutation({
         async onSuccess() {
             toast(`Úspěšně jste si nastavili osobní informace.`)
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -86,6 +89,7 @@ function PersonalDataForm({personalInformation}: {personalInformation: {
     const updatePersonalDataOfUser = api.personalData.updatePersonalDataOfUser.useMutation({
         async onSuccess() {
             toast(`Úspěšně jste si aktualizovali osobní informace.`)
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

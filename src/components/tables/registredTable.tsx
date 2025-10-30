@@ -43,10 +43,13 @@ type RegistredData = {
 }
 
 function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRacer: (index: number) => void}) {
+    const utils = api.useUtils()
+
     const deleteRacer = api.racer.deleteRacer.useMutation({
         async onSuccess(deletedRacer) {
             toast(`Odhlásili jste závodníka "${deletedRacer.personalData.name} ${deletedRacer.personalData.surname}".`)
             popRacer(index)
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
@@ -77,7 +80,7 @@ function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRa
     )
 }
 
-function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"]}) {
+function RegistredTable({defaultData, isRaceManagerOrAbove}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"], isRaceManagerOrAbove: boolean}) {
     const {state: racers, pop: popRacers} = useArrayState<RegistredData>(defaultData.map((racer) => {
         return {
             startingNumber: racer.startingNumber,
@@ -132,15 +135,18 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
         {
             accessorKey: "eventCount",
             header: "Počet disciplín"
-        },
-        {
+        }
+    ]
+
+    if (isRaceManagerOrAbove) {
+        columns.push({
             accessorKey: "options",
             header: "Možnosti",
             cell: ({ row }) => {
                 return (<Cell racerId={row.original.options.racerId} index={row.index} popRacer={popUpdateRacers}/>)
             }
-        }
-    ]
+        })
+    }
 
     const table = useReactTable({
         data: racers,

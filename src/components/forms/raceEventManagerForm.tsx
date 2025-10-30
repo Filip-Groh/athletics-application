@@ -23,8 +23,7 @@ function RaceEventManagerForm({allEvents, raceEvents, raceId}: {allEvents: NonNu
     const setRaceEvents = api.race.setRaceEvents.useMutation({
         async onSuccess(data) {
             toast(`Závod ${data.id} má přiřazené ${data._count.event} disciplín.`)
-            await utils.race.getRaceEvents.invalidate()
-            await utils.race.readRaceById.invalidate()
+            await utils.invalidate()
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")
