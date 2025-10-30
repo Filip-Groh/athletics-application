@@ -1,5 +1,6 @@
 "use client"
 
+import { ChevronsUpDown } from 'lucide-react'
 import React from 'react'
 import TreeTabs, { type DropdownNode, type SingleNode } from '~/components/elements/treeTabs'
 import RaceEventManagerForm from '~/components/forms/raceEventManagerForm'
@@ -54,7 +55,12 @@ function PerformanceTab({race, raceId}: {race: NonNullable<RouterOutputs["race"]
                     isDropdown: true,
                     triggerText: `${event.name} - ${formatSex(event.category, true)}`,
                     uniqueId: `event_${event.id}`,
-                    content: null,
+                    content: (
+                        <div className="flex items-center gap-2">
+                            Pouze seskupení, musíte rozkliknout
+                            <ChevronsUpDown className="h-4 w-4" />
+                        </div>
+                    ),
                     dropdownNodes: event.subEvent.map((subEvent) => {
                         const tableData: PerformanceType[] = subEvent.performance.map<PerformanceType>((value) => {
                             return {

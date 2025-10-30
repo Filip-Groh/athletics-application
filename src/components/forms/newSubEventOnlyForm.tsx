@@ -131,21 +131,21 @@ function NewSubEventOnlyForm() {
                 ]} />
                 {category === "both" ? <>
                     <div className='flex gap-2'>
-                        <NumericInput form={form} fieldName='man_a' label='Parametr A pro muže' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                        <NumericInput form={form} fieldName='woman_a' label='Parametr A pro ženy' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                        <NumericInput form={form} fieldName='man_a' label='Parametr A pro muže' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                        <NumericInput form={form} fieldName='woman_a' label='Parametr A pro ženy' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
                     </div>
                     <div className='flex gap-2'>
-                        <NumericInput form={form} fieldName='man_b' label='Parametr B pro muže' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                        <NumericInput form={form} fieldName='woman_b' label='Parametr B pro ženy' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                        <NumericInput form={form} fieldName='man_b' label='Parametr B pro muže' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                        <NumericInput form={form} fieldName='woman_b' label='Parametr B pro ženy' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
                     </div>
                     <div className='flex gap-2'>
-                        <NumericInput form={form} fieldName='man_c' label='Parametr C pro muže' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                        <NumericInput form={form} fieldName='woman_c' label='Parametr C pro ženy' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                        <NumericInput form={form} fieldName='man_c' label='Parametr C pro muže' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                        <NumericInput form={form} fieldName='woman_c' label='Parametr C pro ženy' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
                     </div>
                 </> : <>
-                    <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                    <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                    <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                    <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                    <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                    <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
                 </>}
                 <Button type="submit" disabled={createEvent.isPending}>Vytvořit disciplínu</Button>
             </form>

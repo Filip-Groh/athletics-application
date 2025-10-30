@@ -28,10 +28,10 @@ import {
 import { getServerAuthSession, type UserRole } from "~/server/auth"
 
 import {
-    LogOut,
-    LogIn,
     User
   } from "lucide-react"
+import SignoutButton from "./signoutButton";
+import SigninButton from "./signinButton";
   
 
 export type MenuItemType = {
@@ -67,8 +67,6 @@ interface MainMenuProps {
 export default async function MainMenu({menuItems, role}: MainMenuProps) {
     const session = await getServerAuthSession()
 
-    console.log(session?.user.image)
-
     return (
         <NavigationMenu>
             <NavigationMenuList>
@@ -82,7 +80,7 @@ export default async function MainMenu({menuItems, role}: MainMenuProps) {
                     <DropdownMenu>
                         <DropdownMenuTrigger className="focus-visible:outline-none focus-visible:drop-shadow-none">
                             <Avatar>
-                                {session?.user.image ? <AvatarImage src={session.user.image} alt="@shadcn" /> : null}
+                                {session?.user.image ? <AvatarImage src={session.user.image} alt="Avatar image" /> : null}
                                 <AvatarFallback>
                                     <User />
                                 </AvatarFallback>
@@ -99,19 +97,13 @@ export default async function MainMenu({menuItems, role}: MainMenuProps) {
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <LogOut className="mr-2 h-4 w-4" />
-                                        <Link href="/api/auth/signout">
-                                            Odhlásit se
-                                        </Link>
+                                        <SignoutButton />
                                     </DropdownMenuItem>
                                 </>
                             :
                                 <>
                                     <DropdownMenuItem>
-                                        <LogIn className="mr-2 h-4 w-4" />
-                                        <Link href="/api/auth/signin">
-                                            Přihlásit se
-                                        </Link>
+                                        <SigninButton />
                                     </DropdownMenuItem>
                                 </>
                             }

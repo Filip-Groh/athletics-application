@@ -29,7 +29,7 @@ export type GroupScoreData = {
     club: string,
     position: number,
     points: number,
-    subEventPoints: number[],
+    subEventPoints: (number | null)[],
     isMe: boolean
 }
 
@@ -132,7 +132,7 @@ function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRa
                         subEventPoints: [],
                         isMe: scoreData.isMe
                     }
-                    groupScoreData.subEventPoints.push(Number.isNaN(scoreData.points) ? 0 : scoreData.points)
+                    groupScoreData.subEventPoints.push(scoreData.measurements.length !== 0 ? (Number.isNaN(scoreData.points) ? 0 : scoreData.points) : null)
                     groupScoreData.points += Number.isNaN(scoreData.points) ? 0 : scoreData.points
                     startingNumberPoints.set(scoreData.startingNumber, groupScoreData)
                 })

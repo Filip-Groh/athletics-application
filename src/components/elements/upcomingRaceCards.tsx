@@ -9,11 +9,11 @@ import {
     CardHeader,
     CardTitle,
 } from "~/components/ui/card"
-import { api } from '~/trpc/react'
+import { api, type RouterOutputs } from '~/trpc/react'
 import Link from 'next/link'
-import { Button } from '../ui/button'
+import SignupButtonGroup from './signupButtonGroup'
 
-function UpcomingRaceCards() {
+function UpcomingRaceCards({signupRaces, isLoggedIn, hasPersonalData}: {signupRaces: RouterOutputs["race"]["getSignUpRaces"], isLoggedIn: boolean, hasPersonalData: boolean}) {
     const {data, isSuccess, isLoading, error} = api.race.getUpcomingRaces.useQuery()
 
     if (error) {
@@ -33,8 +33,8 @@ function UpcomingRaceCards() {
             <>
                 {data.map((race) => {
                     return (
-                        <Link key={`race_${race.id}`} href={`/zavod/${race.id}`}>
-                            <Card>
+                        <Card key={`race_${race.id}`}>
+                            <Link href={`/zavod/${race.id}`}>
                                 <CardHeader>
                                     <CardTitle>{race.name}</CardTitle>
                                     <CardDescription>{race.date.toLocaleString()}</CardDescription>
@@ -43,15 +43,15 @@ function UpcomingRaceCards() {
                                     <p>Organizuje: {race.organizer}</p>
                                     <p>Na místě: {race.place}</p>
                                 </CardContent>
-                                <CardFooter>
-                                    <Button asChild>
-                                        <Link href={`/zavod/${race.id}/prihlasky`}>
-                                            Přihlásit se na závod
-                                        </Link>
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        </Link>
+                            </Link>
+                            <CardFooter>
+                                {signupRaces.some(signupRace => signupRace.id === race.id) ? (
+                                    <div>Již jste přihlášeni na tento závod.</div>
+                                ) : (
+                                    <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
+                                )}
+                            </CardFooter>
+                        </Card>
                     )
                 })}
             </>

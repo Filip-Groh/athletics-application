@@ -68,9 +68,9 @@ function NewSubEventForm({eventId}: {eventId: number}) {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <TextInput form={form} fieldName='name' label='Jméno disciplíny' placeholder='Jméno disciplíny' description='Napište jméno disciplíny.' />
-                <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
-                <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * (naměřená hodnota * koeficient - b) na c)' />
+                <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
+                <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C, který se použije při výpočtu bodů. (a * ((naměřená hodnota * koeficient - b) na c))' />
                 <Button type="submit" disabled={createEvent.isPending}>Vytvořit disciplínu</Button>
             </form>
         </Form>

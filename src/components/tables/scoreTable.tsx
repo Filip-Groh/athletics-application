@@ -28,7 +28,7 @@ function ScoreTable({data}: {data: ScoreData[]}) {
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovací číslo"
+            header: "Startovní číslo"
         },
         {
             accessorKey: "orderNumber",
@@ -65,12 +65,23 @@ function ScoreTable({data}: {data: ScoreData[]}) {
             accessorKey: "points",
             header: "Body",
             accessorFn: (row) => {
+                if (row.measurements.length === 0) {
+                    return "-"
+                }
+                
                 return Number.isNaN(row.points) ? 0 : row.points
             }
         },
         {
             accessorKey: "bestMeasurement",
             header: "Nejlepší výkon",
+            accessorFn: (row) => {
+                if (row.measurements.length === 0) {
+                    return "-"
+                }
+
+                return row.bestMeasurement
+            }
         },
         {
             accessorKey: "measurements",

@@ -9,6 +9,7 @@ import MainMenu, { type MenuItemType } from "~/components/menu/mainMenu";
 import { Toaster } from "~/components/ui/sonner"
 import { HydrateClient } from "~/trpc/server";
 import { getServerAuthSession, UserRole } from "~/server/auth"
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 export const metadata: Metadata = {
     title: "Create T3 App",
@@ -46,17 +47,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <html lang="cs" className={`${GeistSans.variable}`} suppressHydrationWarning>
             <body>
                 <TRPCReactProvider>
-                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
-                        <header>
-                            <MainMenu menuItems={menuItems} role={session?.user.role ?? false}/>
-                        </header>
-                        <main>
-                            <HydrateClient>
-                                {children}
-                            </HydrateClient>
-                        </main>
-                        <Toaster />
-                    </ThemeProvider>
+                    <TooltipProvider>
+                        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange >
+                            <header>
+                                <MainMenu menuItems={menuItems} role={session?.user.role ?? false}/>
+                            </header>
+                            <main>
+                                <HydrateClient>
+                                    {children}
+                                </HydrateClient>
+                            </main>
+                            <Toaster />
+                        </ThemeProvider>
+                    </TooltipProvider>
                 </TRPCReactProvider>
             </body>
         </html>

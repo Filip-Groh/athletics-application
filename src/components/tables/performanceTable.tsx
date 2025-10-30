@@ -186,7 +186,7 @@ function PerformanceTable({data}: {data: PerformanceType[]}) {
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovací číslo"
+            header: "Startovní číslo"
         },
         {
             accessorKey: "name",

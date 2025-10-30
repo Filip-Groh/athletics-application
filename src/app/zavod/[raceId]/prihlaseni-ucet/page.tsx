@@ -17,6 +17,12 @@ async function AccountAttendRequestPage({ params }: { params: { raceId: string }
         notFound()
     }
 
+    if (personalData === null) {
+        return (
+            <p>Nejdříve musíte vyplnit osobní údaje v profilu. (Vpravo nahoře Profil -&gt; Přehled)</p>
+        )
+    }
+
     return (
         <AccontForm sessionPersonalData={personalData} raceId={Number(params.raceId)} events={events}/>
     )

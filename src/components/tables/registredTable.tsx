@@ -101,7 +101,7 @@ function RegistredTable({defaultData}: {defaultData: NonNullable<RouterOutputs["
     const columns: ColumnDef<RegistredData>[] = [
         {
             accessorKey: "startingNumber",
-            header: "Startovací číslo"
+            header: "Startovní číslo"
         },
         {
             accessorKey: "name",

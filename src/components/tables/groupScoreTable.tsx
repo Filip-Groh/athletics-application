@@ -28,7 +28,7 @@ function GroupScoreTable({data}: {data: GroupScoreData[]}) {
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovací číslo"
+            header: "Startovní číslo"
         },
         {
             accessorKey: "name",
@@ -61,6 +61,10 @@ function GroupScoreTable({data}: {data: GroupScoreData[]}) {
             accessorKey: "points",
             header: "Body",
             accessorFn: (row) => {
+                if (row.subEventPoints.every(subEvent => subEvent === null)) {
+                    return "-"
+                }
+
                 return Number.isNaN(row.points) ? 0 : row.points
             }
         },
@@ -69,7 +73,7 @@ function GroupScoreTable({data}: {data: GroupScoreData[]}) {
             header: "Body v disciplínách",
             accessorFn: (row) => {
                 return row.subEventPoints.map((points) => {
-                    return points.toLocaleString()
+                    return points !== null ? points.toLocaleString() : "-"
                 }).reduce((prev, curr) => {
                     if (prev === "") {
                         return `${curr}`

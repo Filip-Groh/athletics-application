@@ -58,14 +58,26 @@
 import React from 'react'
 import TodaysRaceCards from '~/components/elements/todaysRaceCards';
 import UpcomingRaceCards from '~/components/elements/upcomingRaceCards';
+import { getServerAuthSession } from '~/server/auth';
+import { type RouterOutputs } from '~/trpc/react';
+import { api } from '~/trpc/server';
 
 export default async function HomePage() {
+    const session = await getServerAuthSession()
+    const optionalPersonalData = session?.user.personalData
+    const personalData = optionalPersonalData ?? null
+
+    let signupRaces: RouterOutputs["race"]["getSignUpRaces"] = []
+    if (session) {
+        signupRaces = await api.race.getSignUpRaces()
+    }
+
     return (
         <div>
             <h2>Dnešní závody</h2>
-            <TodaysRaceCards />
+            <TodaysRaceCards signupRaces={signupRaces} isLoggedIn={session !== null} hasPersonalData={personalData !== null} />
             <h2>Nadcházející závody</h2>
-            <UpcomingRaceCards />
+            <UpcomingRaceCards signupRaces={signupRaces} isLoggedIn={session !== null} hasPersonalData={personalData !== null} />
         </div>
     );
 }
@@ -73,10 +85,7 @@ export default async function HomePage() {
 
 /*
 TODO:
-- !!! USE REACT QUERY !!!
-
 - Edit racer info
-- Datum in czech
 - Show unsaved progress
 - Tables control
 - Dynamic update
@@ -84,34 +93,10 @@ TODO:
 - Page stylying
 - Race search
 - Tooltips and anomalies (problems with data)
-- Better homepage
-- Geolocation based recommendation
-
-- User roles
-    - Admin - Event types, coeficients and parameters
-    - Race manager - Whole race management
-    - Event manager - Fills out measurements
-    - Racer - Signs to races with account
-
-    DB:
-    - OAuth user - role, optional personal data
-    - Personal data - name, surname, birthdate, sex, club
-    - Racer - personal data
-
-- Group of events - Tree like structure
-*/
-
-/*
-BUGS:
-- Cannot delete empty coeficients
 */
 
 /*
 COMMENTS:
 - Penvé koeficienty a parametry skryté ovládané adminem
-- Výběr závodu na začátku formuláře
 - Uzamknout startovací pořadí (race manager)
-- Startovací číslo = startovní číslo
-- Nezaokhroulovat body ale usekávat
-- Přihlasit se u specifického závodu
 */

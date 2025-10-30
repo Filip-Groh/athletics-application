@@ -113,7 +113,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
                             <Button variant="destructive" disabled={updateSubEvent.isPending || deleteSubEvent.isPending}>Vymazat</Button>
                         </DeleteConfirm>
                     </div>
-                    <p className='text-sm text-muted-foreground'>Vzoreček: (a * (naměřená hodnota * koeficient - b) na c)</p>
+                    <p className='text-sm text-muted-foreground'>Vzoreček: (a * ((naměřená hodnota * koeficient - b) na c))</p>
                 </div>
             </form>
         </Form>
