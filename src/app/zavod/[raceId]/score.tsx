@@ -93,7 +93,7 @@ function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRa
                     isMe: racer?.startingNumber === performance.racer.startingNumber
                 }
             }).sort((a, b) => {
-                return b.points - a.points
+                return (Number.isNaN(b.points) ? -1 : b.points) - (Number.isNaN(a.points) ? -1 : a.points)
             }).map((racer, index) => {
                 return {
                     position: index,
@@ -118,7 +118,7 @@ function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRa
 
     const tree = events.flatMap<SingleNode | DropdownNode>((event) => {
         if (event.name) {
-            const startingNumberPoints = new Map<number, GroupScoreData>()
+            const startingNumberPoints = new Map<number, Omit<GroupScoreData, 'position'>>()
             event.subEvents.forEach((subEvent) => {
                 subEvent.data.forEach((scoreData) => {
                     const groupScoreData = startingNumberPoints.get(scoreData.startingNumber) ?? {
@@ -127,7 +127,6 @@ function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRa
                         surname: scoreData.surname,
                         age: scoreData.age,
                         club: scoreData.club,
-                        position: scoreData.position,
                         points: 0,
                         subEventPoints: [],
                         isMe: scoreData.isMe
@@ -138,7 +137,14 @@ function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRa
                 })
             })
 
-            const groupScoreData: GroupScoreData[] = Array.from(startingNumberPoints.values())
+            const groupScoreData: GroupScoreData[] = Array.from(startingNumberPoints.values()).sort((a, b) => {
+                return (Number.isNaN(b.points) ? -1 : b.points) - (Number.isNaN(a.points) ? -1 : a.points)
+            }).map((racer, index) => {
+                return {
+                    position: index,
+                    ...racer
+                }
+            })
 
             return [{
                 isDropdown: true,

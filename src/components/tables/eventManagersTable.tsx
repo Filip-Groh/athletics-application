@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -26,6 +28,8 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { Switch } from "../ui/switch"
+import { Button } from "../ui/button"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 function RoleCell({isSelected, userId, raceId}: {isSelected: boolean, userId: string, raceId: number}) {
     const [selected, setSelected] = React.useState(isSelected)
@@ -63,6 +67,11 @@ function RoleCell({isSelected, userId, raceId}: {isSelected: boolean, userId: st
 }
 
 function EventManagersTable({raceId, users}: {raceId: number, users: NonNullable<RouterOutputs["user"]["getEventManagers"]>}) {
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "assigned",
+        desc: false
+    }])
+
     const columns: ColumnDef<NonNullable<RouterOutputs["user"]["getEventManagers"]>[0]>[] = [
         {
             accessorKey: "image",
@@ -80,17 +89,51 @@ function EventManagersTable({raceId, users}: {raceId: number, users: NonNullable
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "email",
-            header: "E-Mail",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            E-Mail
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "assigned",
-            header: "Přiřazen",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Plain} />
+                            Přiřazen
+                        </Button>
+                    </span>
+                )
+            },
             cell: ({row}) => {
                 return <RoleCell isSelected={row.original.managingRaces.some((managingRace) => managingRace.id === raceId)} raceId={raceId} userId={row.original.id} />
+            },
+            sortingFn: (rowA, rowB) => {
+                const isSelectedA = rowA.original.managingRaces.some((managingRace) => managingRace.id === raceId)
+                const isSelectedB = rowB.original.managingRaces.some((managingRace) => managingRace.id === raceId)
+                return (isSelectedB ? 1 : 0) - (isSelectedA ? 1 : 0)
             }
         }
     ]
@@ -99,6 +142,11 @@ function EventManagersTable({raceId, users}: {raceId: number, users: NonNullable
         data: users,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
+        state: {
+            sorting
+        }
     })
 
     return (
@@ -139,7 +187,7 @@ function EventManagersTable({raceId, users}: {raceId: number, users: NonNullable
                 ) : (
                     <TableRow>
                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                        Žádné výsledky.
+                        Žádní uživatelé s oprávněním.
                     </TableCell>
                     </TableRow>
                 )}

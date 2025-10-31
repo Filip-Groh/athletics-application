@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -16,31 +18,85 @@ import {
 } from "~/components/ui/table"
 import React from 'react'
 import { type GroupScoreData } from "~/app/zavod/[raceId]/score"
+import { Button } from "../ui/button"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 function GroupScoreTable({data}: {data: GroupScoreData[]}) {
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "position",
+        desc: false
+    }])
+
     const columns: ColumnDef<GroupScoreData>[] = [
         {
             accessorKey: "position",
-            header: "Umístění",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Umístění
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 return `${row.position + 1}.`
             }
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovní číslo"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Startovní číslo
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "surname",
-            header: "Příjmení",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Příjmení
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "age",
-            header: "Věk",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Věk
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 const age = row.age
                 switch (Math.abs(age)) {
@@ -55,18 +111,42 @@ function GroupScoreTable({data}: {data: GroupScoreData[]}) {
         },
         {
             accessorKey: "club",
-            header: "Oddíl",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Oddíl
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "points",
-            header: "Body",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Body
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 if (row.subEventPoints.every(subEvent => subEvent === null)) {
                     return "-"
                 }
 
                 return Number.isNaN(row.points) ? 0 : row.points
-            }
+            },
+            sortingFn: (rowA, rowB) => {
+                const pointsA = rowA.original.subEventPoints.every(subEvent => subEvent === null) ? NaN : rowA.original.points
+                const pointsB = rowB.original.subEventPoints.every(subEvent => subEvent === null) ? NaN : rowB.original.points
+                return pointsA - pointsB
+            },
         },
         {
             accessorKey: "subEventPoints",
@@ -88,6 +168,11 @@ function GroupScoreTable({data}: {data: GroupScoreData[]}) {
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
+        state: {
+            sorting
+        }
     })
 
     return (

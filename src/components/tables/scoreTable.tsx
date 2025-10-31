@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -16,35 +18,96 @@ import {
 } from "~/components/ui/table"
 import React from 'react'
 import { type ScoreData } from "~/app/zavod/[raceId]/score"
+import { Button } from "../ui/button"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 function ScoreTable({data}: {data: ScoreData[]}) {
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "position",
+        desc: false
+    }])
+
     const columns: ColumnDef<ScoreData>[] = [
         {
             accessorKey: "position",
-            header: "Umístění",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Umístění
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 return `${row.position + 1}.`
             }
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovní číslo"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Startovní číslo
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "orderNumber",
-            header: "Startovací pořadí"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Startovací pořadí
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "surname",
-            header: "Příjmení",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Příjmení
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "age",
-            header: "Věk",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Věk
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 const age = row.age
                 switch (Math.abs(age)) {
@@ -59,29 +122,62 @@ function ScoreTable({data}: {data: ScoreData[]}) {
         },
         {
             accessorKey: "club",
-            header: "Oddíl",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Oddíl
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "points",
-            header: "Body",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Body
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 if (row.measurements.length === 0) {
                     return "-"
                 }
                 
                 return Number.isNaN(row.points) ? 0 : row.points
-            }
+            },
+            sortingFn: (rowA, rowB) => {
+                return rowA.original.points - rowB.original.points
+            },
         },
         {
             accessorKey: "bestMeasurement",
-            header: "Nejlepší výkon",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Nejlepší výkon
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 if (row.measurements.length === 0) {
                     return "-"
                 }
 
                 return row.bestMeasurement
-            }
+            },
+            sortingFn: (rowA, rowB) => {
+                return rowA.original.points - rowB.original.points
+            },
         },
         {
             accessorKey: "measurements",
@@ -103,6 +199,11 @@ function ScoreTable({data}: {data: ScoreData[]}) {
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
+        state: {
+            sorting
+        }
     })
 
     return (

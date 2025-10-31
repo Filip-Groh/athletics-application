@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -28,6 +30,8 @@ import {
 import { EllipsisVertical, Trash2 } from "lucide-react"
 import { toast } from "sonner"
 import { useArrayState } from "../hooks/useArrayState"
+import { Button } from "../ui/button"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 type RegistredData = {
     startingNumber: number,
@@ -81,6 +85,11 @@ function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRa
 }
 
 function RegistredTable({defaultData, isRaceManagerOrAbove}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"], isRaceManagerOrAbove: boolean}) {
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "startingNumber",
+        desc: false
+    }])
+
     const {state: racers, pop: popRacers} = useArrayState<RegistredData>(defaultData.map((racer) => {
         return {
             startingNumber: racer.startingNumber,
@@ -104,37 +113,107 @@ function RegistredTable({defaultData, isRaceManagerOrAbove}: {defaultData: NonNu
     const columns: ColumnDef<RegistredData>[] = [
         {
             accessorKey: "startingNumber",
-            header: "Startovní číslo"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Startovní číslo
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "surname",
-            header: "Příjmení",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Příjmení
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "birthDate",
-            header: "Datum narození",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Datum narození
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 return row.birthDate.toLocaleDateString()
-            }
+            },
+            sortingFn: (rowA, rowB) => {
+                return rowB.original.birthDate.valueOf() - rowA.original.birthDate.valueOf()
+            },
         },
         {
             accessorKey: "sex",
-            header: "Pohlaví",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Pohlaví
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 return formatSex(row.sex, false)
-            }
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "club",
-            header: "Oddíl",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Oddíl
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "eventCount",
-            header: "Počet disciplín"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Počet disciplín
+                        </Button>
+                    </span>
+                )
+            },
         }
     ]
 
@@ -152,6 +231,11 @@ function RegistredTable({defaultData, isRaceManagerOrAbove}: {defaultData: NonNu
         data: racers,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
+        state: {
+            sorting
+        }
     })
 
     return (

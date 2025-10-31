@@ -193,7 +193,10 @@ function OptionsCell({raceId, racerId, eventId}: {raceId: number, racerId: numbe
 function PerformanceTable({performance, isRaceManagerOrAbove}: {performance: PerformanceType[], isRaceManagerOrAbove: boolean}) {
     const utils = api.useUtils()
 
-    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "orderNumber",
+        desc: false
+    }])
 
     const columns: ColumnDef<PerformanceType>[] = [
         {
@@ -218,26 +221,81 @@ function PerformanceTable({performance, isRaceManagerOrAbove}: {performance: Per
         },
         {
             accessorKey: "startingNumber",
-            header: "Startovní číslo"
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Startovní číslo
+                        </Button>
+                    </span>
+                )
+            },
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "surname",
-            header: "Příjmení",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Příjmení
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "sex",
-            header: "Pohlaví",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Pohlaví
+                        </Button>
+                    </span>
+                )
+            },
             accessorFn: (row) => {
                 return formatSex(row.sex, false)
-            }
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "birthDate",
-            header: "Datum narození",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            Datum narození
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: (rowA, rowB) => {
+                const splitedA = rowA.original.birthDate.split(".")
+                const splitedB = rowB.original.birthDate.split(".")
+                const dateA = Date.UTC(parseInt(splitedA[2]!), parseInt(splitedA[1]!) - 1, parseInt(splitedA[0]!))
+                const dateB = Date.UTC(parseInt(splitedB[2]!), parseInt(splitedB[1]!) - 1, parseInt(splitedB[0]!))
+                return dateB.valueOf() - dateA.valueOf()
+            },
         },
         {
             accessorKey: "measurement",

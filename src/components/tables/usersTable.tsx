@@ -4,6 +4,8 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    getSortedRowModel,
+    type SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 import {
@@ -42,6 +44,8 @@ import {
     AlertDialogTitle,
 } from "~/components/ui/alert-dialog"
 import { toast } from "sonner"
+import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
+import { Button } from "../ui/button"
 
 enum UserRole {
     Admin = 3,
@@ -143,6 +147,11 @@ function RoleCell({id, role}: {id: string, role: UserRole}) {
 }
 
 function UsersTable({users}: {users: NonNullable<RouterOutputs["user"]["getUsers"]>}) {
+    const [sorting, setSorting] = React.useState<SortingState>([{
+        id: "name",
+        desc: false
+    }])
+
     const columns: ColumnDef<NonNullable<RouterOutputs["user"]["getUsers"]>[0]>[] = [
         {
             accessorKey: "image",
@@ -160,17 +169,49 @@ function UsersTable({users}: {users: NonNullable<RouterOutputs["user"]["getUsers
         },
         {
             accessorKey: "name",
-            header: "Jméno",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            Jméno
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "email",
-            header: "E-Mail",
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
+                            E-Mail
+                        </Button>
+                    </span>
+                )
+            },
+            sortingFn: "alphanumeric"
         },
         {
             accessorKey: "role",
-            header: "Role",
+            header: ({ column }) => {
+                            return (
+                                <span className="flex flex-row gap-1 items-center">
+                                    <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                                        <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Plain} />
+                                        Role
+                                    </Button>
+                                </span>
+                            )
+                        },
             cell: ({row}) => {
                 return <RoleCell id={row.original.id} role={row.original.role}/>
+            },
+            sortingFn: (rowA, rowB) => {
+                return rowB.original.role - rowA.original.role
             }
         }
     ]
@@ -179,6 +220,11 @@ function UsersTable({users}: {users: NonNullable<RouterOutputs["user"]["getUsers
         data: users,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        onSortingChange: setSorting,
+        state: {
+            sorting
+        }
     })
 
     return (
@@ -219,7 +265,7 @@ function UsersTable({users}: {users: NonNullable<RouterOutputs["user"]["getUsers
                 ) : (
                     <TableRow>
                     <TableCell colSpan={columns.length} className="h-24 text-center">
-                        Žádné výsledky.
+                        Žádní uživatelé.
                     </TableCell>
                     </TableRow>
                 )}
