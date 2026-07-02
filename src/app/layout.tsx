@@ -10,6 +10,8 @@ import { Toaster } from "~/components/ui/sonner"
 import { HydrateClient } from "~/trpc/server";
 import { getServerAuthSession, UserRole } from "~/server/auth"
 import { TooltipProvider } from "~/components/ui/tooltip";
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
     title: "Create T3 App",
@@ -61,6 +63,8 @@ const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
                         </ThemeProvider>
                     </TooltipProvider>
                 </TRPCReactProvider>
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     );
