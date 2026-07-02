@@ -1,5 +1,5 @@
 import { type PrismaClient } from "@prisma/client";
-import { z } from "zod";
+import { changeRacersOrderNumberSchema, createRacerWithFormDataSchema, createRacerWithUsersPersonalInformationSchema, deleteRacerSchema, disconnectRacerSchema, getStartingNumberSchema } from "~/schemas/racer";
 
 import {
     createTRPCRouter,
@@ -33,55 +33,7 @@ import {
 //     })
 // })
 
-const getStartingNumberSchema = z.object({
-    raceId: z.number()
-})
-
-const disconnectRacerSchema = z.object({
-    raceId: z.number(),
-    racerId: z.number(),
-    eventId: z.number()
-})
-
-const changeRacersOrderNumberSchema = z.array(z.object({
-    performanceId: z.number(),
-    newOrderNumber: z.number()
-}))
-
-const createRacerWithUsersPersonalInformationSchema = z.object({
-    raceId: z.number(),
-    event: z.array(z.number()).refine((value) => value.some((item) => item), {
-        message: "Vyberte si alespoň 1 disciplínu.",
-    })
-})
-
-const createRacerWithFormDataSchema = z.object({
-    raceId: z.number(),
-    name: z.string().min(1, {
-        message: "Jméno musí mít alespoň 1 znak.",
-    }),
-    surname: z.string().min(1, {
-        message: "Příjmení musí mít alespoň 1 znak.",
-    }),
-    birthDate: z.date({
-        required_error: "Musíte vybrat datum narození.",
-    }),
-    sex: z.enum(["man", "woman"], {
-        required_error: "Vyberte pohlaví.",
-    }),
-    club: z.string().min(1, {
-        message: "Jméno oddílu musí mít alespoň 1 znak.",
-    }),
-    event: z.array(z.number()).refine((value) => value.some((item) => item), {
-        message: "Vyberte si alespoň 1 disciplínu.",
-    })
-})
-
-const deleteRacerSchema = z.object({
-    racerId: z.number()
-})
-
-async function getNextStartingNumber(db: PrismaClient, raceId: number) {
+const getNextStartingNumber = async (db: PrismaClient, raceId: number) => {
     const existingRacersNumbers = await db.racer.findMany({
         where: {
             raceId: raceId
@@ -112,7 +64,7 @@ async function getNextStartingNumber(db: PrismaClient, raceId: number) {
     return startingNumber
 }
 
-async function getNextOrderNumber(db: PrismaClient, raceId: number, subEventId: number) {
+const getNextOrderNumber = async (db: PrismaClient, raceId: number, subEventId: number) => {
     const existingOrderNumbers = await db.performance.findMany({
         where: {
             raceId: raceId,

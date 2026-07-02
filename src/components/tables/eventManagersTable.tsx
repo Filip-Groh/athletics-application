@@ -31,7 +31,13 @@ import { Switch } from "../ui/switch"
 import { Button } from "../ui/button"
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
-function RoleCell({isSelected, userId, raceId}: {isSelected: boolean, userId: string, raceId: number}) {
+type RoleCellProps = {
+    isSelected: boolean,
+    userId: string,
+    raceId: number
+}
+
+const RoleCell: React.FC<RoleCellProps> = ({isSelected, userId, raceId}) => {
     const [selected, setSelected] = React.useState(isSelected)
 
     const utils = api.useUtils()
@@ -66,7 +72,12 @@ function RoleCell({isSelected, userId, raceId}: {isSelected: boolean, userId: st
     )
 }
 
-function EventManagersTable({raceId, users}: {raceId: number, users: NonNullable<RouterOutputs["user"]["getEventManagers"]>}) {
+type EventManagersTableProps = {
+    raceId: number,
+    users: NonNullable<RouterOutputs["user"]["getEventManagers"]>
+}
+
+const EventManagersTable: React.FC<EventManagersTableProps> = ({raceId, users}) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "assigned",
         desc: false

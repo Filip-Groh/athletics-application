@@ -1,23 +1,8 @@
-import { z } from "zod";
-
+import { deleteMeasurementSchema, saveMeasurementsSchema } from "~/schemas/measurement";
 import {
     createTRPCRouter,
     protectedProcedure,
-    publicProcedure,
 } from "~/server/api/trpc";
-
-const saveMeasurementsSchema = z.object({
-    performanceId: z.number(),
-    measurements: z.array(z.object({
-        id: z.optional(z.number()),
-        value: z.number().or(z.nan())
-    }))
-})
-
-const deleteMeasurementSchema = z.object({
-    id: z.number(),
-    index: z.number()
-})
 
 export const measurementRouter = createTRPCRouter({
     saveMeasurementsOnPerformance: protectedProcedure

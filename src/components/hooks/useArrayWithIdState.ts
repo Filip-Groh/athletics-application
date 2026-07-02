@@ -11,10 +11,10 @@ export enum PushDirection {
     PushToStart
 }
 
-export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [], logChanges = false) {
+export const useArrayWithIdState = <T extends ElementWithId>(array: Array<T> = [], logChanges = false) => {
     const [arrayState, setArrayState] = useState<Array<T>>(array);
 
-    function set(array: Array<T>) {
+    const set = (array: Array<T>) => {
         setArrayState(array)
 
         if (logChanges) {
@@ -25,7 +25,7 @@ export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [
         }
     }
 
-    function push(element: T, direction = PushDirection.PushToEnd) {
+    const push = (element: T, direction = PushDirection.PushToEnd) => {
         const pushToEnd = () => {
             return [...arrayState, element]
         }
@@ -44,7 +44,7 @@ export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [
         }
     }
 
-    function pop(id: number) {
+    const pop = (id: number) => {
         arrayState.forEach((element, index) => {
             if (element.id == id) {
                 const arrayStateCopy = arrayState.slice()
@@ -62,7 +62,7 @@ export function useArrayWithIdState<T extends ElementWithId>(array: Array<T> = [
         }
     }
 
-    function get(id: number): T | null {
+    const get = (id: number): T | null => {
         let returnValue: T | null = null
         arrayState.forEach((element) => {
             if (element.id == id) {

@@ -1,24 +1,8 @@
-import { z } from "zod";
-
+import { addAgeCoeficientSchema, deleteAgeCoeficientSchema, saveAgeCoeficientSchema } from "~/schemas/ageCoeficient";
 import {
     createTRPCRouter,
     protectedProcedureAdmin
 } from "~/server/api/trpc";
-
-const addAgeCoeficientSchema = z.object({
-    age: z.number(),
-    ageCoeficients: z.array(z.object({
-        coeficient: z.number(),
-        subEventId: z.number()
-    }))
-})
-
-const saveAgeCoeficientSchema = addAgeCoeficientSchema
-
-const deleteAgeCoeficientSchema = z.object({
-    age: z.number(),
-    subEventIds: z.array(z.number())
-})
 
 export const ageCoeficientRouter = createTRPCRouter({
     addAgeCoeficients: protectedProcedureAdmin

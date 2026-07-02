@@ -22,7 +22,12 @@ import TextInput from '../fields/textInput'
 import DatetimeInput from '../fields/datetimeInput'
 import RadioGroupInput from '../fields/radioGroupInput'
 
-function AnonymForm({raceId, events}: {raceId: number, events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>}) {
+type AnonymFormProps = {
+    raceId: number,
+    events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>
+}
+
+const AnonymForm: React.FC<AnonymFormProps> = ({raceId, events}) => {
     const router = useRouter()
     const utils = api.useUtils()
 
@@ -72,7 +77,7 @@ function AnonymForm({raceId, events}: {raceId: number, events: NonNullable<Route
         }
     })
     
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         createRacerWithFormData.mutate({
             raceId: raceId,
             name: values.name,

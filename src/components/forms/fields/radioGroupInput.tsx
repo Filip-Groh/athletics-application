@@ -15,7 +15,16 @@ interface Item {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function RadioGroupInput<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, items, onValueChange}: {form: UseFormReturn<TFieldValues, TContext, TTransformedValues>, fieldName: TName, label: string, items: Array<Item>, onValueChange?: ((event: string) => void)}) {
+type RadioGroupInputProps<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
+    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>,
+    fieldName: TName,
+    label: string,
+    items: Array<Item>,
+    onValueChange?: ((event: string) => void)
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const RadioGroupInput = <TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, items, onValueChange}: RadioGroupInputProps<TFieldValues, TContext, TTransformedValues, TName>) => {
     return (
         <FormField
             control={form.control}

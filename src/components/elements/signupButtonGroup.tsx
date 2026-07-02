@@ -8,7 +8,13 @@ import {
 } from "~/components/ui/tooltip"
 import SigninButton from '../menu/signinButton'
 
-function SignupButtonGroup({raceId, isLoggedIn, hasPersonalData}: {raceId: number, isLoggedIn: boolean, hasPersonalData: boolean}) {
+type SignupButtonGroupProps = {
+    raceId: number,
+    isLoggedIn: boolean,
+    hasPersonalData: boolean
+}
+
+const SignupButtonGroup: React.FC<SignupButtonGroupProps> = ({raceId, isLoggedIn, hasPersonalData}) => {
     const router = useRouter()
 
     const accountButtonEnabled = (

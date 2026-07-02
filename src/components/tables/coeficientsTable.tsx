@@ -24,7 +24,7 @@ import { api, type RouterOutputs } from "~/trpc/react"
 import { toast } from "sonner"
 import NumericInput from "../elements/numericInput"
 import { inputStringToNumber } from "~/lib/utils"
-import { type Data } from "~/app/ucet/coeficients"
+import type { Data } from "~/types/event"
 
 // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
 type SubEventNameCoeficientPair = {
@@ -35,11 +35,17 @@ type DataInString = {
     age: string
 } & SubEventNameCoeficientPair
 
-function getIdentifier(age: string, subEventId: number) {
+const getIdentifier = (age: string, subEventId: number) => {
     return `age:${age},event:${subEventId}`
 }
 
-function InputCell({age, subEventId, rowData}: {age: string, subEventId: number, rowData: React.MutableRefObject<Map<string, string | undefined>>}) {
+type InputCellProps = {
+    age: string,
+    subEventId: number,
+    rowData: React.MutableRefObject<Map<string, string | undefined>>
+}
+
+const InputCell: React.FC<InputCellProps> = ({age, subEventId, rowData}) => {
     const identifier = getIdentifier(age, subEventId)
     const [value, setValue] = React.useState(rowData.current.get(identifier) ?? "0")
 
@@ -52,7 +58,12 @@ function InputCell({age, subEventId, rowData}: {age: string, subEventId: number,
     )
 }
 
-function CoeficientsTable({subEventNames, defaultData}: {subEventNames: {id: number, name: string}[], defaultData: Data[]}) {
+type CoeficientsTableProps = {
+    subEventNames: {id: number, name: string}[],
+    defaultData: Data[]
+}
+
+const CoeficientsTable: React.FC<CoeficientsTableProps> = ({subEventNames, defaultData}) => {
     const {state: data, set: setData} = useArrayState(defaultData.map((item) => {
         // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
         const coeficients: DataInString = {

@@ -1,25 +1,25 @@
 "use client"
 
 import React from 'react'
+import QueryWrapper from '~/components/wrappers/QueryWrapper'
 import EventManagersTable from '~/components/tables/eventManagersTable'
 import { api } from '~/trpc/react'
 
-function EventManagerTab({raceId}: {raceId: number}) {
-    const {data, isSuccess, isLoading, error} = api.user.getEventManagers.useQuery()
-    
-    if (error) {
-        return <div>Nastala chyba: {error.message}</div>
-    }
+type EventManagerTabProps = {
+    raceId: number
+}
 
-    if (isLoading) {
-        return <div>Loading ...</div>
-    }
+const EventManagerTab: React.FC<EventManagerTabProps> = ({ raceId }) => {
+    const getEventManagersQuery = api.user.getEventManagers.useQuery()
 
-    if (isSuccess) {
-        return (
-            <EventManagersTable raceId={raceId} users={data}/>
-        )
-    }
+    return (
+        <QueryWrapper
+            query={getEventManagersQuery}
+            Success={(data) => (
+                <EventManagersTable raceId={raceId} users={data} />
+            )}
+        />
+    )
 }
 
 export default EventManagerTab

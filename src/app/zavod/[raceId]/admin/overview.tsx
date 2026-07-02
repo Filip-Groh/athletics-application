@@ -2,11 +2,13 @@ import React from 'react'
 import OverviewForm from '~/components/forms/overviewForm'
 import type { RouterOutputs } from '~/trpc/react'
 
-function OverviewTab({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
+type OverviewTabProps = {
+    race: NonNullable<RouterOutputs["race"]["readRaceById"]>
+}
+
+const OverviewTab: React.FC<OverviewTabProps> = ({ race }) => {
     return (
-        <>
-            <OverviewForm race={race} />
-        </>
+        <OverviewForm race={race} />
     )
 }
 

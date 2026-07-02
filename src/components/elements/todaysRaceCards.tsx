@@ -12,51 +12,50 @@ import {
 import { api, type RouterOutputs } from '~/trpc/react'
 import Link from 'next/link'
 import SignupButtonGroup from './signupButtonGroup'
+import QueryWrapper from '../wrappers/QueryWrapper'
 
-function TodaysRaceCards({signupRaces, isLoggedIn, hasPersonalData}: {signupRaces: RouterOutputs["race"]["getSignUpRaces"], isLoggedIn: boolean, hasPersonalData: boolean}) {
-    const {data, isSuccess, isLoading, error} = api.race.getTodayRaces.useQuery()
+type TodaysRaceCardsProps = {
+    signupRaces: RouterOutputs["race"]["getSignUpRaces"],
+    isLoggedIn: boolean,
+    hasPersonalData: boolean
+}
 
-    if (error) {
-        return <div>Nastala chyba: {error.message}</div>
-    }
+const TodaysRaceCards: React.FC<TodaysRaceCardsProps> = ({ signupRaces, isLoggedIn, hasPersonalData }) => {
+    const getTodayRacesQuery = api.race.getTodayRaces.useQuery()
 
-    if (isLoading) {
-        return <div>Loading ...</div>
-    }
-
-    if (isSuccess) {
-        if (data.length === 0) {
-            return <div>Dnes se nakonají žádné závody.</div>
-        }
-
-        return (
-            <>
-                {data.map((race) => {
-                    return (   
-                        <Card key={`race_${race.id}`}>
-                            <Link href={`/zavod/${race.id}`}>
-                                <CardHeader>
-                                    <CardTitle>{race.name}</CardTitle>
-                                    <CardDescription>{race.date.toLocaleString()}</CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <p>Organizuje: {race.organizer}</p>
-                                    <p>Na místě: {race.place}</p>
-                                </CardContent>
-                            </Link>
-                            <CardFooter>
-                                {signupRaces.some(signupRace => signupRace.id === race.id) ? (
-                                    <div>Již jste přihlášeni na tento závod.</div>
-                                ) : (
-                                    <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
-                                )}
-                            </CardFooter>
-                        </Card>
-                    )
-                })}
-            </>
-        )
-    }
+    return (
+        <QueryWrapper
+            query={getTodayRacesQuery}
+            Empty={<div>Dnes se nakonají žádné závody.</div>}
+            Success={(data) => (
+                <>
+                    {data.map((race) => {
+                        return (
+                            <Card key={`race_${race.id}`}>
+                                <Link href={`/zavod/${race.id}`}>
+                                    <CardHeader>
+                                        <CardTitle>{race.name}</CardTitle>
+                                        <CardDescription>{race.date.toLocaleString()}</CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <p>Organizuje: {race.organizer}</p>
+                                        <p>Na místě: {race.place}</p>
+                                    </CardContent>
+                                </Link>
+                                <CardFooter>
+                                    {signupRaces.some(signupRace => signupRace.id === race.id) ? (
+                                        <div>Již jste přihlášeni na tento závod.</div>
+                                    ) : (
+                                        <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
+                                    )}
+                                </CardFooter>
+                            </Card>
+                        )
+                    })}
+                </>
+            )}
+        />
+    )
 }
 
 export default TodaysRaceCards

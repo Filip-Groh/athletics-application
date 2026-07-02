@@ -45,7 +45,7 @@ interface MenuItemProps {
     role: UserRole | false
 }
 
-function MenuItem({menuItem, role}: MenuItemProps) {
+const MenuItem = ({menuItem, role}: MenuItemProps) => {
     if ((role !== false ? role : -1) >= (menuItem.minRole !== false ? menuItem.minRole : -1)) {
         return (
             <NavigationMenuItem>
@@ -64,7 +64,7 @@ interface MainMenuProps {
     role: UserRole | false
 }
 
-export default async function MainMenu({menuItems, role}: MainMenuProps) {
+const MainMenu = async ({menuItems, role}: MainMenuProps) => {
     const session = await getServerAuthSession()
 
     return (
@@ -114,3 +114,5 @@ export default async function MainMenu({menuItems, role}: MainMenuProps) {
         </NavigationMenu>
     )
 }
+
+export default MainMenu

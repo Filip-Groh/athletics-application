@@ -16,7 +16,13 @@ import DeleteConfirm from '../elements/deleteConfirm'
 import TextInput from './fields/textInput'
 import NumericInput from './fields/numericInput'
 
-function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<RouterOutputs["event"]["getEvents"]>[0]["subEvent"][0], isForEvent: boolean, eventId: number}) {
+type SubEventFormProps = {
+    subEvent: NonNullable<RouterOutputs["event"]["getEvents"]>[0]["subEvent"][0],
+    isForEvent: boolean,
+    eventId: number
+}
+
+const SubEventForm: React.FC<SubEventFormProps> = ({subEvent, isForEvent, eventId}) => {
     const utils = api.useUtils()
 
     const updateSubEvent = api.subevent.updateSubEvent.useMutation({
@@ -52,7 +58,7 @@ function SubEventForm({subEvent, isForEvent, eventId}: {subEvent: NonNullable<Ro
         },
     })
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         updateSubEvent.mutate({
             id: subEvent.id,
             name: values.name,

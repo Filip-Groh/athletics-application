@@ -2,7 +2,13 @@ import React from 'react'
 import { getServerAuthSession } from '~/server/auth'
 import RaceOverviewClientPage from './clientPage'
 
-async function RaceOverviewPage({ params }: { params: { raceId: string } }) {
+type RaceOverviewPageProps = {
+    params: {
+        raceId: string
+    }
+}
+
+const RaceOverviewPage: React.FC<RaceOverviewPageProps> = async ({ params }) => {
     return (
         <RaceOverviewClientPage raceId={Number(params.raceId)} isSession={(await getServerAuthSession()) !== null} />
     )

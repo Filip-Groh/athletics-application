@@ -6,7 +6,11 @@ import { signIn } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { FcGoogle } from "react-icons/fc"
 
-function SigninButton({callbackUrl}: {callbackUrl?: string}) {
+type SigninButtonProps = {
+    callbackUrl?: string
+}
+
+const SigninButton: React.FC<SigninButtonProps> = ({callbackUrl}) => {
     const path = usePathname();
 
     return (

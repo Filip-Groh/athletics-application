@@ -4,39 +4,36 @@ import { type PersonalData } from '@prisma/client'
 import { notFound, redirect } from 'next/navigation'
 import React from 'react'
 import AccontForm from '~/components/forms/attendance/accontForm'
+import QueryWrapper from '~/components/wrappers/QueryWrapper'
 import { api } from '~/trpc/react'
 
-function AccountAttendRequestClientPage({raceId, sessionPersonalData}: {raceId: number, sessionPersonalData: PersonalData | null}) {
-    const {data: signUpRaces, isSuccess: isSignUpRacesSuccess, isLoading: isSignUpRacesLoading, error: signUpRacesError} = api.race.getSignUpRaces.useQuery()
-    const {data: raceEvents, isSuccess: isRaceEventsSuccess, isLoading: isRaceEventsLoading, error: raceEventsError} = api.race.getRaceEvents.useQuery({
-        id: raceId
-    })
+type AccountAttendRequestClientPageProps = {
+    raceId: number,
+    sessionPersonalData: PersonalData | null
+}
 
-    if (signUpRacesError) {
-        return <div>Nastala chyba: {signUpRacesError.message}</div>
-    }
+const AccountAttendRequestClientPage: React.FC<AccountAttendRequestClientPageProps> = ({ raceId, sessionPersonalData }) => {
+    const queries = api.useQueries((t) => [
+        t.race.getSignUpRaces(),
+        t.race.getRaceEvents({id: raceId})
+    ])
 
-    if (raceEventsError) {
-        return <div>Nastala chyba: {raceEventsError.message}</div>
-    }
+    return (
+        <QueryWrapper
+            queries={queries}
+            emptyPredicate={([, raceEvents]) => !raceEvents}
+            Empty={() => notFound()}
+            Success={([signUpRaces, raceEvents]) => {
+                if (signUpRaces.some(signupRace => signupRace.id === raceId)) {
+                    redirect(`/zavod/${raceId}`)
+                }
 
-    if (isSignUpRacesLoading || isRaceEventsLoading) {
-        return <div>Loading ...</div>
-    }
-
-    if (isSignUpRacesSuccess && isRaceEventsSuccess) {
-        if (signUpRaces.some(signupRace => signupRace.id === raceId)) {
-            redirect(`/zavod/${raceId}`)
-        }
-
-        if (!raceEvents) {
-            notFound()
-        }
-
-        return (
-            <AccontForm sessionPersonalData={sessionPersonalData} raceId={raceId} events={raceEvents}/>
-        )
-    }
+                return (
+                    <AccontForm sessionPersonalData={sessionPersonalData} raceId={raceId} events={raceEvents}/>
+                )
+            }}
+        />
+    )
 }
 
 export default AccountAttendRequestClientPage

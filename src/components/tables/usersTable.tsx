@@ -52,16 +52,21 @@ enum UserRole {
     RaceManager = 2,
     EventManager = 1,
     Racer = 0
-  }
+}
 
-function RoleCell({id, role}: {id: string, role: UserRole}) {
+type RoleCellProps = {
+    id: string,
+    role: UserRole
+}
+
+const RoleCell: React.FC<RoleCellProps> = ({id, role}) => {
     const utils = api.useUtils()
 
     const [selected, setSelected] = React.useState(role.toString())
     const [newValue, setNewValue] = React.useState(selected)
     const [alertOpen, setAlertOpen] = React.useState(false)
 
-    async function onSuccess<T extends {role: number, name: string | null}>(newUser: T) {
+    const onSuccess = async <T extends {role: number, name: string | null}>(newUser: T) => {
         let newRole = "Racer"
         switch (newUser.role) {
             case 1:
@@ -82,7 +87,7 @@ function RoleCell({id, role}: {id: string, role: UserRole}) {
         await utils.invalidate()
     }
 
-    async function onError(error: unknown) {
+    const onError = async (error: unknown) => {
         toast("Někde se stala chyba, více informací v console.log().")
         console.log(error)
     }
@@ -146,7 +151,11 @@ function RoleCell({id, role}: {id: string, role: UserRole}) {
     )
 }
 
-function UsersTable({users}: {users: NonNullable<RouterOutputs["user"]["getUsers"]>}) {
+type UsersTableProps = {
+    users: NonNullable<RouterOutputs["user"]["getUsers"]>
+}
+
+const UsersTable: React.FC<UsersTableProps> = ({users}) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "name",
         desc: false

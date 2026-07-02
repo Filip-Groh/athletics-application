@@ -1,5 +1,4 @@
-import { z } from "zod";
-
+import { setManagingRaceSchema, setUserSchema } from "~/schemas/user";
 import {
     createTRPCRouter,
     protectedProcedure,
@@ -7,16 +6,6 @@ import {
     protectedProcedureRaceManager
 } from "~/server/api/trpc";
 import { UserRole } from "~/server/auth";
-
-const setUser = z.object({
-    id: z.string().cuid()
-})
-
-const setManagingRaceSchema = z.object({
-    id: z.string().cuid(),
-    raceId: z.number(),
-    isAssigned: z.boolean()
-})
 
 export const userRouter = createTRPCRouter({
     getUsers: protectedProcedure
@@ -76,7 +65,7 @@ export const userRouter = createTRPCRouter({
         }),
 
     setUserAdmin: protectedProcedureAdmin
-        .input(setUser)
+        .input(setUserSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.user.update({
                 where: {
@@ -89,7 +78,7 @@ export const userRouter = createTRPCRouter({
         }),
 
     setUserRaceManager: protectedProcedureRaceManager
-        .input(setUser)
+        .input(setUserSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.user.update({
                 where: {
@@ -102,7 +91,7 @@ export const userRouter = createTRPCRouter({
         }),
 
     setUserEventManager: protectedProcedureRaceManager
-        .input(setUser)
+        .input(setUserSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.user.update({
                 where: {
@@ -115,7 +104,7 @@ export const userRouter = createTRPCRouter({
         }),
 
     setUserRacer: protectedProcedureRaceManager
-        .input(setUser)
+        .input(setUserSchema)
         .mutation(({ctx, input}) => {
             return ctx.db.user.update({
                 where: {

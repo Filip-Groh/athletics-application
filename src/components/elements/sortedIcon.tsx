@@ -9,7 +9,13 @@ export enum SortedIconType {
     Plain
 }
 
-function SortedIcon({sorted, type, className="w-4 h-4"}: {sorted: false | SortDirection, type: SortedIconType, className?: string}) {
+type SortedIconProps = {
+    sorted: false | SortDirection,
+    type: SortedIconType,
+    className?: string
+}
+
+const SortedIcon: React.FC<SortedIconProps> = ({sorted, type, className="w-4 h-4"}) => {
     if (!sorted) {
         return
     }

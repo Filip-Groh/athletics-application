@@ -1,7 +1,7 @@
 import React from 'react'
 import NewRaceForm from '~/components/forms/newRaceForm'
 
-function NovyPage() {
+const NovyPage: React.FC = () => {
     return (
         <NewRaceForm />
     )

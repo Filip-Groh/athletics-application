@@ -14,7 +14,11 @@ import TextInput from './fields/textInput'
 import { formatSex, inputStringToNumber } from '~/lib/utils'
 import NumericInput from './fields/numericInput'
 
-function NewSubEventForm({eventId}: {eventId: number}) {
+type NewSubEventFormProps = {
+    eventId: number
+}
+
+const NewSubEventForm: React.FC<NewSubEventFormProps> = ({eventId}) => {
     const utils = api.useUtils()
 
     const createEvent = api.subevent.createSubEvent.useMutation({
@@ -29,7 +33,7 @@ function NewSubEventForm({eventId}: {eventId: number}) {
         },
     })
     
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         createEvent.mutate({
             name: values.name,
             a: inputStringToNumber(values.a),

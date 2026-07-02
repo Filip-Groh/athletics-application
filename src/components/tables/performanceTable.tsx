@@ -35,7 +35,13 @@ import {
 } from "~/components/ui/dropdown-menu"
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
-function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {performanceId: number, originalMeasurements: MeasurementType[], rowIndex: number}) {
+type MeasurementCellProps = {
+    performanceId: number,
+    originalMeasurements: MeasurementType[],
+    rowIndex: number
+}
+
+const MeasurementCell: React.FC<MeasurementCellProps> = ({performanceId, originalMeasurements, rowIndex}) => {
     const utils = api.useUtils()
 
     const [allowSave, setAllowSave] = React.useState(false)
@@ -151,7 +157,13 @@ function MeasurementCell({performanceId, originalMeasurements, rowIndex}: {perfo
     )
 }
 
-function OptionsCell({raceId, racerId, eventId}: {raceId: number, racerId: number, eventId: number}) {
+type OptionsCellProps = {
+    raceId: number,
+    racerId: number,
+    eventId: number
+}
+
+const OptionsCell: React.FC<OptionsCellProps> = ({raceId, racerId, eventId}) => {
     const utils = api.useUtils()
 
     const disconnectRacer = api.racer.disconnectRacer.useMutation({
@@ -190,7 +202,12 @@ function OptionsCell({raceId, racerId, eventId}: {raceId: number, racerId: numbe
     )
 }
 
-function PerformanceTable({performance, isRaceManagerOrAbove}: {performance: PerformanceType[], isRaceManagerOrAbove: boolean}) {
+type PerformanceTableProps = {
+    performance: PerformanceType[],
+    isRaceManagerOrAbove: boolean
+}
+
+const PerformanceTable: React.FC<PerformanceTableProps> = ({performance, isRaceManagerOrAbove}) => {
     const utils = api.useUtils()
 
     const [sorting, setSorting] = React.useState<SortingState>([{

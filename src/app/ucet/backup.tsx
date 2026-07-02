@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,39 +24,12 @@ import {
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { downloadJSON } from '~/lib/utils'
+import { loadBackupFileSchema } from '~/schemas/backup'
 import { api } from '~/trpc/react'
 
-const backupFileSchema = z.array(z.object({
-    id: z.number(),
-    createdAt: z.string().transform((str) => new Date(str)),
-    updatedAt: z.string().transform((str) => new Date(str)),
-
-    name: z.nullable(z.string()),
-    category: z.enum(["man", "woman"]),
-
-    subEvent: z.array(z.object({
-        id: z.number(),
-        createdAt: z.string().transform((str) => new Date(str)),
-        updatedAt: z.string().transform((str) => new Date(str)),
-
-        name: z.string(),
-        a: z.number(),
-        b: z.number(),
-        c: z.number(),
-
-        ageCoeficient: z.array(z.object({
-            id: z.number(),
-            createdAt: z.string().transform((str) => new Date(str)),
-            updatedAt: z.string().transform((str) => new Date(str)),
-
-            age: z.number(),
-            coeficient: z.number()
-        }))
-    }))
-}))
-
-function Backup() {
+const Backup = () => {
     const [errorMessage, setErrorMessage] = React.useState("")
+    
     const utils = api.useUtils()
 
     const getBackupFile = api.backup.getBackupFile.useMutation({
@@ -96,7 +68,7 @@ function Backup() {
             return
         }
 
-        const parseTry = backupFileSchema.safeParse(await JSON.parse(await file.text()))
+        const parseTry = loadBackupFileSchema.safeParse(await JSON.parse(await file.text()))
 
         if (!parseTry.success) {
             console.error(parseTry.error)
@@ -105,8 +77,7 @@ function Backup() {
         }
 
         const backup = parseTry.data
-        console.warn("Upload!")
-        console.log(backup)
+
         loadBackupFile.mutate(backup)
     }
 

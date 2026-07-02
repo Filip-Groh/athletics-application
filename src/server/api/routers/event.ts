@@ -1,31 +1,10 @@
-import { z } from "zod";
-
+import { createEventSchema, deleteEventSchema, updateEventSchema } from "~/schemas/event";
 import {
     createTRPCRouter,
     protectedProcedure,
     protectedProcedureAdmin,
     protectedProcedureEventManager
 } from "~/server/api/trpc";
-
-const createEventSchema = z.object({
-    name: z.optional(z.string().min(1, {
-        message: "Jméno disciplíny musí mít alespoň 1 znak.",
-    })),
-    category: z.enum(["man", "woman"], {
-        required_error: "Vyberte kategorii.",
-    })
-})
-
-const updateEventSchema = z.object({
-    id: z.number(),
-    name: z.optional(z.string().min(1, {
-        message: "Jméno musí mít alespoň 1 znak."
-    }))
-})
-
-const deleteEventSchema = z.object({
-    id: z.number()
-})
 
 export const eventRouter = createTRPCRouter({
     getEvents: protectedProcedureEventManager

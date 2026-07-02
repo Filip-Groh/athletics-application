@@ -2,7 +2,13 @@ import React from 'react'
 import { getServerAuthSession } from '~/server/auth'
 import AccountAttendRequestClientPage from './clientPage'
 
-async function AccountAttendRequestPage({ params }: { params: { raceId: string } }) {
+type AccountAttendRequestPageProps = {
+    params: {
+        raceId: string
+    }
+}
+
+const AccountAttendRequestPage: React.FC<AccountAttendRequestPageProps> = async ({ params }) => {
     const session = await getServerAuthSession()
     const optionalPersonalData = session?.user.personalData
     const personalData = optionalPersonalData ?? null

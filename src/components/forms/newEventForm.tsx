@@ -13,7 +13,7 @@ import { api } from '~/trpc/react'
 import TextInput from './fields/textInput'
 import RadioGroupInput from './fields/radioGroupInput'
 
-function NewEventForm() {
+const NewEventForm: React.FC = () => {
     const utils = api.useUtils()
 
     const createEvent = api.event.createEvent.useMutation({
@@ -28,7 +28,7 @@ function NewEventForm() {
         },
     })
     
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         if (values.category === "both") {
             createEvent.mutate({
                 name: values.name,

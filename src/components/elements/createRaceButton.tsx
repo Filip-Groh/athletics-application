@@ -5,7 +5,7 @@ import React from 'react'
 import { Button } from '~/components/ui/button'
 import { PlusSquare } from 'lucide-react'
 
-function CreateRaceButton() {
+const CreateRaceButton = () => {
     const router = useRouter()
 
     return (

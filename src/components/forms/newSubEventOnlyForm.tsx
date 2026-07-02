@@ -15,7 +15,7 @@ import RadioGroupInput from './fields/radioGroupInput'
 import { inputStringToNumber } from '~/lib/utils'
 import NumericInput from './fields/numericInput'
 
-function NewSubEventOnlyForm() {
+const NewSubEventOnlyForm: React.FC = () => {
     const [category, setCategory] = React.useState("both")
     const utils = api.useUtils()
 
@@ -31,7 +31,7 @@ function NewSubEventOnlyForm() {
         },
     })
     
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         if (values.category === "both") {
             createEvent.mutate({
                 name: values.name,

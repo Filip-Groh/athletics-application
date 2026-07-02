@@ -21,7 +21,15 @@ import { cs } from 'date-fns/locale/cs'
 import type { FieldPath, FieldValues, UseFormReturn } from 'react-hook-form'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function DatetimeInput<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, description}: {form: UseFormReturn<TFieldValues, TContext, TTransformedValues>, fieldName: TName, label: string, description: string}) {
+type DatetimeInputProps<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
+    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>,
+    fieldName: TName,
+    label: string,
+    description: string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DatetimeInput = <TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, description}: DatetimeInputProps<TFieldValues, TContext, TTransformedValues, TName>) => {
     return (
         <FormField
             control={form.control}

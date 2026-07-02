@@ -8,7 +8,7 @@ import Events from './events'
 import Coeficients from './coeficients'
 import Backup from './backup'
 
-async function ProfilePage() {
+const ProfilePage = async () => {
     const session = await getServerAuthSession()
 
     return (

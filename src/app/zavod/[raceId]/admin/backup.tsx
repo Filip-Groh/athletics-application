@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { toast } from 'sonner'
-import { z } from 'zod'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -25,56 +24,14 @@ import {
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
 import { downloadJSON } from '~/lib/utils'
+import { raceBackupFileSchema } from '~/schemas/backup'
 import { api } from '~/trpc/react'
 
-const raceBackupFileSchema = z.object({
-    createdAt: z.date(),
-    updatedAt: z.date(),
+type BackupTabProps = {
+    raceId: number
+}
 
-    name: z.string(),
-    date: z.date(),
-    place: z.string(),
-    organizer: z.string(),
-    visible: z.boolean(),
-    ownerId: z.string(),
-
-    event: z.array(z.object({
-        id: z.number()
-    })),
-
-    racer: z.array(z.object({
-        id: z.number(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
-
-        personalDataId: z.number(),
-        startingNumber: z.number(),
-    })),
-
-    performace: z.array(z.object({
-        id: z.number(),
-        createdAt: z.date(),
-        updatedAt: z.date(),
-
-        orderNumber: z.number(),
-        subEventId: z.number(),
-        racerId: z.number(),
-
-        measurement: z.array(z.object({
-            id: z.number(),
-            createdAt: z.date(),
-            updatedAt: z.date(),
-
-            value: z.number()
-        }))
-    })),
-
-    managers: z.array(z.object({
-        id: z.string()
-    }))
-})
-
-function BackupTab({raceId}: {raceId: number}) {
+const BackupTab: React.FC<BackupTabProps> = ({ raceId }) => {
     const [errorMessage, setErrorMessage] = React.useState("")
 
     const getRaceBackupFile = api.backup.getRaceBackupFile.useMutation({
@@ -121,8 +78,7 @@ function BackupTab({raceId}: {raceId: number}) {
         }
 
         const backup = parseTry.data
-        console.warn("Upload!")
-        console.log(backup)
+
         loadRaceBackupFile.mutate({
             raceId: raceId,
             race: backup

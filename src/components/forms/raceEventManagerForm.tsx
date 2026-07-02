@@ -8,7 +8,13 @@ import { Checkbox } from '../ui/checkbox'
 import { Label } from '../ui/label'
 import { useArrayState } from '../hooks/useArrayState'
 
-function RaceEventManagerForm({allEvents, raceEvents, raceId}: {allEvents: NonNullable<RouterOutputs["event"]["getEvents"]>, raceEvents: NonNullable<RouterOutputs["race"]["getRaceEvents"]>, raceId: number}) {
+type RaceEventManagerFormProps = {
+    allEvents: NonNullable<RouterOutputs["event"]["getEvents"]>,
+    raceEvents: NonNullable<RouterOutputs["race"]["getRaceEvents"]>,
+    raceId: number
+}
+
+const RaceEventManagerForm: React.FC<RaceEventManagerFormProps> = ({allEvents, raceEvents, raceId}) => {
     const utils = api.useUtils()
 
     const {state: eventState, change: eventChange} = useArrayState(allEvents.map((event) => {
@@ -31,7 +37,7 @@ function RaceEventManagerForm({allEvents, raceEvents, raceId}: {allEvents: NonNu
         }
     })
     
-    async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         setRaceEvents.mutate({

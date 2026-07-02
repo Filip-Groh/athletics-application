@@ -21,7 +21,11 @@ import { type GroupScoreData } from "~/app/zavod/[raceId]/score"
 import { Button } from "../ui/button"
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
-function GroupScoreTable({data}: {data: GroupScoreData[]}) {
+type GroupScoreTableProps = {
+    data: GroupScoreData[]
+}
+
+const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "position",
         desc: false

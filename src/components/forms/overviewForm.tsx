@@ -6,13 +6,13 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "~/components/ui/button"
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 
@@ -22,9 +22,9 @@ import { CalendarIcon } from "lucide-react"
 import { cn } from "~/lib/utils"
 import { Calendar } from "~/components/ui/calendar"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "~/components/ui/popover"
 import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
@@ -33,10 +33,14 @@ import type { RouterOutputs } from '~/trpc/react'
 import { api } from '~/trpc/react'
 import DeleteConfirm from '../elements/deleteConfirm'
 
-function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRaceById"]>}) {
+type OverviewFormProps = {
+    race: NonNullable<RouterOutputs["race"]["readRaceById"]>
+}
+
+const OverviewForm: React.FC<OverviewFormProps> = ({ race }) => {
     const router = useRouter()
     const utils = api.useUtils()
-    
+
     const formSchema = z.object({
         name: z.string().min(1, {
             message: "Jméno musí mít alespoň 1 znak.",
@@ -55,13 +59,13 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
         }),
         visible: z.boolean().default(false).optional()
     })
-    
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: race.name,
             date: race.date,
-            time: race.date.toLocaleTimeString(navigator.language, {hour: "2-digit", minute: "2-digit"}),
+            time: race.date.toLocaleTimeString(navigator.language, { hour: "2-digit", minute: "2-digit" }),
             place: race.place,
             organizer: race.organizer,
             visible: race.visible
@@ -97,12 +101,12 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
             console.log(error)
         },
     })
-    
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         const [hours, minutes] = values.time.split(":")
         values.date.setHours(Number(hours), Number(minutes))
-        updateRace.mutate({ 
-            id: race.id, 
+        updateRace.mutate({
+            id: race.id,
             name: values.name,
             date: values.date,
             place: values.place,
@@ -173,39 +177,39 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
                     name="date"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
-                        <FormLabel>Datum závodu</FormLabel>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                            <FormControl>
-                                <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                        "w-[240px] pl-3 text-left font-normal",
-                                        !field.value && "text-muted-foreground"
-                                    )}
-                                >
-                                    {/* eslint-disable-next-line @typescript-eslint/no-unsafe-call*/}
-                                    {field.value ? format(field.value, "PPP") : (<span>Vyberte datum</span>)}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                            </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                    date < new Date()
-                                }
-                                initialFocus
-                            />
-                            </PopoverContent>
-                        </Popover>
-                        <FormDescription>
-                            Vyberte datum konání závodu.
-                        </FormDescription>
-                        <FormMessage />
+                            <FormLabel>Datum závodu</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant={"outline"}
+                                            className={cn(
+                                                "w-[240px] pl-3 text-left font-normal",
+                                                !field.value && "text-muted-foreground"
+                                            )}
+                                        >
+                                            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-call*/}
+                                            {field.value ? format(field.value, "PPP") : (<span>Vyberte datum</span>)}
+                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0" align="start">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={field.onChange}
+                                        disabled={(date) =>
+                                            date < new Date()
+                                        }
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                            <FormDescription>
+                                Vyberte datum konání závodu.
+                            </FormDescription>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
@@ -230,20 +234,20 @@ function OverviewForm({race}: {race: NonNullable<RouterOutputs["race"]["readRace
                     name="visible"
                     render={({ field }) => (
                         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                        <FormControl>
-                            <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                            <FormLabel>
-                            Viditelný závod
-                            </FormLabel>
-                            <FormDescription>
-                            Pokud zaškrtnuto závodníci se můžou na závod přihlásit.
-                            </FormDescription>
-                        </div>
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                                <FormLabel>
+                                    Viditelný závod
+                                </FormLabel>
+                                <FormDescription>
+                                    Pokud zaškrtnuto závodníci se můžou na závod přihlásit.
+                                </FormDescription>
+                            </div>
                         </FormItem>
                     )}
                 />

@@ -46,7 +46,13 @@ type RegistredData = {
     }
 }
 
-function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRacer: (index: number) => void}) {
+type CellProps = {
+    racerId: number,
+    index: number,
+    popRacer: (index: number) => void
+}
+
+const Cell: React.FC<CellProps> = ({racerId, index, popRacer}) => {
     const utils = api.useUtils()
 
     const deleteRacer = api.racer.deleteRacer.useMutation({
@@ -84,7 +90,12 @@ function Cell({racerId, index, popRacer}: {racerId: number, index: number, popRa
     )
 }
 
-function RegistredTable({defaultData, isRaceManagerOrAbove}: {defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"], isRaceManagerOrAbove: boolean}) {
+type RegistredTableProps = {
+    defaultData: NonNullable<RouterOutputs["race"]["readRaceById"]>["racer"],
+    isRaceManagerOrAbove: boolean
+}
+
+const RegistredTable: React.FC<RegistredTableProps> = ({defaultData, isRaceManagerOrAbove}) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "startingNumber",
         desc: false

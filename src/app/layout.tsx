@@ -40,7 +40,7 @@ const menuItems: Array<MenuItemType> = [
     }
 ]
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
     const session = await getServerAuthSession()
 
     return (
@@ -65,3 +65,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </html>
     );
 }
+
+export default RootLayout

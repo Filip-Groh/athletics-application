@@ -12,7 +12,16 @@ import { Input } from "~/components/ui/input"
 import { inputStringToNumber } from '~/lib/utils'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function NumericInput<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, placeholder, description}: {form: UseFormReturn<TFieldValues, TContext, TTransformedValues>, fieldName: TName, label: string, placeholder: string, description: string}) {
+type NumericInputProps<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
+    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>,
+    fieldName: TName,
+    label: string,
+    placeholder: string,
+    description: string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const NumericInput = <TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, placeholder, description}: NumericInputProps<TFieldValues, TContext, TTransformedValues, TName>) => {
     return (
         <FormField
             control={form.control}

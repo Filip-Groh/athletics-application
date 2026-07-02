@@ -21,7 +21,13 @@ import { api, type RouterOutputs } from '~/trpc/react'
 import { Checkbox } from '~/components/ui/checkbox'
 import { useRouter } from 'next/navigation'
 
-function AccontForm({sessionPersonalData, raceId, events}: {sessionPersonalData: PersonalData | null, raceId: number, events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>}) {
+type AccontFormProps = {
+    sessionPersonalData: PersonalData | null,
+    raceId: number,
+    events: NonNullable<RouterOutputs["race"]["getRaceEvents"]>
+}
+
+const AccontForm: React.FC<AccontFormProps> = ({sessionPersonalData, raceId, events}) => {
     const router = useRouter()
     const utils = api.useUtils()
 
@@ -47,7 +53,7 @@ function AccontForm({sessionPersonalData, raceId, events}: {sessionPersonalData:
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         createRacerWithUsersPersonalInformation.mutate({
             raceId: raceId,
             event: values.event.map((event) => {

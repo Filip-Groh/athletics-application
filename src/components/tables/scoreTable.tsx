@@ -21,7 +21,11 @@ import { type ScoreData } from "~/app/zavod/[raceId]/score"
 import { Button } from "../ui/button"
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
-function ScoreTable({data}: {data: ScoreData[]}) {
+type ScoreTableProps = {
+    data: ScoreData[]
+}
+
+const ScoreTable: React.FC<ScoreTableProps> = ({data}) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "position",
         desc: false

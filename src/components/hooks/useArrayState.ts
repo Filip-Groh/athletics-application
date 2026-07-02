@@ -7,7 +7,7 @@ export enum PushDirection {
     PushToStart
 }
 
-export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
+export const useArrayState = <T>(array: Array<T> = [], logChanges = false) => {
     const [arrayState, setArrayState] = useState<Array<T>>(array);
 
     useEffect(() => {
@@ -16,7 +16,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         }
     }, [arrayState, logChanges])
 
-    function set(array: Array<T>) {
+    const set = (array: Array<T>) => {
         setArrayState(array)
 
         if (logChanges) {
@@ -27,7 +27,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         }
     }
 
-    function push(element: T, direction = PushDirection.PushToEnd) {
+    const push = (element: T, direction = PushDirection.PushToEnd) => {
         const pushToEnd = () => {
             return [...arrayState, element]
         }
@@ -46,7 +46,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         }
     }
 
-    function pop(index: number) {
+    const pop = (index: number) => {
         const arrayStateCopy = arrayState.slice()
         arrayStateCopy.splice(index, 1)
 
@@ -60,7 +60,7 @@ export function useArrayState<T>(array: Array<T> = [], logChanges = false) {
         }
     }
 
-    function change(index: number, element: T) {
+    const change = (index: number, element: T) => {
         const newArray = structuredClone(arrayState)
         newArray[index] = element
         setArrayState(newArray)

@@ -44,16 +44,21 @@ type Events = {
     }[]
 }
 
-function countPoints(measurement: number, coeficient: number, a: number, b: number, c: number) {
+const countPoints = (measurement: number, coeficient: number, a: number, b: number, c: number) => {
     const points = a * ((measurement * coeficient - b) ** c)
     return Math.floor(points)
 }
 
-function getAge(birthDate: Date) {
+const getAge = (birthDate: Date) => {
     return Math.floor((Date.now() - birthDate.valueOf()) / 1000 / 60 / 60 / 24 / 365.25)
 }
 
-function ScoreTab({race, racer}: {race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>, racer: RouterOutputs["racer"]["getStartingNumber"] | null}) {
+type ScoreTabProps = {
+    race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>
+    racer: RouterOutputs["racer"]["getStartingNumber"] | null
+}
+
+const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
     const events: Events[] = race.event.map((event) => {
         const subEvents = event.subEvent.map((subEvent) => {
             const a = subEvent.a

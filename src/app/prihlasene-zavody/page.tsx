@@ -2,7 +2,7 @@ import React from 'react'
 import { getServerAuthSession } from '~/server/auth'
 import PrihlaseneZavodyClientPage from './clientPage'
 
-async function PrihlaseneZavodyPage() {
+const PrihlaseneZavodyPage = async () => {
     const session = await getServerAuthSession()
 
     if (!session) {

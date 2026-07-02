@@ -1,46 +1,8 @@
-import { z } from "zod";
-
+import { createSubEventSchema, createSubEventWithEventSchema, deleteSubEventSchema, updateSubEventSchema } from "~/schemas/subEvent";
 import {
     createTRPCRouter,
-    protectedProcedure,
     protectedProcedureAdmin
 } from "~/server/api/trpc";
-
-const createSubEventSchema = z.object({
-    name: z.string().min(1, {
-        message: "Jméno disciplíny musí mít alespoň 1 znak.",
-    }),
-    a: z.number(),
-    b: z.number(),
-    c: z.number(),
-    eventId: z.number()
-})
-
-const createSubEventWithEventSchema = z.object({
-    name: z.string().min(1, {
-        message: "Jméno disciplíny musí mít alespoň 1 znak.",
-    }),
-    category: z.enum(["man", "woman"], {
-        required_error: "Vyberte kategorii.",
-    }),
-    a: z.number(),
-    b: z.number(),
-    c: z.number()
-})
-
-const updateSubEventSchema = z.object({
-    id: z.number(),
-    name: z.string().min(1, {
-        message: "Jméno musí mít alespoň 1 znak."
-    }),
-    a: z.number(),
-    b: z.number(),
-    c: z.number()
-})
-
-const deleteSubEventSchema = z.object({
-    id: z.number()
-})
 
 export const subEventRouter = createTRPCRouter({
     // getSubEvents: protectedProcedure

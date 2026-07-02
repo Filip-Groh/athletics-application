@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import React from 'react'
 import { getServerAuthSession } from "~/server/auth"
 
-const AdminLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
+const AdminLayout: React.FC<React.PropsWithChildren> = async ({children}) => {
     const session = await getServerAuthSession()
 
     if (!session) {
@@ -10,9 +10,7 @@ const AdminLayout = async ({ children }: Readonly<{ children: React.ReactNode }>
     }
 
     return (
-        <>
-            {children}
-        </>
+        <>{children}</>
     )
 }
 

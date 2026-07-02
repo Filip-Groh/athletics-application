@@ -15,7 +15,11 @@ import { api } from '~/trpc/react'
 import DeleteConfirm from '../elements/deleteConfirm'
 import TextInput from './fields/textInput'
 
-function EventForm({event}: {event: NonNullable<RouterOutputs["event"]["getEvents"]>[0]}) {
+type EventFormProps = {
+    event: NonNullable<RouterOutputs["event"]["getEvents"]>[0]
+}
+
+const EventForm: React.FC<EventFormProps> = ({event}) => {
     const utils = api.useUtils()
 
     const updateEvent = api.event.updateEvent.useMutation({
@@ -40,7 +44,7 @@ function EventForm({event}: {event: NonNullable<RouterOutputs["event"]["getEvent
         },
     })
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
         updateEvent.mutate({
             id: event.id,
             name: values.name

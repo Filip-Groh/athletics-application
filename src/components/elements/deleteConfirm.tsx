@@ -11,7 +11,11 @@ import {
     AlertDialogTrigger,
   } from "~/components/ui/alert-dialog"
 
-function DeleteConfirm({ children, onConfirm }: {children: React.ReactNode, onConfirm: () => void}) {
+type DeleteConfirmProps = {
+    onConfirm: () => void
+}
+
+const DeleteConfirm: React.FC<React.PropsWithChildren<DeleteConfirmProps>> = ({ children, onConfirm }) => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>

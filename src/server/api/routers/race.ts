@@ -1,5 +1,4 @@
-import { z } from "zod";
-
+import { createRaceSchema, deleteRaceSchema, getPastRacesSchema, getRaceByIdPublicSchema, getRaceEventsSchema, getRacesSchema, readRaceByIdSchema, setRaceEventsSchema, updateRaceSchema } from "~/schemas/race";
 import {
     createTRPCRouter,
     protectedProcedure,
@@ -7,67 +6,6 @@ import {
     protectedProcedureEventManager,
     protectedProcedureRaceManager
 } from "~/server/api/trpc";
-
-const getPastRacesSchema = z.object({
-    page: z.number().min(1),
-    pageSize: z.number().min(1).max(100)
-})
-
-const getRacesSchema = z.object({
-    includeHidden: z.boolean()
-})
-
-const createRaceSchema = z.object({
-    name: z.string().min(1, {
-        message: "Jméno musí mít alespoň 1 znak."
-    }),
-    date: z.date({
-        required_error: "Musíte vybrat datum.",
-    }),
-    organizer: z.string().min(1, {
-        message: "Jméno organizátora musí mít alespoň 1 znak."
-    }),
-    place: z.string().min(1, {
-        message: "Místo konání musí mít alespoň 1 znak."
-    }),
-    visible: z.boolean()
-})
-
-const readRaceByIdSchema = z.object({
-    id: z.number()
-})
-
-const updateRaceSchema = z.object({
-    id: z.number(),
-    name: z.optional(z.string().min(1, {
-        message: "Jméno musí mít alespoň 1 znak."
-    })),
-    date: z.optional(z.date()),
-    organizer: z.optional(z.string().min(1, {
-        message: "Jméno organizátora musí mít alespoň 1 znak."
-    })),
-    place: z.optional(z.string().min(1, {
-        message: "Místo konání musí mít alespoň 1 znak."
-    })),
-    visible: z.optional(z.boolean())
-})
-
-const getRaceEventsSchema = z.object({
-    id: z.number()
-})
-
-const getRaceByIdPublicSchema = z.object({
-    id: z.number()
-})
-
-const deleteRaceSchema = z.object({
-    id: z.number()
-})
-
-const setRaceEventsSchema = z.object({
-    raceId: z.number(),
-    eventIds: z.array(z.number())
-})
 
 export const raceRouter = createTRPCRouter({
     getTodayRaces: publicProcedure

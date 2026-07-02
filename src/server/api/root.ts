@@ -2,7 +2,6 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { raceRouter } from "~/server/api/routers/race";
 import { eventRouter } from "~/server/api/routers/event";
 import { measurementRouter } from "~/server/api/routers/measurement";
-import { performanceRouter } from "~/server/api/routers/performance";
 import { racerRouter } from "~/server/api/routers/racer";
 import { ageCoeficientRouter } from "~/server/api/routers/ageCoeficient";
 import { backupRouter } from "./routers/backup";
@@ -20,7 +19,6 @@ export const appRouter = createTRPCRouter({
   event: eventRouter,
   subevent: subEventRouter,
   measurement: measurementRouter,
-  performance: performanceRouter,
   racer: racerRouter,
   ageCoeficient: ageCoeficientRouter,
   backup: backupRouter,

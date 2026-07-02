@@ -4,7 +4,15 @@ import { inputStringToNumber } from '~/lib/utils'
 import { Button } from '../ui/button'
 import { Trash2 } from 'lucide-react'
 
-function NumericInput({numericValue, onChange, placeholder, className, onDelete, allowEmpty}: {numericValue: string | (() => string), onChange: (newValue: string) => void, placeholder: string, className?: string, onDelete?: () => void, allowEmpty?: boolean}) {
+type NumericInputProps = {
+    numericValue: string | (() => string),
+    onChange: (newValue: string) => void,
+    placeholder: string,
+    className?: string,
+    onDelete?: () => void, allowEmpty?: boolean
+}
+
+const NumericInput: React.FC<NumericInputProps> = ({ numericValue, onChange, placeholder, className, onDelete, allowEmpty }) => {
     let value: string
     if (typeof numericValue === "string") {
         value = numericValue
@@ -23,7 +31,7 @@ function NumericInput({numericValue, onChange, placeholder, className, onDelete,
     if (onDelete) {
         return (
             <div className="flex w-full max-w-sm items-center">
-                <Input placeholder={placeholder} className={`${!isValid(value) ? "border-destructive" : ""} rounded-r-none border-collapse z-10 ${className}`} value={value} onChange={(e) => {onChange(e.target.value)}} />
+                <Input placeholder={placeholder} className={`${!isValid(value) ? "border-destructive" : ""} rounded-r-none border-collapse z-10 ${className}`} value={value} onChange={(e) => { onChange(e.target.value) }} />
                 <Button variant="outline" size="icon" className={`${!isValid(value) ? "border-destructive" : ""} rounded-l-none border-l-0`} onClick={onDelete}>
                     <Trash2 className="h-4 w-4" />
                 </Button>
@@ -32,7 +40,7 @@ function NumericInput({numericValue, onChange, placeholder, className, onDelete,
     }
 
     return (
-        <Input placeholder={placeholder} className={`${!isValid(value) ? "border-destructive" : ""} ${className}`} value={value} onChange={(e) => {onChange(e.target.value)}} />
+        <Input placeholder={placeholder} className={`${!isValid(value) ? "border-destructive" : ""} ${className}`} value={value} onChange={(e) => { onChange(e.target.value) }} />
     )
 }
 

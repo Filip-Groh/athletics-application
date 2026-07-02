@@ -30,7 +30,7 @@ import { toast } from "sonner"
 import { useRouter } from 'next/navigation'
 import { api } from "~/trpc/react"
 
-function NewRaceForm() {
+const NewRaceForm: React.FC = () => {
     const router = useRouter()
     const utils = api.useUtils()
 
@@ -76,7 +76,7 @@ function NewRaceForm() {
         },
     })
     
-    async function onSubmit(values: z.infer<typeof createRaceSchema>) {
+    const onSubmit = (values: z.infer<typeof createRaceSchema>) => {
         const [hours, minutes] = values.time.split(":")
         values.date.setHours(Number(hours), Number(minutes))
         createRace.mutate(values)

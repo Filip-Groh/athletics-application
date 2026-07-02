@@ -11,7 +11,16 @@ import {
 import { Input } from "~/components/ui/input"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function TextInput<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, placeholder, description}: {form: UseFormReturn<TFieldValues, TContext, TTransformedValues>, fieldName: TName, label: string, placeholder: string, description: string}) {
+type TextInputProps<TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>> = {
+    form: UseFormReturn<TFieldValues, TContext, TTransformedValues>,
+    fieldName: TName,
+    label: string,
+    placeholder: string,
+    description: string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const TextInput = <TFieldValues extends FieldValues = FieldValues, TContext = any, TTransformedValues extends FieldValues | undefined = undefined, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({form, fieldName, label, placeholder, description}: TextInputProps<TFieldValues, TContext, TTransformedValues, TName>) => {
     return (
         <FormField
             control={form.control}

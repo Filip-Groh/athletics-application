@@ -3,7 +3,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "~/components/ui/collapsible"  
+} from "~/components/ui/collapsible"
 import { VerticalTabs, VerticalTabsContent, VerticalTabsList, VerticalTabsTrigger } from '~/components/ui/verticalTabs'
 import { ChevronsUpDown } from "lucide-react"
 import { Button } from "~/components/ui/button"
@@ -23,9 +23,15 @@ export interface DropdownNode {
     dropdownNodes: SingleNode[]
 }
 
-function DropdownTabTrigger({triggerText, uniqueId, dropdownNodes}: {triggerText: string, uniqueId: string, dropdownNodes: {triggerText: string, uniqueId: string}[]}) {
+type DropdownTabTriggerProps = {
+    triggerText: string,
+    uniqueId: string,
+    dropdownNodes: { triggerText: string, uniqueId: string }[]
+}
+
+const DropdownTabTrigger: React.FC<DropdownTabTriggerProps> = ({ triggerText, uniqueId, dropdownNodes }) => {
     const [isOpen, setIsOpen] = React.useState(false)
-    
+
     return (
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
             <div className='flex'>
@@ -45,7 +51,14 @@ function DropdownTabTrigger({triggerText, uniqueId, dropdownNodes}: {triggerText
     )
 }
 
-function DropdownTabContent({triggerText, uniqueId, content, dropdownNodes}: {triggerText: string, uniqueId: string, content: React.ReactNode, dropdownNodes: {uniqueId: string, content: React.ReactNode}[]}) {
+type DropdownTabContentProps = {
+    triggerText: string,
+    uniqueId: string,
+    content: React.ReactNode,
+    dropdownNodes: { uniqueId: string, content: React.ReactNode }[]
+}
+
+const DropdownTabContent: React.FC<DropdownTabContentProps> = ({ triggerText, uniqueId, content, dropdownNodes }) => {
     return (
         <>
             <VerticalTabsContent key={`${triggerText}(${uniqueId})Content`} value={uniqueId}>
@@ -62,31 +75,35 @@ function DropdownTabContent({triggerText, uniqueId, content, dropdownNodes}: {tr
     )
 }
 
-function TreeTabs({tree}: {tree: (DropdownNode | SingleNode)[]}) {
+type TreeTabsProps = {
+    tree: (DropdownNode | SingleNode)[]
+}
+
+const TreeTabs: React.FC<TreeTabsProps> = ({ tree }) => {
     return (
         <VerticalTabs defaultValue={tree[0]?.uniqueId}>
             <VerticalTabsList>
                 {tree.map((node) => {
                     if (node.isDropdown) {
-                        return <DropdownTabTrigger key={`${node.triggerText}(${node.uniqueId})Trigger`} triggerText={node.triggerText} uniqueId={node.uniqueId} dropdownNodes={node.dropdownNodes}/>
+                        return <DropdownTabTrigger key={`${node.triggerText}(${node.uniqueId})Trigger`} triggerText={node.triggerText} uniqueId={node.uniqueId} dropdownNodes={node.dropdownNodes} />
                     } else {
                         return <VerticalTabsTrigger key={`${node.triggerText}(${node.uniqueId})Trigger`} value={node.uniqueId}>{node.triggerText}</VerticalTabsTrigger>
                     }
                 })}
             </VerticalTabsList>
-                {tree.map((node) => {
-                    if (node.isDropdown) {
-                        return (
-                            <DropdownTabContent key={`${node.triggerText}(${node.uniqueId})Content`} triggerText={node.triggerText} uniqueId={node.uniqueId} content={node.content} dropdownNodes={node.dropdownNodes}/>
-                        )
-                    } else {
-                        return (
-                            <VerticalTabsContent key={`${node.triggerText}(${node.uniqueId})Content`} value={node.uniqueId}>
-                                {node.content}
-                            </VerticalTabsContent>
-                        )
-                    }
-                })}
+            {tree.map((node) => {
+                if (node.isDropdown) {
+                    return (
+                        <DropdownTabContent key={`${node.triggerText}(${node.uniqueId})Content`} triggerText={node.triggerText} uniqueId={node.uniqueId} content={node.content} dropdownNodes={node.dropdownNodes} />
+                    )
+                } else {
+                    return (
+                        <VerticalTabsContent key={`${node.triggerText}(${node.uniqueId})Content`} value={node.uniqueId}>
+                            {node.content}
+                        </VerticalTabsContent>
+                    )
+                }
+            })}
         </VerticalTabs>
     )
 }

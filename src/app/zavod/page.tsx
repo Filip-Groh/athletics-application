@@ -3,7 +3,7 @@ import AssignedRaceCards from '~/components/elements/assignedRaceCards';
 import OwnedRaceCards from '~/components/elements/ownedRaceCards';
 import { getServerAuthSession, UserRole } from '~/server/auth';  
 
-async function ZavodyPage() {
+const ZavodyPage: React.FC = async () => {
     const session = await getServerAuthSession()
 
     return (
