@@ -51,7 +51,7 @@ const BackupTab: React.FC<BackupTabProps> = ({ raceId }) => {
 
     const loadRaceBackupFile = api.backup.loadRaceBackupFile.useMutation({
         async onSuccess(data) {
-            toast(`Backup úspěšně načetl závod ${data.race.name} s ${data.measurements.flat().length} měřeními.`)
+            toast(`Backup úspěšně načetl závod ${data?.name} s ${data?.performance.flatMap((p) => p.measurement).length} měřeními.`)
         },
         async onError(error) {
             toast("Někde se stala chyba, více informací v console.log().")

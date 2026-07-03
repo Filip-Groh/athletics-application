@@ -23,12 +23,23 @@ export const raceBackupFileSchema = z.object({
       createdAt: z.coerce.date(),
       updatedAt: z.coerce.date(),
 
-      personalDataId: z.number(),
+      personalData: z.object({
+        id: z.number(),
+        createdAt: z.coerce.date(),
+        updatedAt: z.coerce.date(),
+
+        name: z.string(),
+        surname: z.string(),
+        birthDate: z.coerce.date(),
+        sex: z.string(),
+        club: z.string(),
+        userId: z.string().nullable(),
+      }),
       startingNumber: z.number(),
     }),
   ),
 
-  performace: z.array(
+  performance: z.array(
     z.object({
       id: z.number(),
       createdAt: z.coerce.date(),
@@ -56,6 +67,8 @@ export const raceBackupFileSchema = z.object({
     }),
   ),
 });
+
+export type RaceBackupFile = z.infer<typeof raceBackupFileSchema>;
 
 export const loadBackupFileSchema = z.array(
   z.object({

@@ -22,13 +22,13 @@ export const backupRouter = createTRPCRouter({
   loadBackupFile: protectedProcedureAdmin
     .input(loadBackupFileSchema)
     .mutation(async ({ ctx, input }) => {
-      return await Promise.all(
+      return await ctx.db.$transaction(
         input.map((event) => {
-          return ctx.db.event.update({
+          return ctx.db.event.upsert({
             where: {
               id: event.id,
             },
-            data: {
+            update: {
               createdAt: event.createdAt,
               updatedAt: event.updatedAt,
 
@@ -52,17 +52,16 @@ export const backupRouter = createTRPCRouter({
                       c: subEvent.c,
 
                       ageCoeficient: {
-                        createMany: {
-                          data: subEvent.ageCoeficient.map((ageCoeficient) => {
-                            return {
-                              createdAt: ageCoeficient.createdAt,
-                              updatedAt: ageCoeficient.updatedAt,
+                        create: subEvent.ageCoeficient.map((ageCoeficient) => {
+                          return {
+                            id: ageCoeficient.id,
+                            createdAt: ageCoeficient.createdAt,
+                            updatedAt: ageCoeficient.updatedAt,
 
-                              age: ageCoeficient.age,
-                              coeficient: ageCoeficient.coeficient,
-                            };
-                          }),
-                        },
+                            age: ageCoeficient.age,
+                            coeficient: ageCoeficient.coeficient,
+                          };
+                        }),
                       },
                     },
                     update: {
@@ -104,6 +103,41 @@ export const backupRouter = createTRPCRouter({
                 }),
               },
             },
+            create: {
+              createdAt: event.createdAt,
+              updatedAt: event.updatedAt,
+
+              name: event.name,
+              category: event.category,
+
+              subEvent: {
+                create: event.subEvent.map((subEvent) => {
+                  return {
+                    id: subEvent.id,
+                    createdAt: subEvent.createdAt,
+                    updatedAt: subEvent.updatedAt,
+
+                    name: subEvent.name,
+                    a: subEvent.a,
+                    b: subEvent.b,
+                    c: subEvent.c,
+
+                    ageCoeficient: {
+                      create: subEvent.ageCoeficient.map((ageCoeficient) => {
+                        return {
+                          id: ageCoeficient.id,
+                          createdAt: ageCoeficient.createdAt,
+                          updatedAt: ageCoeficient.updatedAt,
+
+                          age: ageCoeficient.age,
+                          coeficient: ageCoeficient.coeficient,
+                        };
+                      }),
+                    },
+                  };
+                }),
+              },
+            },
           });
         }),
       );
@@ -122,7 +156,11 @@ export const backupRouter = createTRPCRouter({
               id: true,
             },
           },
-          racer: true,
+          racer: {
+            include: {
+              personalData: true,
+            },
+          },
           performance: {
             include: {
               measurement: true,
@@ -140,186 +178,166 @@ export const backupRouter = createTRPCRouter({
   loadRaceBackupFile: protectedProcedureRaceManager
     .input(loadRaceBackupFileSchema)
     .mutation(async ({ ctx, input }) => {
-      const race = await ctx.db.race.update({
-        where: {
-          id: input.raceId,
-        },
-        data: {
-          createdAt: input.race.createdAt,
-          updatedAt: input.race.updatedAt,
+      const raceBackup = input.race;
 
-          name: input.race.name,
-          date: input.race.date,
-          place: input.race.place,
-          organizer: input.race.organizer,
-          visible: input.race.visible,
-
-          owner: {
-            connect: {
-              id: input.race.ownerId,
+      const race = await ctx.db.$transaction(async (tx) => {
+        await tx.measurement.deleteMany({
+          where: {
+            performance: {
+              raceId: input.raceId,
             },
           },
+        });
 
-          event: {
-            connect: input.race.event.map((event) => {
-              return {
-                id: event.id,
-              };
-            }),
+        await tx.performance.deleteMany({
+          where: {
+            raceId: input.raceId,
           },
+        });
 
-          racer: {
-            connectOrCreate: input.race.racer.map((racer) => {
-              return {
-                where: {
-                  id: racer.id,
-                },
-                create: {
-                  createdAt: racer.createdAt,
-                  updatedAt: racer.updatedAt,
-                  personalData: {
-                    connect: {
-                      id: racer.personalDataId,
-                    },
-                  },
-                  startingNumber: racer.startingNumber,
-                },
-              };
-            }),
+        await tx.racer.deleteMany({
+          where: {
+            raceId: input.raceId,
           },
+        });
 
-          performance: {
-            createMany: {
-              data: input.race.performace.map((performance) => {
+        await tx.race.update({
+          where: {
+            id: input.raceId,
+          },
+          data: {
+            createdAt: raceBackup.createdAt,
+            updatedAt: raceBackup.updatedAt,
+
+            name: raceBackup.name,
+            date: raceBackup.date,
+            place: raceBackup.place,
+            organizer: raceBackup.organizer,
+            visible: raceBackup.visible,
+
+            owner: {
+              connect: {
+                id: raceBackup.ownerId,
+              },
+            },
+
+            event: {
+              set: raceBackup.event.map((event) => {
                 return {
-                  createdAt: performance.createdAt,
-                  updatedAt: performance.updatedAt,
-                  orderNumber: performance.orderNumber,
-                  subEventId: performance.subEventId,
-                  racerId: performance.racerId,
+                  id: event.id,
+                };
+              }),
+            },
+
+            managers: {
+              set: raceBackup.managers.map((manager) => {
+                return {
+                  id: manager.id,
                 };
               }),
             },
           },
+        });
 
-          managers: {
-            connect: input.race.managers.map((manager) => {
-              return {
-                id: manager.id,
-              };
-            }),
+        for (const racer of raceBackup.racer) {
+          const existingUser = racer.personalData.userId === null ? null : await tx.user.findUnique({
+            where: {
+              id: racer.personalData.userId,
+            },
+          });
+
+          await tx.personalData.upsert({
+            where: {
+              id: racer.personalData.id,
+            },
+            create: {
+              id: racer.personalData.id,
+              createdAt: racer.personalData.createdAt,
+              updatedAt: racer.personalData.updatedAt,
+              name: racer.personalData.name,
+              surname: racer.personalData.surname,
+              birthDate: racer.personalData.birthDate,
+              sex: racer.personalData.sex,
+              club: racer.personalData.club,
+              userId: existingUser?.id ?? null,
+            },
+            update: {
+              createdAt: racer.personalData.createdAt,
+              updatedAt: racer.personalData.updatedAt,
+              name: racer.personalData.name,
+              surname: racer.personalData.surname,
+              birthDate: racer.personalData.birthDate,
+              sex: racer.personalData.sex,
+              club: racer.personalData.club,
+              userId: existingUser?.id ?? null,
+            },
+          });
+
+          await tx.racer.create({
+            data: {
+              id: racer.id,
+              createdAt: racer.createdAt,
+              updatedAt: racer.updatedAt,
+              personalDataId: racer.personalData.id,
+              startingNumber: racer.startingNumber,
+              raceId: input.raceId,
+            },
+          });
+        }
+
+        for (const performance of raceBackup.performance) {
+          await tx.performance.create({
+            data: {
+              id: performance.id,
+              createdAt: performance.createdAt,
+              updatedAt: performance.updatedAt,
+              orderNumber: performance.orderNumber,
+              raceId: input.raceId,
+              subEventId: performance.subEventId,
+              racerId: performance.racerId,
+              measurement: {
+                create: performance.measurement.map((measurement) => {
+                  return {
+                    id: measurement.id,
+                    createdAt: measurement.createdAt,
+                    updatedAt: measurement.updatedAt,
+                    value: measurement.value,
+                  };
+                }),
+              },
+            },
+          });
+        }
+
+        return await tx.race.findUnique({
+          where: {
+            id: input.raceId,
           },
-        },
+          include: {
+            event: {
+              select: {
+                id: true,
+              },
+            },
+            racer: {
+              include: {
+                personalData: true,
+              },
+            },
+            performance: {
+              include: {
+                measurement: true,
+              },
+            },
+            managers: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        });
       });
 
-      // const eventsIdMap = new Map<number, number>()
-      // const events = await ctx.db.event.createManyAndReturn({
-      //     data: input.race.event.map((event) => {
-      //         return {
-      //             createdAt: event.createdAt,
-      //             updatedAt: event.updatedAt,
-
-      //             name: event.name,
-      //             category: event.category,
-
-      //             a: event.a,
-      //             b: event.b,
-      //             c: event.c,
-
-      //             raceId: input.raceId
-      //         }
-      //     }),
-      // })
-      // events.forEach((event, index) => {
-      //     eventsIdMap.set(input.race.event[index]!.id, event.id)
-      // })
-
-      // const racers = await ctx.db.racer.createManyAndReturn({
-      //     data: input.race.racer.map((racer) => {
-      //         return {
-      //             createdAt: racer.createdAt,
-      //             updatedAt: racer.updatedAt,
-
-      //             name: racer.name,
-      //             surname: racer.surname,
-      //             birthDate: racer.birthDate,
-      //             sex: racer.sex,
-      //             club: racer.club,
-
-      //             startingNumber: racer.startingNumber,
-
-      //             raceId: input.raceId
-      //         }
-      //     })
-      // })
-
-      // const ageCoeficients = await Promise.all(events.map(async (event, index) => {
-      //     return await ctx.db.ageCoeficient.createManyAndReturn({
-      //         data: input.race.event[index]!.ageCoeficient.map((ageCoeficient) => {
-      //             return {
-      //                 createdAt: ageCoeficient.createdAt,
-      //                 updatedAt: ageCoeficient.updatedAt,
-
-      //                 age: ageCoeficient.age,
-      //                 coeficient: ageCoeficient.coeficient,
-
-      //                 eventId: event.id
-      //             }
-      //         })
-      //     })
-      // }))
-
-      // const performances = await Promise.all(racers.map(async (racer, index) => {
-      //     return await ctx.db.performance.createManyAndReturn({
-      //         data: input.race.racer[index]!.performace.map((performance) => {
-      //             return {
-      //                 createdAt: performance.createdAt,
-      //                 updatedAt: performance.updatedAt,
-
-      //                 racerId: racer.id,
-      //                 eventId: eventsIdMap.get(performance.eventId)!,
-
-      //                 orderNumber: performance.orderNumber
-      //             }
-      //         })
-      //     })
-      // }))
-
-      const measurements = await Promise.all(
-        input.race.performace.map(async (performance) => {
-          return await ctx.db.measurement.createManyAndReturn({
-            data: performance.measurement.map((measurement) => {
-              return {
-                createdAt: measurement.createdAt,
-                updatedAt: measurement.updatedAt,
-
-                value: measurement.value,
-                performanceId: performance.id,
-              };
-            }),
-          });
-        }),
-      );
-
-      // const measurements = await Promise.all(racers.map(async (racer, racerIndex) => {
-      //     return await ctx.db.measurement.createManyAndReturn({
-      //         data: performances.flatMap((performance, performanceIndex) => {
-      //             return input.race.racer[racerIndex]!.performace[performanceIndex]!.measurement.map((measurement) => {
-      //                 return {
-      //                     createdAt: measurement.createdAt,
-      //                     updatedAt: measurement.updatedAt,
-
-      //                     value: measurement.value,
-      //                     performanceId: performance[performanceIndex]!.id
-      //                 }
-      //             })
-      //         })
-      //     })
-      // }))
-
-      return {
-        race: race,
-        measurements: measurements,
-      };
+      return race;
     }),
 });

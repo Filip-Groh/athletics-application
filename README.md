@@ -83,7 +83,7 @@
 
 
 
-backup z update na upsert
+
 nezdařený pokus je x ne prázdné
 výsledky: ne věk ale kategorie, porovnávat s datem závodu
 pořešit více race managerů
