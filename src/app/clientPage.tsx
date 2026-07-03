@@ -20,6 +20,7 @@ const HomeClientPage: React.FC<HomeClientPageProps> = ({ isSession, hasPersonalD
     return (
         <QueryWrapper
             query={getSignUpRacesQuery}
+            successPredicate={(data) => data.isSuccess || (data.isPending && !data.isFetching)}
             Success={(data) => (
                 <div>
                     <h2>Dnešní závody</h2>

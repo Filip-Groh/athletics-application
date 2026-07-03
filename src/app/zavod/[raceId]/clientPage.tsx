@@ -24,6 +24,7 @@ const RaceOverviewClientPage: React.FC<RaceOverviewClientPageProps> = ({ raceId,
             queries={queries}
             emptyPredicate={([race]) => !race}
             Empty={() => notFound()}
+            successPredicate={([getRaceByIdPublicQuery, getStartingNumberQuery]) => getRaceByIdPublicQuery.isSuccess && (getStartingNumberQuery.isSuccess || (getStartingNumberQuery.isPending && !getStartingNumberQuery.isFetching))}
             Success={([race, racer]) => (
                 <Tabs defaultValue="overview">
                     <TabsList>

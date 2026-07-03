@@ -183,7 +183,7 @@ const renderSingleQuery = <TData, TError extends MinimalError, TTransformedData>
     return null
 }
 
-const renderMultiQuery = <TQueries extends readonly unknown[], TTransformedData>(props: MultiStandardProps<TQueries> | MultiTransformedProps<TQueries, TTransformedData>) => {   
+const renderMultiQuery = <TQueries extends readonly unknown[], TTransformedData>(props: MultiStandardProps<TQueries> | MultiTransformedProps<TQueries, TTransformedData>) => {
     if (props.loadingPredicate ? props.loadingPredicate(props.queries) : defaultMultiIsLoadingPredicate(props.queries)) {
         return props.Loading ?? DefaultLoading()
     }

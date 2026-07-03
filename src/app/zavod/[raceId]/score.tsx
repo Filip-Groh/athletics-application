@@ -55,7 +55,7 @@ const getAge = (birthDate: Date) => {
 
 type ScoreTabProps = {
     race: NonNullable<RouterOutputs["race"]["getRaceByIdPublic"]>
-    racer: RouterOutputs["racer"]["getStartingNumber"] | null
+    racer: RouterOutputs["racer"]["getStartingNumber"]
 }
 
 const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
