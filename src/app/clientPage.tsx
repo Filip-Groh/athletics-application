@@ -13,8 +13,7 @@ type HomeClientPageProps = {
 
 const HomeClientPage: React.FC<HomeClientPageProps> = ({ isSession, hasPersonalData }) => {
     const getSignUpRacesQuery = api.race.getSignUpRaces.useQuery(undefined, {
-        enabled: isSession,
-        initialData: []
+        enabled: isSession
     })
 
     return (
@@ -24,9 +23,9 @@ const HomeClientPage: React.FC<HomeClientPageProps> = ({ isSession, hasPersonalD
             Success={(data) => (
                 <div>
                     <h2>Dnešní závody</h2>
-                    <TodaysRaceCards signupRaces={data} isLoggedIn={isSession} hasPersonalData={hasPersonalData} />
+                    <TodaysRaceCards signupRaces={data ?? []} isLoggedIn={isSession} hasPersonalData={hasPersonalData} />
                     <h2>Nadcházející závody</h2>
-                    <UpcomingRaceCards signupRaces={data} isLoggedIn={isSession} hasPersonalData={hasPersonalData} />
+                    <UpcomingRaceCards signupRaces={data ?? []} isLoggedIn={isSession} hasPersonalData={hasPersonalData} />
                 </div>
             )}
         />
