@@ -88,5 +88,4 @@ nezdařený pokus je x ne prázdné
 výsledky: ne věk ale kategorie, porovnávat s datem závodu
 pořešit více race managerů
 závodníci DNS a DNF
-rozdělit souhrn na disciplíny a přidat výsledek s body
 umožnit změnu datumu závodu

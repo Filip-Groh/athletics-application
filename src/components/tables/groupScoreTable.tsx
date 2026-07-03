@@ -22,10 +22,11 @@ import { Button } from "../ui/button"
 import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
 
 type GroupScoreTableProps = {
-    data: GroupScoreData[]
+    data: GroupScoreData[],
+    subEventNames: string[]
 }
 
-const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
+const GroupScoreTable: React.FC<GroupScoreTableProps> = ({ data, subEventNames }) => {
     const [sorting, setSorting] = React.useState<SortingState>([{
         id: "position",
         desc: false
@@ -37,7 +38,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
                             Umístění
                         </Button>
@@ -53,7 +54,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
                             Startovní číslo
                         </Button>
@@ -66,7 +67,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
                             Jméno
                         </Button>
@@ -80,7 +81,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
                             Příjmení
                         </Button>
@@ -94,7 +95,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
                             Věk
                         </Button>
@@ -118,7 +119,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
                             Oddíl
                         </Button>
@@ -132,7 +133,7 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
             header: ({ column }) => {
                 return (
                     <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
                             <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
                             Body
                         </Button>
@@ -140,33 +141,47 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
                 )
             },
             accessorFn: (row) => {
-                if (row.subEventPoints.every(subEvent => subEvent === null)) {
+                if (Object.values(row.subEvents).every(subEvent => subEvent === null)) {
                     return "-"
                 }
 
                 return Number.isNaN(row.points) ? 0 : row.points
             },
             sortingFn: (rowA, rowB) => {
-                const pointsA = rowA.original.subEventPoints.every(subEvent => subEvent === null) ? NaN : rowA.original.points
-                const pointsB = rowB.original.subEventPoints.every(subEvent => subEvent === null) ? NaN : rowB.original.points
+                const pointsA = Object.values(rowA.original.subEvents).every(subEvent => subEvent === null) ? NaN : rowA.original.points
+                const pointsB = Object.values(rowB.original.subEvents).every(subEvent => subEvent === null) ? NaN : rowB.original.points
                 return pointsA - pointsB
             },
         },
-        {
-            accessorKey: "subEventPoints",
-            header: "Body v disciplínách",
-            accessorFn: (row) => {
-                return row.subEventPoints.map((points) => {
-                    return points !== null ? points.toLocaleString() : "-"
-                }).reduce((prev, curr) => {
-                    if (prev === "") {
-                        return `${curr}`
-                    }
-                    return `${prev}; ${curr}`
-                }, "")
-            }
-        }
     ]
+
+    subEventNames.forEach((subEventName) => {
+        columns.push({
+            id: subEventName,
+            header: ({ column }) => {
+                return (
+                    <span className="flex flex-row gap-1 items-center">
+                        <Button variant={"ghost"} onClick={() => { column.toggleSorting(column.getIsSorted() === "asc") }} className="flex flex-row gap-1">
+                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Numbers} />
+                            {subEventName}
+                        </Button>
+                    </span>
+                )
+            },
+            accessorFn: (row) => {
+                const scoreData = row.subEvents[subEventName]
+
+                if (!scoreData) return "-"
+
+                return `${scoreData.cumulative} (+${scoreData.change})`
+            },
+            sortingFn: (rowA, rowB) => {
+                const pointsA = rowA.original.subEvents[subEventName] === null ? NaN : rowA.original.subEvents[subEventName]?.cumulative ?? NaN
+                const pointsB = rowB.original.subEvents[subEventName] === null ? NaN : rowB.original.subEvents[subEventName]?.cumulative ?? NaN
+                return pointsA - pointsB
+            }
+        })
+    })
 
     const table = useReactTable({
         data,
@@ -183,45 +198,45 @@ const GroupScoreTable: React.FC<GroupScoreTableProps> = ({data}) => {
         <div className="rounded-md border">
             <Table>
                 <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                        return (
-                        <TableHead key={header.id}>
-                            {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                                )}
-                        </TableHead>
-                        )
-                    })}
-                    </TableRow>
-                ))}
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                )
+                            })}
+                        </TableRow>
+                    ))}
                 </TableHeader>
                 <TableBody>
-                {table.getRowModel().rows?.length ? (
-                    table.getRowModel().rows.map((row) => (
-                    <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && "selected"}
-                        data-highlight={row.original.isMe && "highlighted"}
-                    >
-                        {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                        ))}
-                    </TableRow>
-                    ))
-                ) : (
-                    <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                        Žádné výsledky.
-                    </TableCell>
-                    </TableRow>
-                )}
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                                data-highlight={row.original.isMe && "highlighted"}
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                                Žádné výsledky.
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </div>

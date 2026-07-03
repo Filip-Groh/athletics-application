@@ -22,6 +22,7 @@ export type ScoreData = {
 }
 
 export type GroupScoreData = {
+    isMe: boolean,
     startingNumber: number,
     name: string,
     surname: string,
@@ -29,8 +30,10 @@ export type GroupScoreData = {
     club: string,
     position: number,
     points: number,
-    subEventPoints: (number | null)[],
-    isMe: boolean
+    subEvents: Record<string, {
+        change: number
+        cumulative: number
+    } | null>
 }
 
 type Events = {
@@ -58,7 +61,7 @@ type ScoreTabProps = {
     racer: RouterOutputs["racer"]["getStartingNumber"]
 }
 
-const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
+const ScoreTab: React.FC<ScoreTabProps> = ({ race, racer }) => {
     const events: Events[] = race.event.map((event) => {
         const subEvents = event.subEvent.map((subEvent) => {
             const a = subEvent.a
@@ -133,10 +136,13 @@ const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
                         age: scoreData.age,
                         club: scoreData.club,
                         points: 0,
-                        subEventPoints: [],
-                        isMe: scoreData.isMe
+                        isMe: scoreData.isMe,
+                        subEvents: {}
                     }
-                    groupScoreData.subEventPoints.push(scoreData.measurements.length !== 0 ? (Number.isNaN(scoreData.points) ? 0 : scoreData.points) : null)
+                    groupScoreData.subEvents[subEvent.name] = scoreData.measurements.length === 0 ? null : {
+                        change: Number.isNaN(scoreData.points) ? 0 : scoreData.points,
+                        cumulative: groupScoreData.points + (Number.isNaN(scoreData.points) ? 0 : scoreData.points)
+                    }
                     groupScoreData.points += Number.isNaN(scoreData.points) ? 0 : scoreData.points
                     startingNumberPoints.set(scoreData.startingNumber, groupScoreData)
                 })
@@ -156,7 +162,7 @@ const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
                 triggerText: `${event.name} - ${formatSex(event.category, true)}`,
                 uniqueId: `event_${event.id}`,
                 content: (
-                    <GroupScoreTable data={groupScoreData} />
+                    <GroupScoreTable data={groupScoreData} subEventNames={event.subEvents.map((subEvent) => subEvent.name)} />
                 ),
                 dropdownNodes: event.subEvents.map((subEvent) => {
                     return {
@@ -164,7 +170,7 @@ const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
                         triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
                         uniqueId: `event_${event.id}:subEvent_${subEvent.id}`,
                         content: (
-                            <ScoreTable data={subEvent.data}/>
+                            <ScoreTable data={subEvent.data} />
                         )
                     }
                 })
@@ -176,7 +182,7 @@ const ScoreTab: React.FC<ScoreTabProps> = ({race, racer}) => {
                     triggerText: `${subEvent.name} - ${formatSex(event.category, true)}`,
                     uniqueId: `event_${subEvent.id}`,
                     content: (
-                        <ScoreTable data={subEvent.data}/>
+                        <ScoreTable data={subEvent.data} />
                     )
                 }
             })
