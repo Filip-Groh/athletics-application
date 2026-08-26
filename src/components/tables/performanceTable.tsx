@@ -123,9 +123,9 @@ const MeasurementCell: React.FC<MeasurementCellProps> = ({performanceId, origina
     }, [measurements, originalMeasurements])
 
     return (
-        <span className="flex flex-row gap-2">
+        <span className="flex flex-wrap items-center gap-2">
             {measurements.length > 0 ? (
-                <Button variant="outline" size="icon" className="flex-shrink-0" onClick={handleSave} disabled={!allowSave}>
+                <Button variant="outline" size="icon" className="h-11 w-11 shrink-0 md:h-9 md:w-9" onClick={handleSave} disabled={!allowSave}>
                     <Save className="h-4 w-4" />
                 </Button>
             ) : null}
@@ -150,7 +150,7 @@ const MeasurementCell: React.FC<MeasurementCellProps> = ({performanceId, origina
                     <NumericInput key={`row_${rowIndex}_measurement_${index}`} placeholder="Hodnota" allowEmpty numericValue={measurement.value} onChange={handleChange} onDelete={handleDelete} />
                 )
             })}
-            <Button variant="outline" size="icon" className="flex-shrink-0" onClick={() => {pushMeasurement({id: undefined, value: ""})}}>
+            <Button variant="outline" size="icon" className="h-11 w-11 shrink-0 md:h-9 md:w-9" onClick={() => {pushMeasurement({id: undefined, value: ""})}}>
                 <PlusIcon className="h-4 w-4" />
             </Button>
         </span>
@@ -187,7 +187,7 @@ const OptionsCell: React.FC<OptionsCellProps> = ({raceId, racerId, eventId}) => 
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="flex h-11 w-11 items-center justify-center md:h-9 md:w-9">
                 <EllipsisVertical className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>

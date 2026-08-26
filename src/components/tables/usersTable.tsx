@@ -15,6 +15,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
+    stickyColumnClass,
 } from "~/components/ui/table"
 import React from 'react'
 import { api, type RouterOutputs } from "~/trpc/react"
@@ -44,8 +45,7 @@ import {
     AlertDialogTitle,
 } from "~/components/ui/alert-dialog"
 import { toast } from "sonner"
-import SortedIcon, { SortedIconType } from "../elements/sortedIcon"
-import { Button } from "../ui/button"
+import SortableHeaderButton from "./sortableHeaderButton"
 
 enum UserRole {
     Admin = 3,
@@ -122,7 +122,7 @@ const RoleCell: React.FC<RoleCellProps> = ({id, role}) => {
     return (
         <>
             <Select defaultValue={role.toString()} value={selected} onValueChange={handleUpdate}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] max-w-full">
                     <SelectValue placeholder="Role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -178,44 +178,23 @@ const UsersTable: React.FC<UsersTableProps> = ({users}) => {
         },
         {
             accessorKey: "name",
-            header: ({ column }) => {
-                return (
-                    <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
-                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
-                            Jméno
-                        </Button>
-                    </span>
-                )
-            },
+            header: ({ column }) => (
+                <SortableHeaderButton column={column}>Jméno</SortableHeaderButton>
+            ),
             sortingFn: "alphanumeric"
         },
         {
             accessorKey: "email",
-            header: ({ column }) => {
-                return (
-                    <span className="flex flex-row gap-1 items-center">
-                        <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
-                            <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Letters} />
-                            E-Mail
-                        </Button>
-                    </span>
-                )
-            },
+            header: ({ column }) => (
+                <SortableHeaderButton column={column}>E-Mail</SortableHeaderButton>
+            ),
             sortingFn: "alphanumeric"
         },
         {
             accessorKey: "role",
-            header: ({ column }) => {
-                            return (
-                                <span className="flex flex-row gap-1 items-center">
-                                    <Button variant={"ghost"} onClick={() => {column.toggleSorting(column.getIsSorted() === "asc")}} className="flex flex-row gap-1">
-                                        <SortedIcon sorted={column.getIsSorted()} type={SortedIconType.Plain} />
-                                        Role
-                                    </Button>
-                                </span>
-                            )
-                        },
+            header: ({ column }) => (
+                <SortableHeaderButton column={column}>Role</SortableHeaderButton>
+            ),
             cell: ({row}) => {
                 return <RoleCell id={row.original.id} role={row.original.role}/>
             },
@@ -240,22 +219,20 @@ const UsersTable: React.FC<UsersTableProps> = ({users}) => {
         <div className="rounded-md border">
             <Table>
                 <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                        return (
-                        <TableHead key={header.id}>
-                            {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                                )}
-                        </TableHead>
-                        )
-                    })}
-                    </TableRow>
-                ))}
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id}>
+                            {headerGroup.headers.map((header, headerIndex) => (
+                                <TableHead key={header.id} className={headerIndex === 0 ? stickyColumnClass : undefined}>
+                                    {header.isPlaceholder
+                                        ? null
+                                        : flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                </TableHead>
+                            ))}
+                        </TableRow>
+                    ))}
                 </TableHeader>
                 <TableBody>
                 {table.getRowModel().rows?.length ? (
@@ -264,10 +241,10 @@ const UsersTable: React.FC<UsersTableProps> = ({users}) => {
                         key={row.id}
                         data-state={row.getIsSelected() && "selected"}
                     >
-                        {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
+                        {row.getVisibleCells().map((cell, cellIndex) => (
+                            <TableCell key={cell.id} className={cellIndex === 0 ? stickyColumnClass : undefined}>
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </TableCell>
                         ))}
                     </TableRow>
                     ))

@@ -12,7 +12,7 @@ React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root>
 <TabsPrimitive.Root
   ref={ref}
   className={cn(
-    "flex flex-row gap-3",
+    "flex flex-col gap-3 md:flex-row",
     className
   )}
   {...props}
@@ -27,7 +27,7 @@ const VerticalTabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "flex flex-col w-min items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      "flex w-full flex-row items-center justify-start gap-1 overflow-x-auto rounded-md bg-muted p-1 text-muted-foreground md:w-min md:flex-col md:justify-center",
       className
     )}
     {...props}
@@ -42,7 +42,7 @@ const VerticalTabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex w-full items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      "flex min-h-11 shrink-0 items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm md:w-full",
       className
     )}
     {...props}

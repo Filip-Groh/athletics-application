@@ -22,6 +22,7 @@ import {
 import { Separator } from "~/components/ui/separator"
 import PaginationPageButton from '~/components/elements/paginationPageButton'
 import { getNumberOfPages } from '~/lib/utils'
+import { RotateCcwClock } from 'lucide-react'
 
 const HistoryRacesPage = () => {
     const [page, setPage] = React.useState(1)
@@ -33,14 +34,22 @@ const HistoryRacesPage = () => {
         <QueryWrapper
             query={getNumberOfPastRacesQuery}
             emptyPredicate={(data) => data === 0}
-            Empty={<div>Žádné závody ještě neproběhly.</div>}
+            Empty={
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center text-gray-500 dark:text-gray-400">
+                    <RotateCcwClock className="w-12 h-12 mb-3 text-gray-300 dark:text-gray-600" />
+                    <p className="text-lg font-medium">Žádné závody ještě neproběhly.</p>
+                </div>
+            }
             Success={(data) => (
                 <div>
-                    <h2>Proběhlé závody</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <RotateCcwClock />
+                        <span>Proběhlé závody</span>
+                    </h2>
                     <PastRaceCards page={page} pageSize={pageSize} />
-                    <div className="flex flex-row gap-4 items-center h-6 my-4">
+                    <div className="flex flex-wrap items-center gap-4 my-4">
                         <Select defaultValue='10' onValueChange={newValue => setPageSize(parseInt(newValue))}>
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-full sm:w-[180px]">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>

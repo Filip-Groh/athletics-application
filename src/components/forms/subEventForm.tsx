@@ -107,13 +107,13 @@ const SubEventForm: React.FC<SubEventFormProps> = ({subEvent, isForEvent, eventI
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-row gap-2">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap gap-2">
                 <TextInput form={form} fieldName='name' label='Jméno disciplíny' placeholder='Jméno' description='Napište jméno disciplíny.' />
                 <NumericInput form={form} fieldName='a' label='Parametr A' placeholder='Hodnota A' description='Napište hodnotu parametru A.' />
                 <NumericInput form={form} fieldName='b' label='Parametr B' placeholder='Hodnota B' description='Napište hodnotu parametru B.' />
                 <NumericInput form={form} fieldName='c' label='Parametr C' placeholder='Hodnota C' description='Napište hodnotu parametru C.' />
                 <div>
-                    <div className='flex flex-row gap-2 mt-8 mb-2'>
+                    <div className='flex flex-wrap gap-2 mt-8 mb-2'>
                         <Button type="submit" disabled={updateSubEvent.isPending || deleteSubEvent.isPending}>Updatovat</Button>
                         <DeleteConfirm onConfirm={onDelete}>
                             <Button variant="destructive" disabled={updateSubEvent.isPending || deleteSubEvent.isPending}>Vymazat</Button>

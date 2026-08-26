@@ -75,7 +75,7 @@ const Cell: React.FC<CellProps> = ({racerId, index, popRacer}) => {
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger className="flex h-11 w-11 items-center justify-center md:h-9 md:w-9">
                 <EllipsisVertical className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent>

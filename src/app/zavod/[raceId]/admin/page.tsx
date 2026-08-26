@@ -11,8 +11,6 @@ type PrehledPageProps = {
 const PrehledPage: React.FC<PrehledPageProps> = async ({ params }) => {
     const session = await getServerAuthSession()
 
-    console.log(session)
-
     return (
         <PrehledClientPage raceId={Number(params.raceId)} userRole={session?.user.role ?? null} />
     )

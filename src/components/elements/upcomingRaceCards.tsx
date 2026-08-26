@@ -1,18 +1,10 @@
 "use client"
 
 import React from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "~/components/ui/card"
 import { api, type RouterOutputs } from '~/trpc/react'
-import Link from 'next/link'
-import SignupButtonGroup from './signupButtonGroup'
 import QueryWrapper from '../wrappers/QueryWrapper'
+import RaceCard from './RaceCard'
+import { Calendar } from 'lucide-react'
 
 type UpcomingRaceCardsProps = {
     signupRaces: RouterOutputs["race"]["getSignUpRaces"],
@@ -26,49 +18,24 @@ const UpcomingRaceCards: React.FC<UpcomingRaceCardsProps> = ({ signupRaces, isLo
     return (
         <QueryWrapper
             query={getUpcomingRacesQuery}
-            Empty={<div>Žádné nadcházející závody.</div>}
+            Empty={
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center text-gray-500 dark:text-gray-400">
+                    <Calendar className="w-12 h-12 mb-3 text-gray-300 dark:text-gray-600" />
+                    <p className="text-lg font-medium">Žádné nadcházející závody.</p>
+                </div>
+            }
             Success={(data) => (
-                <>
-                    {data.map((race) => {
-                        if (signupRaces.some(signupRace => signupRace.id === race.id)) {
-                            return (
-                                <Link key={`race_${race.id}`} href={`/zavod/${race.id}`}>
-                                    <Card>
-                                        <CardHeader>
-                                            <CardTitle>{race.name}</CardTitle>
-                                            <CardDescription>{race.date.toLocaleString()}</CardDescription>
-                                        </CardHeader>
-                                        <CardContent>
-                                            <p>Organizuje: {race.organizer}</p>
-                                            <p>Na místě: {race.place}</p>
-                                        </CardContent>
-                                        <CardFooter>
-                                            <div>Již jste přihlášeni na tento závod.</div>
-                                        </CardFooter>
-                                    </Card>
-                                </Link>
-                            )
-                        }
-
-                        return (
-                            <Card key={`race_${race.id}`}>
-                                <Link href={`/zavod/${race.id}`}>
-                                    <CardHeader>
-                                        <CardTitle>{race.name}</CardTitle>
-                                        <CardDescription>{race.date.toLocaleString()}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent>
-                                        <p>Organizuje: {race.organizer}</p>
-                                        <p>Na místě: {race.place}</p>
-                                    </CardContent>
-                                </Link>
-                                <CardFooter>
-                                    <SignupButtonGroup raceId={race.id} isLoggedIn={isLoggedIn} hasPersonalData={hasPersonalData} />
-                                </CardFooter>
-                            </Card>
-                        )
-                    })}
-                </>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    {data.map((race) => (
+                        <RaceCard
+                            key={`race_${race.id}`}
+                            race={race}
+                            isSignedUp={signupRaces.some(signupRace => signupRace.id === race.id)}
+                            isLoggedIn={isLoggedIn}
+                            hasPersonalData={hasPersonalData}
+                        />
+                    ))}
+                </div>
             )}
         />
     )

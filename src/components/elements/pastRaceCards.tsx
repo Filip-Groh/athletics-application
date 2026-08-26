@@ -24,7 +24,7 @@ const PastRaceCards: React.FC<PastRaceCardsProps> = ({ page, pageSize }) => {
         <QueryWrapper
             query={getPastRacesQuery}
             Success={(data) => (
-                <>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {data.map((race) => {
                         return (
                             <Link key={`race_${race.id}`} href={`/zavod/${race.id}`}>
@@ -41,7 +41,7 @@ const PastRaceCards: React.FC<PastRaceCardsProps> = ({ page, pageSize }) => {
                             </Link>
                         )
                     })}
-                </>
+                </div>
             )}
         />
     )

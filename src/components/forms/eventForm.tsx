@@ -72,9 +72,9 @@ const EventForm: React.FC<EventFormProps> = ({event}) => {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-row gap-2">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap gap-2">
                 <TextInput form={form} fieldName='name' label='Jméno skupiny disciplín' placeholder='Jméno' description='Napište jméno skupiny disciplín.' />
-                <div className='flex flex-row gap-2 mt-8 mb-2'>
+                    <div className='flex flex-wrap gap-2 mt-8 mb-2'>
                     <Button type="submit" disabled={updateEvent.isPending || deleteEvent.isPending}>Updatovat</Button>
                     <DeleteConfirm onConfirm={onDelete}>
                         <Button variant="destructive" disabled={updateEvent.isPending || deleteEvent.isPending}>Vymazat</Button>

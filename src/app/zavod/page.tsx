@@ -1,3 +1,4 @@
+import { Crown, PenLine } from 'lucide-react';
 import React from 'react'
 import AssignedRaceCards from '~/components/elements/assignedRaceCards';
 import OwnedRaceCards from '~/components/elements/ownedRaceCards';
@@ -7,14 +8,20 @@ const ZavodyPage: React.FC = async () => {
     const session = await getServerAuthSession()
 
     return (
-        <>
+        <div>
             {(session?.user.role ?? 0) >= UserRole.RaceManager ? <>
-                <p>Mnou pořádané závody:</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <Crown />
+                    <span>Mnou pořádané závody:</span>
+                </h2>
                 <OwnedRaceCards />
             </> : null}
-            <p>Závody kde jsem zapisovatel:</p>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <PenLine />
+                <span>Závody kde jsem zapisovatel:</span>
+            </h2>
             <AssignedRaceCards />
-        </>
+        </div>
     )
 }
 

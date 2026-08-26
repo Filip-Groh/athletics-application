@@ -73,7 +73,7 @@ const TableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+      "h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 first:sticky first:left-0 first:z-10 first:bg-background first:shadow-[1px_0_0_0_hsl(var(--border))]",
       className
     )}
     {...props}
@@ -87,7 +87,7 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
+    className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0 first:sticky first:left-0 first:z-10 first:bg-background first:shadow-[1px_0_0_0_hsl(var(--border))]", className)}
     {...props}
   />
 ))
@@ -104,6 +104,9 @@ const TableCaption = React.forwardRef<
   />
 ))
 TableCaption.displayName = "TableCaption"
+
+export const stickyColumnClass =
+  "sticky left-0 z-10 bg-background shadow-[1px_0_0_0_hsl(var(--border))]"
 
 export {
   Table,

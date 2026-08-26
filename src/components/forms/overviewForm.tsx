@@ -184,7 +184,7 @@ const OverviewForm: React.FC<OverviewFormProps> = ({ race }) => {
                                         <Button
                                             variant={"outline"}
                                             className={cn(
-                                                "w-[240px] pl-3 text-left font-normal",
+                                                "w-full sm:w-[240px] pl-3 text-left font-normal",
                                                 !field.value && "text-muted-foreground"
                                             )}
                                         >
